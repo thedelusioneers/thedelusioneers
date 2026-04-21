@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Delusioneers</title>
+<meta name="description" content="A documentation practice. Following the boring things to the truth and making it impossible to look away from.">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+  :root {
+    --bg: #f5f0e8;
+    --ink: #0d0d0d;
+    --ink-light: #2a2a2a;
+    --ink-faded: #6a6a5a;
+    --red: #c41e1e;
+    --rule: rgba(0,0,0,0.042);
+    --rule-solid: rgba(0,0,0,0.15);
+    --tag-border: rgba(0,0,0,0.14);
+    --tag-red-border: rgba(196,30,30,0.35);
+    --header-border: #0d0d0d;
+    --toggle-bg: rgba(0,0,0,0.08);
+    --toggle-hover: rgba(0,0,0,0.14);
+  }
+
+  [data-theme="dark"] {
+    --bg: #1a1a18;
+    --ink: #f5f0e8;
+    --ink-light: rgba(245,240,232,0.78);
+    --ink-faded: rgba(245,240,232,0.38);
+    --red: #e03030;
+    --rule: rgba(255,255,255,0.038);
+    --rule-solid: rgba(255,255,255,0.12);
+    --tag-border: rgba(255,255,255,0.14);
+    --tag-red-border: rgba(224,48,48,0.4);
+    --header-border: rgba(245,240,232,0.2);
+    --toggle-bg: rgba(255,255,255,0.07);
+    --toggle-hover: rgba(255,255,255,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    -webkit-font-smoothing: antialiased;
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 27px,
+      var(--rule) 27px,
+      var(--rule) 28px
+    );
+    background-attachment: fixed;
+    transition: background 0.25s ease, color 0.25s ease;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 64px 0 48px;
+    border-bottom: 2px solid var(--header-border);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .wordmark {
+    font-family: 'Special Elite', monospace;
+    font-size: 28px;
+    letter-spacing: 1px;
+    color: var(--ink);
+    line-height: 1;
+    transition: color 0.25s;
+  }
+
+  .wordmark span { color: var(--red); }
+
+  .header-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    padding-top: 2px;
+  }
+
+  .header-meta {
+    text-align: right;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    line-height: 2;
+    transition: color 0.25s;
+  }
+
+  .header-meta a { color: var(--ink-faded); text-decoration: none; transition: color 0.25s; }
+  .header-meta a:hover { color: var(--ink); }
+
+  /* ── TOGGLE ── */
+  .theme-toggle {
+    background: var(--toggle-bg);
+    border: 1px solid var(--rule-solid);
+    color: var(--ink-faded);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+
+  .theme-toggle:hover {
+    background: var(--toggle-hover);
+    color: var(--ink);
+  }
+
+  .toggle-icon { font-size: 11px; }
+
+  /* ── LEDE ── */
+  .lede {
+    padding: 56px 0 48px;
+    border-bottom: 1px dashed var(--ink-faded);
+  }
+
+  .lede-text {
+    font-family: 'Special Elite', monospace;
+    font-size: 22px;
+    line-height: 1.5;
+    color: var(--ink);
+    max-width: 560px;
+    transition: color 0.25s;
+  }
+
+  .lede-text em { font-style: normal; color: var(--red); }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 48px 0;
+    border-bottom: 1px dashed var(--ink-faded);
+  }
+
+  .section-label {
+    font-size: 13px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 700;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--rule-solid);
+  }
+
+  /* ── ABOUT ── */
+  .about-body {
+    font-size: 13px;
+    line-height: 2;
+    color: var(--ink-light);
+    transition: color 0.25s;
+  }
+
+  .about-body p { margin-bottom: 20px; }
+  .about-body p:last-child { margin-bottom: 0; }
+  .about-body strong { color: var(--ink); font-weight: 700; }
+
+  /* ── PIECE INDEX ── */
+  .piece-list { list-style: none; }
+
+  .piece-item {
+    padding: 24px 16px;
+    border-bottom: 1px dotted var(--rule-solid);
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 0 20px;
+    align-items: start;
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.15s;
+    margin: 0 -16px;
+  }
+
+  .piece-item:last-child { border-bottom: none; }
+  .piece-item:hover { background: var(--toggle-bg); }
+
+  .piece-date {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    padding-top: 3px;
+    line-height: 1.6;
+    transition: color 0.25s;
+  }
+
+  .piece-title {
+    font-family: 'Special Elite', monospace;
+    font-size: 15px;
+    color: var(--ink);
+    margin-bottom: 5px;
+    line-height: 1.3;
+    transition: color 0.25s;
+  }
+
+  .piece-desc {
+    font-size: 11px;
+    line-height: 1.7;
+    color: var(--ink-light);
+    margin-bottom: 9px;
+    transition: color 0.25s;
+  }
+
+  .piece-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag {
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    border: 1px solid var(--tag-border);
+    padding: 2px 6px;
+    transition: color 0.25s, border 0.25s;
+  }
+
+  .tag.red {
+    color: var(--red);
+    border-color: var(--tag-red-border);
+  }
+
+  .piece-arrow {
+    font-size: 16px;
+    color: var(--ink-faded);
+    padding-top: 2px;
+    transition: color 0.15s, transform 0.15s;
+  }
+
+  .piece-item:hover .piece-arrow {
+    color: var(--red);
+    transform: translateX(3px);
+  }
+
+  /* ── CONTACT ── */
+  .contact-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .contact-left {
+    font-size: 11px;
+    line-height: 2;
+    color: var(--ink-light);
+    max-width: 420px;
+    transition: color 0.25s;
+  }
+
+  .contact-left strong {
+    font-size: 13px;
+    color: var(--ink);
+    display: block;
+    margin-bottom: 6px;
+    font-family: 'Special Elite', monospace;
+    letter-spacing: 0.5px;
+  }
+
+  .contact-link {
+    display: inline-block;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink);
+    border: 1px solid var(--ink);
+    padding: 10px 20px;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s, border 0.25s;
+    white-space: nowrap;
+  }
+
+  .contact-link:hover {
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  /* ── STAMP ── */
+  .stamp-block {
+    padding: 40px 0;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .stamp {
+    font-family: 'Special Elite', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--red);
+    border: 2px solid var(--red);
+    padding: 10px 16px;
+    white-space: nowrap;
+    opacity: 0.7;
+    transform: rotate(-1.5deg);
+    display: inline-block;
+    line-height: 1.4;
+  }
+
+  .stamp-text {
+    font-size: 10px;
+    line-height: 1.9;
+    color: var(--ink-faded);
+    letter-spacing: 0.5px;
+    transition: color 0.25s;
+  }
+
+  /* ── FOOTER ── */
+  footer { padding: 32px 0 64px; }
+
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .footer-left {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    line-height: 2.2;
+    transition: color 0.25s;
+  }
+
+  .footer-left a { color: var(--ink-faded); text-decoration: none; }
+  .footer-left a:hover { color: var(--ink); }
+
+  .footer-right {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    text-align: right;
+    line-height: 2.2;
+    transition: color 0.25s;
+  }
+
+  .footer-right a { color: var(--ink-faded); text-decoration: none; }
+  .footer-right a:hover { color: var(--ink); }
+
+  .rule {
+    border: none;
+    border-top: 1px dashed var(--ink-faded);
+    margin: 0;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .container { padding: 0 20px; }
+    .header-inner { flex-direction: column; gap: 12px; }
+    .header-right { align-items: flex-start; }
+    .header-meta { text-align: left; }
+    .wordmark { font-size: 22px; }
+    .lede-text { font-size: 18px; }
+    .piece-item {
+      grid-template-columns: 1fr auto;
+      grid-template-rows: auto auto;
+    }
+    .piece-date { grid-column: 1; grid-row: 1; margin-bottom: 6px; }
+    .piece-content { grid-column: 1; grid-row: 2; }
+    .piece-arrow { grid-column: 2; grid-row: 1 / 3; align-self: center; }
+    .stamp-block { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .contact-block { flex-direction: column; align-items: flex-start; gap: 20px; }
+    .footer-inner { flex-direction: column; gap: 16px; }
+    .footer-right { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <div class="header-inner">
+      <div class="wordmark">The Delusioneers<span>.</span></div>
+      <div class="header-right">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+          <span class="toggle-icon" id="toggleIcon">○</span>
+          <span id="toggleLabel">Light</span>
+        </button>
+        <div class="header-meta">
+          <a href="https://thedelusioneers.substack.com" target="_blank">Substack</a> &nbsp;·&nbsp;
+          <a href="https://instagram.com/the_delusioneers" target="_blank">@the_delusioneers</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="lede">
+    <p class="lede-text">Following the boring things to the truth<br>and making it <em>impossible to look away</em> from.</p>
+  </div>
+
+  <section id="about">
+    <div class="section-label">About</div>
+    <div class="about-body">
+      <p>The Delusioneers is a documentation practice that builds ready-to-use public-interest research packages — clear, sourced, and structured so they can move without us.</p>
+      <p>We write for the people who actually use this material: <strong>journalists, staffers, and engaged citizens.</strong> That means leading with the finding, grounding everything in named sources, and laying out timelines and comparisons that make the story legible at a glance.</p>
+      <p>The work is intentionally plain. If it feels a little dry, it's probably close to something that matters.</p>
+      <p>We don't optimize for credit. The goal is simple: someone else can pick it up, verify it, and use it.</p>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="section-label">Work</div>
+    <ul class="piece-list">
+      
+      <li>
+        <a class="piece-item" href="https://thedelusioneers.ca/projects/ontario-reversal-patterns/" target="_blank">
+          <div class="piece-date">Apr 2026</div>
+          <div class="piece-content">
+            <div class="piece-title">The Pattern: Ontario Reversals 2018-2026</div>
+            <div class="piece-desc">Nine times since 2018, the Ontario government announced a major decision, implemented it, faced backlash, and reversed course. What varies is who forced the reversal, and what the government claimed was the reason.</div>
+            <div class="piece-tags">
+              <span class="tag red">New</span>
+              <span class="tag">Ontario</span>
+            </div>
+          </div>
+          <div class="piece-arrow">→</div>
+        </a>
+      </li>
+
+      <li>
+        <a class="piece-item" href="https://thedelusioneers.github.io/flight-log-not-found/" target="_blank">
+          <div class="piece-date">Apr 2026</div>
+          <div class="piece-content">
+            <div class="piece-title">Flight Log Not Found</div>
+            <div class="piece-desc">Ontario's $28.9M jet purchase moves the Premier's travel outside the public disclosure system — with no replacement regime announced. Bill 97's FOI amendments stack on top.</div>
+            <div class="piece-tags">
+              <span class="tag red">New</span>
+              <span class="tag">Ontario</span>
+              <span class="tag">FIPPA</span>
+              <span class="tag">Bill 97</span>
+            </div>
+          </div>
+          <div class="piece-arrow">→</div>
+        </a>
+      </li>
+
+      <li>
+        <a class="piece-item" href="https://thedelusioneers.github.io/Polling-Alberta-Separatism/" target="_blank">
+          <div class="piece-date">Apr 2026</div>
+          <div class="piece-content">
+            <div class="piece-title">Instrumental Variance</div>
+            <div class="piece-desc">A methodology record on Alberta separatism polling. How a number travels from instrument to headline, what house effects look like across trackers, and what the data actually shows versus what gets reported.</div>
+            <div class="piece-tags">
+              <span class="tag red">New</span>
+              <span class="tag">Alberta</span>
+              <span class="tag">Polling</span>
+              <span class="tag">Methodology</span>
+            </div>
+          </div>
+          <div class="piece-arrow">→</div>
+        </a>
+      </li>
+
+      <li>
+        <a class="piece-item" href="https://delusioneers-ont-bill97-sec7.netlify.app/" target="_blank">
+          <div class="piece-date">Apr 2026</div>
+          <div class="piece-content">
+            <div class="piece-title">Bill 97, Schedule 7 — Policy in Parallel</div>
+            <div class="piece-desc">Side-by-side statutory explainer: what the Bill 97 FIPPA amendments actually say versus what they mean. Ministerial exclusion, retroactivity, timelines, extensions — section by section.</div>
+            <div class="piece-tags">
+              <span class="tag">Ontario</span>
+              <span class="tag">FIPPA</span>
+              <span class="tag">Bill 97</span>
+              <span class="tag">Statutory</span>
+            </div>
+          </div>
+          <div class="piece-arrow">→</div>
+        </a>
+      </li>
+
+      <li>
+        <a class="piece-item" href="https://delusioneers-rip-ontario-foi.netlify.app/" target="_blank">
+          <div class="piece-date">Mar 2026</div>
+          <div class="piece-content">
+            <div class="piece-title">The FOI Track Record — Ontario 1988–2026</div>
+            <div class="piece-desc">A full timeline of Ontario cases where FOI requests and follow-up reviews changed what we know. Peterson era through Ford era. What the mechanism actually produced in 38 years before the register closed.</div>
+            <div class="piece-tags">
+              <span class="tag">Ontario</span>
+              <span class="tag">FIPPA</span>
+              <span class="tag">History</span>
+            </div>
+          </div>
+          <div class="piece-arrow">→</div>
+        </a>
+      </li>
+
+      <li>
+        <a class="piece-item" href="https://delusioneers-ont-foi-2026.netlify.app/" target="_blank">
+          <div class="piece-date">Mar 2026</div>
+          <div class="piece-content">
+            <div class="piece-title">The Receipt</div>
+            <div class="piece-desc">What Ontario's FOI laws revealed before the government exempted itself from them. 20 items. 38 years of FIPPA. One retroactive closure.</div>
+            <div class="piece-tags">
+              <span class="tag">Ontario</span>
+              <span class="tag">FIPPA</span>
+              <span class="tag">FOI</span>
+            </div>
+          </div>
+          <div class="piece-arrow">→</div>
+        </a>
+      </li>
+
+      <li>
+        <a class="piece-item" href="https://ontario-foi2026-mpptemplates.netlify.app/" target="_blank">
+          <div class="piece-date">Mar 2026</div>
+          <div class="piece-content">
+            <div class="piece-title">Write Your MPP</div>
+            <div class="piece-desc">Ready-to-send templates for contacting Ontario MPPs on the Bill 97 FIPPA amendments. Formatted for PC, NDP, Liberal, and Green caucus members.</div>
+            <div class="piece-tags">
+              <span class="tag">Ontario</span>
+              <span class="tag">FIPPA</span>
+              <span class="tag">Civic Action</span>
+            </div>
+          </div>
+          <div class="piece-arrow">→</div>
+        </a>
+      </li>
+
+      <li>
+        <a class="piece-item" href="https://ontario-foi2026-punchlist.netlify.app/" target="_blank">
+          <div class="piece-date">Mar 2026</div>
+          <div class="piece-content">
+            <div class="piece-title">The Punch List</div>
+            <div class="piece-desc">What needed to happen before the Bill 97 FIPPA amendments closed the books. Four concrete actions: contact your MPP, file a $5 FOI, back the organizations fighting it, hand someone the receipt.</div>
+            <div class="piece-tags">
+              <span class="tag">Ontario</span>
+              <span class="tag">FIPPA</span>
+              <span class="tag">Civic Action</span>
+            </div>
+          </div>
+          <div class="piece-arrow">→</div>
+        </a>
+      </li>
+
+    </ul>
+  </section>
+
+  <section id="contact">
+    <div class="section-label">Contact</div>
+    <div class="contact-block">
+      <div class="contact-left">
+        <strong>Tips. Ideas. Leads.</strong>
+        If you have a document, a thread worth pulling, or a story that isn't getting coverage — send it. We read everything. We don't need credit and we don't share sources.
+      </div>
+      <a class="contact-link" href="mailto:thedelusioneers@gmail.com">Send a tip →</a>
+    </div>
+  </section>
+
+  <div class="stamp-block">
+    <div class="stamp">Visibility<br>not verdicts</div>
+    <div class="stamp-text">
+      Facts and primary sources only.<br>
+      No editorializing. No agenda.<br>
+      The documentation speaks.
+    </div>
+  </div>
+
+  <hr class="rule">
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-left">
+        The Delusioneers<br>
+        Kingston, Ontario<br>
+        thedelusioneers.ca
+      </div>
+      <div class="footer-right">
+        <a href="https://thedelusioneers.substack.com" target="_blank">Substack archive</a><br>
+        <a href="https://instagram.com/the_delusioneers" target="_blank">@the_delusioneers</a><br>
+        No returns. No refunds. No records.
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  const html = document.documentElement;
+  const toggle = document.getElementById('themeToggle');
+  const icon = document.getElementById('toggleIcon');
+  const label = document.getElementById('toggleLabel');
+
+  // Detect system preference
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+  // Check for saved preference, fall back to system
+  const saved = localStorage.getItem('theme');
+  const initialDark = saved ? saved === 'dark' : prefersDark.matches;
+
+  function setTheme(dark) {
+    html.setAttribute('data-theme', dark ? 'dark' : 'light');
+    icon.textContent = dark ? '●' : '○';
+    label.textContent = dark ? 'Dark' : 'Light';
+  }
+
+  setTheme(initialDark);
+
+  toggle.addEventListener('click', () => {
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    const next = !isDark;
+    setTheme(next);
+    localStorage.setItem('theme', next ? 'dark' : 'light');
+  });
+
+  // Update if system preference changes and no manual override
+  prefersDark.addEventListener('change', (e) => {
+    if (!localStorage.getItem('theme')) {
+      setTheme(e.matches);
+    }
+  });
+</script>
+
+</body>
+</html>
