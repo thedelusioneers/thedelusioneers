@@ -2,549 +2,725 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Ontario Reversals Process</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Pattern — Ontario Government Reversals, 2018–2026</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
+  :root {
+    --bg: #2a2825;
+    --ink: #f5f0e8;
+    --ink-dim: rgba(245,240,232,0.6);
+    --ink-faint: rgba(245,240,232,0.3);
+    --ink-ghost: rgba(245,240,232,0.1);
+    --red: #c41e1e;
+    --col: min(860px, 94vw);
+  }
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
 
   body {
-    background: #1a1a1a;
-    font-family: 'JetBrains Mono', monospace;
+    background: var(--bg);
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    color: var(--ink);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 40px;
-    padding: 40px;
+    -webkit-font-smoothing: antialiased;
   }
 
-  .card {
-    width: 1080px;
-    height: 1080px;
-    background: #2a2825;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    flex-shrink: 0;
+  .progress-bar {
+    position: fixed; top: 0; left: 0;
+    height: 3px; background: var(--red); z-index: 200;
+    transition: width 0.05s linear;
+    box-shadow: 0 0 8px rgba(196,30,30,0.5);
   }
 
-  /* Brand bar — top */
-  .brand-bar {
-    background: #1a1a1a;
-    padding: 28px 52px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-shrink: 0;
+  /* HEADER */
+  header {
+    width: var(--col);
+    padding: 44px 0 32px;
+    border-bottom: 1px solid var(--ink-ghost);
   }
-  .brand-name {
+
+  .brand {
+    font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--ink-faint); margin-bottom: 14px;
+  }
+
+  header h1 {
     font-family: 'Special Elite', monospace;
-    font-size: 22px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: #f5f0e8;
-  }
-  .series-name {
-    font-size: 11px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: rgba(245,240,232,0.3);
+    font-size: clamp(26px, 4.5vw, 40px);
+    line-height: 1.15; color: var(--ink); margin-bottom: 10px;
   }
 
-  /* Red accent line */
-  .accent-line {
-    height: 4px;
-    background: #c41e1e;
-    flex-shrink: 0;
+  header p {
+    font-size: 12px; line-height: 1.75; color: var(--ink-dim);
+    max-width: 600px;
   }
 
-  /* Content area */
-  .card-content {
-    flex: 1;
-    padding: 52px 52px 0;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+  /* PATTERN SEQUENCE */
+  .pattern-seq {
+    width: var(--col);
+    padding: 16px 0 18px;
+    border-bottom: 1px solid var(--ink-ghost);
+    display: flex; align-items: center; flex-wrap: wrap; gap: 2px;
   }
+  .ps { font-family: 'Special Elite', monospace; font-size: 13px; color: var(--ink-faint); }
+  .ps.end { color: var(--red); opacity: 0.9; }
+  .pa { font-size: 11px; color: var(--ink-ghost); margin: 0 8px; }
 
-  /* Attribution bar — bottom */
-  .attr-bar {
-    padding: 24px 52px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 1px solid rgba(245,240,232,0.08);
-    flex-shrink: 0;
-  }
-  .attr-sources {
-    font-size: 13px;
-    color: rgba(245,240,232,0.25);
-    letter-spacing: 1px;
-  }
-  .attr-handle {
-    font-size: 13px;
-    color: rgba(245,240,232,0.25);
-    letter-spacing: 1px;
-  }
+  /* CASES */
+  .cases { width: var(--col); }
 
-  /* ── COVER CARD ── */
-  .cover .card-content {
-    justify-content: center;
-    gap: 0;
+  .case {
+    padding: 36px 0;
+    border-bottom: 1px solid var(--ink-ghost);
+    opacity: 0; transform: translateY(10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
   }
-  .cover .doc-type {
-    font-size: 12px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: #c41e1e;
-    opacity: 0.8;
+  .case.visible { opacity: 1; transform: translateY(0); }
+
+  .case-header {
+    display: flex; align-items: baseline; gap: 14px;
     margin-bottom: 20px;
   }
-  .cover h1 {
+  .case-n { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-ghost); }
+  .case-title {
     font-family: 'Special Elite', monospace;
-    font-size: 72px;
-    line-height: 1.1;
-    color: #f5f0e8;
-    margin-bottom: 24px;
-  }
-  .cover .cover-sub {
-    font-size: 16px;
-    line-height: 1.8;
-    color: rgba(245,240,232,0.45);
-    max-width: 620px;
-    margin-bottom: 48px;
-  }
-  .cover .pattern-line {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    flex-wrap: wrap;
-  }
-  .cover .p-step {
-    font-family: 'Special Elite', monospace;
-    font-size: 18px;
-    color: rgba(245,240,232,0.4);
-  }
-  .cover .p-step.last { color: #c41e1e; }
-  .cover .p-arrow {
-    font-size: 14px;
-    color: rgba(245,240,232,0.15);
-    margin: 0 16px;
-  }
-  .cover .count-tag {
-    margin-top: 28px;
-    font-size: 12px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: rgba(245,240,232,0.25);
-    padding: 8px 16px;
-    border: 1px solid rgba(245,240,232,0.12);
-    display: inline-block;
+    font-size: clamp(17px, 2.8vw, 22px);
+    color: var(--ink); line-height: 1.2;
   }
 
-  /* ── CASE CARDS ── */
-  .case-card .card-number {
-    font-size: 11px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: rgba(245,240,232,0.2);
-    margin-bottom: 12px;
-  }
-  .case-card .case-title {
-    font-family: 'Special Elite', monospace;
-    font-size: 38px;
-    line-height: 1.2;
-    color: #f5f0e8;
-    margin-bottom: 36px;
-  }
-
-  .case-grid {
+  /* TWO-COLUMN GRID */
+  .cols {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 2px;
-    flex: 1;
+    gap: 3px;
+  }
+  @media (max-width: 580px) { .cols { grid-template-columns: 1fr; } }
+
+  .col {
+    padding: 18px 20px;
+    display: flex; flex-direction: column; gap: 0;
+  }
+
+  .col-d { background: rgba(245,240,232,0.025); border-top: 2px solid rgba(245,240,232,0.15); }
+  .col-r { background: rgba(196,30,30,0.04); border-top: 2px solid var(--red); }
+
+  /* Column heading */
+  .col-head {
+    font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase;
+    padding-bottom: 14px; border-bottom: 1px solid var(--ink-ghost);
     margin-bottom: 0;
   }
+  .col-d .col-head { color: var(--ink-faint); }
+  .col-r .col-head { color: var(--red); opacity: 0.8; }
 
-  .case-col {
-    padding: 28px 32px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
+  /* Fields */
+  .field {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--ink-ghost);
   }
+  .field:last-of-type { border-bottom: none; }
 
-  .case-col.decision-col {
-    background: rgba(245,240,232,0.03);
-    border-top: 2px solid rgba(245,240,232,0.12);
+  .fl {
+    font-size: 8px; letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 5px;
   }
+  .col-d .fl { color: var(--ink-faint); }
+  .col-r .fl { color: rgba(196,30,30,0.55); }
 
-  .case-col.reversal-col {
-    background: rgba(196,30,30,0.05);
-    border-top: 2px solid #c41e1e;
-  }
-
-  .col-head {
-    font-size: 10px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .col-head::before {
-    content: '';
-    display: block;
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-  .decision-head { color: rgba(245,240,232,0.3); }
-  .decision-head::before { background: rgba(245,240,232,0.25); }
-  .reversal-head { color: #c41e1e; opacity: 0.8; }
-  .reversal-head::before { background: #c41e1e; }
-
-  .col-text {
-    font-size: 15px;
-    line-height: 1.65;
-    color: rgba(245,240,232,0.55);
-    flex: 1;
+  .ft {
+    font-size: 11.5px; line-height: 1.7; color: var(--ink-dim);
   }
 
-  .stated {
-    font-size: 13px;
-    line-height: 1.6;
-    color: rgba(245,240,232,0.28);
-    padding-left: 12px;
-    border-left: 2px solid rgba(245,240,232,0.1);
-    font-style: italic;
+  .ft.quote { color: var(--red); opacity: 0.8; font-style: italic; }
+
+  .timetag {
+    display: inline-block; margin-top: 6px;
+    font-size: 8.5px; letter-spacing: 2px; text-transform: uppercase;
+    padding: 2px 7px; border: 1px solid var(--ink-ghost); color: var(--ink-faint);
   }
 
-  .forced {
-    font-size: 13px;
-    line-height: 1.6;
-    color: rgba(245,240,232,0.32);
-    padding-left: 12px;
-    border-left: 2px solid rgba(196,30,30,0.35);
+  /* Sources */
+  .srcs {
+    padding-top: 12px;
+    display: flex; flex-wrap: wrap; gap: 5px;
+  }
+  .src {
+    font-size: 8.5px; letter-spacing: 1px; text-transform: uppercase;
+    padding: 2px 7px; border: 1px solid var(--ink-ghost);
+    text-decoration: none; color: var(--ink-faint);
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .src:hover { color: var(--ink); border-color: var(--ink-dim); }
+  .col-r .src { color: rgba(196,30,30,0.45); border-color: rgba(196,30,30,0.2); }
+  .col-r .src:hover { color: var(--red); border-color: var(--red); }
+
+  /* SUMMARY */
+  .summary {
+    width: var(--col); padding: 44px 0 36px;
+    border-top: 1px solid var(--ink-ghost);
+    opacity: 0; transform: translateY(10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .summary.visible { opacity: 1; transform: translateY(0); }
+
+  .sum-label {
+    font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--ink-ghost); margin-bottom: 18px;
   }
 
-  .claim {
-    font-size: 14px;
-    line-height: 1.6;
-    color: #c41e1e;
-    opacity: 0.75;
-    font-style: italic;
-    padding-left: 12px;
-    border-left: 2px solid #c41e1e;
+  .sum-grid {
+    display: grid; grid-template-columns: repeat(4,1fr);
+    gap: 2px; background: var(--ink-ghost); margin-bottom: 24px;
   }
+  @media (max-width: 480px) { .sum-grid { grid-template-columns: repeat(2,1fr); } }
 
-  .speed {
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    padding: 4px 10px;
-    border: 1px solid rgba(245,240,232,0.15);
-    color: rgba(245,240,232,0.3);
-    display: inline-block;
-    align-self: flex-start;
-    margin-top: auto;
+  .sum-cell { background: var(--bg); padding: 16px 14px; }
+  .sum-val { font-family: 'Special Elite', monospace; font-size: 24px; color: var(--ink); margin-bottom: 4px; }
+  .sum-val.r { color: var(--red); }
+  .sum-key { font-size: 8.5px; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-faint); line-height: 1.5; }
+
+  .sum-note { font-size: 11.5px; line-height: 1.85; color: var(--ink-dim); max-width: 600px; }
+
+  /* FOOTER */
+  footer {
+    width: var(--col); padding: 24px 0 48px;
+    border-top: 1px solid var(--ink-ghost);
+    display: flex; justify-content: space-between; align-items: flex-end;
+    flex-wrap: wrap; gap: 14px;
   }
+  .fl-l { display: flex; flex-direction: column; gap: 4px; }
+  .fl-l p { font-size: 8.5px; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-ghost); line-height: 1.9; }
+  .fl-l a { color: var(--ink-faint); text-decoration: none; }
+  .fl-l a:hover { color: var(--ink); }
+  .fl-r { font-family: 'Special Elite', monospace; font-size: 11px; color: var(--ink-ghost); letter-spacing: 2px; text-align: right; }
 </style>
 </head>
 <body>
 
-<!-- CARD 00: COVER -->
-<div class="card cover" id="card-00-cover">
-  <div class="brand-bar">
-    <span class="brand-name">The Delusioneers</span>
-    <span class="series-name">Pattern Documentation</span>
-  </div>
-  <div class="accent-line"></div>
-  <div class="card-content">
-    <div class="doc-type">Ontario · 2018–2026</div>
-    <h1>The<br>Pattern</h1>
-    <p class="cover-sub">Ford Government Reversals. Nine times since 2018, the Ontario government announced a major decision, implemented it, faced backlash, and reversed course.</p>
-    <div class="pattern-line">
-      <span class="p-step">Decision</span>
-      <span class="p-arrow">→</span>
-      <span class="p-step">Implementation</span>
-      <span class="p-arrow">→</span>
-      <span class="p-step">Backlash</span>
-      <span class="p-arrow">→</span>
-      <span class="p-step last">Reversal</span>
-    </div>
-    <span class="count-tag">9 documented cases · 2018–2026</span>
-  </div>
-  <div class="attr-bar">
-    <span class="attr-sources">thedelusioneers.substack.com</span>
-    <span class="attr-handle">@the_delusioneers</span>
-  </div>
+<div class="progress-bar" id="pb"></div>
+
+<header>
+  <div class="brand">The Delusioneers · Pattern Documentation</div>
+  <h1>The Pattern</h1>
+  <p>Ford Government Reversals, 2018–2026. Nine times since 2018, the Ontario government announced a major decision, implemented it, faced backlash, and reversed course. What varies is who forced the reversal, and what the government claimed was the reason.</p>
+</header>
+
+<div class="pattern-seq">
+  <span class="ps">Decision</span><span class="pa">→</span>
+  <span class="ps">Implementation</span><span class="pa">→</span>
+  <span class="ps">Backlash</span><span class="pa">→</span>
+  <span class="ps end">Reversal</span>
 </div>
 
-<!-- CARD 01: GREENBELT -->
-<div class="card case-card" id="card-01-greenbelt">
-  <div class="brand-bar">
-    <span class="brand-name">The Delusioneers</span>
-    <span class="series-name">The Pattern · Case 01 of 09</span>
-  </div>
-  <div class="accent-line"></div>
-  <div class="card-content">
-    <div class="case-title">Greenbelt<br>Land Removals</div>
-    <div class="case-grid">
-      <div class="case-col decision-col">
-        <div class="col-head decision-head">Decision</div>
-        <div class="col-text">Nov 4, 2022: Province removes 2,994 hectares from Greenbelt protection. Internal process later found to have favoured specific developers.</div>
-        <div class="stated">Stated: accelerate housing, add land supply.</div>
-      </div>
-      <div class="case-col reversal-col">
-        <div class="col-head reversal-head">Reversal</div>
-        <div class="col-text">AG and Integrity Commissioner both find process favoured developers. Ministers resign. RCMP opens investigation. September 2023: Ford reverses, promises to return all land.</div>
-        <div class="forced">AG · Integrity Commissioner · public · RCMP</div>
-        <div class="claim">"I broke that promise."</div>
-        <div class="speed">10 months</div>
-      </div>
-    </div>
-  </div>
-  <div class="attr-bar">
-    <span class="attr-sources">CBC · The Narwhal · AG Ontario</span>
-    <span class="attr-handle">@the_delusioneers</span>
-  </div>
-</div>
+<div class="cases" id="cases">
 
-<!-- CARD 02: PEEL -->
-<div class="card case-card" id="card-02-peel">
-  <div class="brand-bar">
-    <span class="brand-name">The Delusioneers</span>
-    <span class="series-name">The Pattern · Case 02 of 09</span>
-  </div>
-  <div class="accent-line"></div>
-  <div class="card-content">
-    <div class="case-title">Dissolution of<br>Peel Region</div>
-    <div class="case-grid">
-      <div class="case-col decision-col">
-        <div class="col-head decision-head">Decision</div>
-        <div class="col-text">June 2023: Hazel McCallion Act passed. Dissolves Peel Region by 2025. Transition board established.</div>
-        <div class="stated">Stated: modernization, efficiency, local autonomy.</div>
+  <!-- 01 GREENBELT -->
+  <div class="case">
+    <div class="case-header">
+      <span class="case-n">01 / 09</span>
+      <span class="case-title">Greenbelt Land Removals</span>
+    </div>
+    <div class="cols">
+      <div class="col col-d">
+        <div class="col-head">Decision</div>
+        <div class="field">
+          <div class="fl">Decision</div>
+          <div class="ft">November 4, 2022: Province removes 2,994 hectares (7,400 acres) from Greenbelt protection via regulatory instruments.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Implementation</div>
+          <div class="ft">Legislative and regulatory steps completed. Lands removed from protection and enabled for development. Internal process conducted without normal environmental or agricultural review. Site selection later found to have been driven by a small group of political staff.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Stated Reason</div>
+          <div class="ft">Accelerate housing construction. Address the housing crisis by adding land supply.</div>
+        </div>
+        <div class="srcs">
+          <a class="src" href="https://www.cbc.ca/news/canada/toronto/ont-greenbelt-timeline-1.6974715" target="_blank">CBC Timeline</a>
+          <a class="src" href="https://toronto.citynews.ca/2023/09/21/ontario-greenbelt-doug-ford-timeline-key-events/" target="_blank">CityNews</a>
+        </div>
       </div>
-      <div class="case-col reversal-col">
-        <div class="col-head reversal-head">Reversal</div>
-        <div class="col-text">Municipalities raise concerns about financial and operational complexity. Transition costs unresolved. December 2023: legislation introduced to undo the dissolution.</div>
-        <div class="forced">Peel municipalities · local leaders · public scrutiny</div>
-        <div class="claim">Claim: acted on "feedback" about cost and complexity.</div>
-        <div class="speed">6 months</div>
+      <div class="col col-r">
+        <div class="col-head">Reversal</div>
+        <div class="field">
+          <div class="fl">Reversal</div>
+          <div class="ft">September 2023: Ford publicly reverses the decision and promises to return all affected lands. Legislature passes law to restore lands and reinforce protections.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Who Forced It</div>
+          <div class="ft">Auditor General and Integrity Commissioner both find the process "favoured certain developers" and was driven by political staff with limited environmental review. Ministers and staff resign. RCMP opens a criminal investigation.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Timeline</div>
+          <div class="ft">Removals announced: November 2022. Promise to restore: September 2023.</div>
+          <span class="timetag">10 months</span>
+        </div>
+        <div class="field">
+          <div class="fl">Ford's Claim</div>
+          <div class="ft quote">"I broke that promise."</div>
+        </div>
+        <div class="srcs">
+          <a class="src" href="https://thenarwhal.ca/ford-reverses-greenbelt-decision/" target="_blank">The Narwhal</a>
+          <a class="src" href="https://www.theglobeandmail.com/canada/article-doug-ford-ontario-policies-reversal/" target="_blank">Globe &amp; Mail</a>
+          <a class="src" href="https://www.cbc.ca/news/canada/hamilton/greenbelt-land-reversal-1.6974326" target="_blank">CBC</a>
+        </div>
       </div>
     </div>
   </div>
-  <div class="attr-bar">
-    <span class="attr-sources">CBC · askross.ca</span>
-    <span class="attr-handle">@the_delusioneers</span>
-  </div>
-</div>
 
-<!-- CARD 03: EDUCATION WORKERS -->
-<div class="card case-card" id="card-03-education">
-  <div class="brand-bar">
-    <span class="brand-name">The Delusioneers</span>
-    <span class="series-name">The Pattern · Case 03 of 09</span>
-  </div>
-  <div class="accent-line"></div>
-  <div class="card-content">
-    <div class="case-title">Education Workers &amp;<br>Notwithstanding Clause</div>
-    <div class="case-grid">
-      <div class="case-col decision-col">
-        <div class="col-head decision-head">Decision</div>
-        <div class="col-text">Nov 2022: Legislation imposes contract on 55,000 CUPE workers, bans strikes, invokes notwithstanding clause to pre-empt Charter challenges.</div>
-        <div class="stated">Stated: maintain in-person schooling, avoid disruption.</div>
+  <!-- 02 PEEL -->
+  <div class="case">
+    <div class="case-header">
+      <span class="case-n">02 / 09</span>
+      <span class="case-title">Dissolution of Peel Region</span>
+    </div>
+    <div class="cols">
+      <div class="col col-d">
+        <div class="col-head">Decision</div>
+        <div class="field">
+          <div class="fl">Decision</div>
+          <div class="ft">June 2023: Hazel McCallion Act passed. Dissolves Peel Region by 2025, creating standalone municipalities for Mississauga, Brampton, and Caledon.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Implementation</div>
+          <div class="ft">Transition board established to work through financial and service-delivery implications. Transition costs begin accruing with no clear answer on who pays.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Stated Reason</div>
+          <div class="ft">Modernization, efficiency, and local autonomy for the three municipalities.</div>
+        </div>
+        <div class="srcs">
+          <a class="src" href="https://askross.ca/ontarios-legislative-reversal-the-future-of-peel-region-and-its-impact-on-mississauga/" target="_blank">askross.ca</a>
+        </div>
       </div>
-      <div class="case-col reversal-col">
-        <div class="col-head reversal-head">Reversal</div>
-        <div class="col-text">Workers strike despite the law. Allied unions signal broader action. Government offers to repeal if workers end strike. Within weeks: law withdrawn.</div>
-        <div class="forced">CUPE strike · allied unions · public scrutiny of notwithstanding use</div>
-        <div class="speed">Weeks</div>
+      <div class="col col-r">
+        <div class="col-head">Reversal</div>
+        <div class="field">
+          <div class="fl">Reversal</div>
+          <div class="ft">December 2023: Minister announces new legislation to undo the dissolution. Peel Region remains intact.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Who Forced It</div>
+          <div class="ft">Peel municipalities and local leaders highlight financial and operational complexity. Questions about transition board costs go unanswered. Public and media scrutiny of feasibility intensifies.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Timeline</div>
+          <div class="ft">Law passed: June 2023. Reversal announced: December 2023.</div>
+          <span class="timetag">6 months</span>
+        </div>
+        <div class="field">
+          <div class="fl">Ford's Claim</div>
+          <div class="ft quote">Acted on "feedback" about cost and complexity risks.</div>
+        </div>
+        <div class="srcs">
+          <a class="src" href="https://www.cbc.ca/news/canada/toronto/peel-region-paul-calandra-1.7057628" target="_blank">CBC</a>
+          <a class="src" href="https://www.cbc.ca/news/canada/toronto/peel-region-transition-board-1.7200954" target="_blank">CBC (Transition Board)</a>
+        </div>
       </div>
     </div>
   </div>
-  <div class="attr-bar">
-    <span class="attr-sources">CBC · CTV</span>
-    <span class="attr-handle">@the_delusioneers</span>
-  </div>
-</div>
 
-<!-- CARD 04: BILL 124 -->
-<div class="card case-card" id="card-04-bill124">
-  <div class="brand-bar">
-    <span class="brand-name">The Delusioneers</span>
-    <span class="series-name">The Pattern · Case 04 of 09</span>
-  </div>
-  <div class="accent-line"></div>
-  <div class="card-content">
-    <div class="case-title">Bill 124 —<br>Public Sector Wage Cap</div>
-    <div class="case-grid">
-      <div class="case-col decision-col">
-        <div class="col-head decision-head">Decision</div>
-        <div class="col-text">2019: Bill 124 caps public-sector wages at 1% annually for three years. Unions immediately begin court challenges.</div>
-        <div class="stated">Stated: control compensation growth, manage provincial finances.</div>
+  <!-- 03 EDUCATION WORKERS -->
+  <div class="case">
+    <div class="case-header">
+      <span class="case-n">03 / 09</span>
+      <span class="case-title">Education Workers &amp; the Notwithstanding Clause</span>
+    </div>
+    <div class="cols">
+      <div class="col col-d">
+        <div class="col-head">Decision</div>
+        <div class="field">
+          <div class="fl">Decision</div>
+          <div class="ft">November 2022: Legislation passed imposing a contract on approximately 55,000 CUPE education support workers, banning strikes and invoking the Charter's notwithstanding clause pre-emptively.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Implementation</div>
+          <div class="ft">Law in force. Workers legally prohibited from striking. Notwithstanding clause invoked before any court ruling — a pre-emptive use.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Stated Reason</div>
+          <div class="ft">Maintain in-person schooling and avoid disruption to students and families.</div>
+        </div>
+        <div class="srcs">
+          <a class="src" href="https://www.cbc.ca/news/canada/toronto/ont-peel-reversals-1.7058542" target="_blank">CBC</a>
+          <a class="src" href="https://www.ctvnews.ca/toronto/article/a-list-of-policies-and-cuts-the-doug-ford-government-has-reversed/" target="_blank">CTV</a>
+        </div>
       </div>
-      <div class="case-col reversal-col">
-        <div class="col-head reversal-head">Reversal</div>
-        <div class="col-text">Superior Court and Court of Appeal both rule the law unconstitutional — infringes collective bargaining rights. Feb 2024: government will not appeal. Law to be repealed.</div>
-        <div class="forced">Union court challenges · adverse rulings at two court levels</div>
-        <div class="claim">Claim: cost-of-living pressures on workers.</div>
-        <div class="speed">5 years</div>
+      <div class="col col-r">
+        <div class="col-head">Reversal</div>
+        <div class="field">
+          <div class="fl">Reversal</div>
+          <div class="ft">Government offers to repeal the legislation and return to bargaining if workers end their strike. Within weeks, the law is withdrawn.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Who Forced It</div>
+          <div class="ft">CUPE workers strike despite the law. Other unions signal broader labour action. Public and media scrutiny intensifies over the use of the notwithstanding clause in a labour dispute.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Timeline</div>
+          <div class="ft">Law passed and withdrawn within weeks during the November 2022 dispute.</div>
+          <span class="timetag">Weeks</span>
+        </div>
+        <div class="srcs">
+          <a class="src" href="https://www.cbc.ca/news/canada/toronto/ont-peel-reversals-1.7058542" target="_blank">CBC</a>
+        </div>
       </div>
     </div>
   </div>
-  <div class="attr-bar">
-    <span class="attr-sources">CTV · CKOM</span>
-    <span class="attr-handle">@the_delusioneers</span>
-  </div>
-</div>
 
-<!-- CARD 05: BLUE PLATES -->
-<div class="card case-card" id="card-05-plates">
-  <div class="brand-bar">
-    <span class="brand-name">The Delusioneers</span>
-    <span class="series-name">The Pattern · Case 05 of 09</span>
-  </div>
-  <div class="accent-line"></div>
-  <div class="card-content">
-    <div class="case-title">Blue<br>Licence Plates</div>
-    <div class="case-grid">
-      <div class="case-col decision-col">
-        <div class="col-head decision-head">Decision</div>
-        <div class="col-text">2019: New blue Ontario licence plates introduced as part of provincial rebrand following procurement and design decisions.</div>
-        <div class="stated">Stated: more durable plates, updated provincial branding.</div>
+  <!-- 04 BILL 124 -->
+  <div class="case">
+    <div class="case-header">
+      <span class="case-n">04 / 09</span>
+      <span class="case-title">Bill 124 — Public Sector Wage Cap</span>
+    </div>
+    <div class="cols">
+      <div class="col col-d">
+        <div class="col-head">Decision</div>
+        <div class="field">
+          <div class="fl">Decision</div>
+          <div class="ft">2019: Bill 124 passed, capping public-sector wage increases at 1% annually for three years, covering hundreds of thousands of health, education, and public sector workers.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Implementation</div>
+          <div class="ft">Law in force. Wage caps applied across the public sector. Unions immediately begin court challenges arguing the law violates collective bargaining rights.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Stated Reason</div>
+          <div class="ft">Control public-sector compensation growth and manage provincial finances.</div>
+        </div>
+        <div class="srcs">
+          <a class="src" href="https://www.ckom.com/2024/02/13/a-list-of-policies-and-cuts-the-doug-ford-government-has-reversed/" target="_blank">CKOM</a>
+          <a class="src" href="https://www.ctvnews.ca/toronto/article/a-list-of-policies-and-cuts-the-doug-ford-government-has-reversed/" target="_blank">CTV</a>
+        </div>
       </div>
-      <div class="case-col reversal-col">
-        <div class="col-head reversal-head">Reversal</div>
-        <div class="col-text">Police report plates are difficult to read at night. Reports and images confirm visibility issues. Government quickly halts rollout. ~170,000 blue plates remain in circulation as of 2023.</div>
-        <div class="forced">Front-line police flagging safety · media coverage</div>
-        <div class="speed">Quickly</div>
+      <div class="col col-r">
+        <div class="col-head">Reversal</div>
+        <div class="field">
+          <div class="fl">Reversal</div>
+          <div class="ft">February 2024: Government announces it will not seek Supreme Court leave to appeal and will repeal the law.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Who Forced It</div>
+          <div class="ft">Ontario Superior Court rules Bill 124 unconstitutional. Court of Appeal upholds the ruling. Two adverse rulings at two court levels leave no legal ground to continue.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Timeline</div>
+          <div class="ft">Law passed: 2019. Commitment to repeal: February 2024.</div>
+          <span class="timetag">5 years</span>
+        </div>
+        <div class="field">
+          <div class="fl">Ford's Claim</div>
+          <div class="ft quote">Cost-of-living pressures on workers.</div>
+        </div>
+        <div class="srcs">
+          <a class="src" href="https://www.ckom.com/2024/02/13/a-list-of-policies-and-cuts-the-doug-ford-government-has-reversed/" target="_blank">CKOM</a>
+        </div>
       </div>
     </div>
   </div>
-  <div class="attr-bar">
-    <span class="attr-sources">CBC</span>
-    <span class="attr-handle">@the_delusioneers</span>
-  </div>
-</div>
 
-<!-- CARD 06: PUBLIC HEALTH CUTS -->
-<div class="card case-card" id="card-06-pubhealth">
-  <div class="brand-bar">
-    <span class="brand-name">The Delusioneers</span>
-    <span class="series-name">The Pattern · Case 06 of 09</span>
-  </div>
-  <div class="accent-line"></div>
-  <div class="card-content">
-    <div class="case-title">Public Health &amp;<br>Municipal Funding Cuts</div>
-    <div class="case-grid">
-      <div class="case-col decision-col">
-        <div class="col-head decision-head">Decision</div>
-        <div class="col-text">2019: Province cuts cost-sharing to municipalities for public health and other local services. Changes are retroactive, affecting already-set budgets.</div>
-        <div class="stated">Stated: fiscal restraint, rebalancing provincial-municipal cost sharing.</div>
+  <!-- 05 BLUE PLATES -->
+  <div class="case">
+    <div class="case-header">
+      <span class="case-n">05 / 09</span>
+      <span class="case-title">Blue Licence Plates</span>
+    </div>
+    <div class="cols">
+      <div class="col col-d">
+        <div class="col-head">Decision</div>
+        <div class="field">
+          <div class="fl">Decision</div>
+          <div class="ft">2019: Introduction of new blue Ontario licence plates as part of a provincial rebrand following procurement and design decisions.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Implementation</div>
+          <div class="ft">Plates manufactured and issued. Rollout begins across Ontario.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Stated Reason</div>
+          <div class="ft">More durable plates and updated provincial branding.</div>
+        </div>
+        <div class="srcs">
+          <a class="src" href="https://www.cbc.ca/news/canada/toronto/ont-peel-reversals-1.7058542" target="_blank">CBC</a>
+        </div>
       </div>
-      <div class="case-col reversal-col">
-        <div class="col-head reversal-head">Reversal</div>
-        <div class="col-text">Mayors organize collective opposition. Mid-year retroactive cuts cancelled. Broader cuts paused during pandemic. 2023: government permanently reverses the cost-sharing changes.</div>
-        <div class="forced">Coordinated municipal opposition · COVID-19 exposing public health capacity needs</div>
-        <div class="speed">2019 – 2023</div>
+      <div class="col col-r">
+        <div class="col-head">Reversal</div>
+        <div class="field">
+          <div class="fl">Reversal</div>
+          <div class="ft">Rollout halted. Province returns to issuing more legible plate designs. As of 2023, approximately 170,000 blue plates remain in circulation with no plan to remove them.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Who Forced It</div>
+          <div class="ft">A Kingston police officer publicly reports the plates are unreadable at night. Further reports and images confirm the visibility defect. Media coverage amplifies the safety concern.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Timeline</div>
+          <div class="ft">Precise interval not documented in available records. Described as quickly reversed after visibility concerns emerged.</div>
+          <span class="timetag">Quickly</span>
+        </div>
+        <div class="srcs">
+          <a class="src" href="https://www.cbc.ca/news/canada/toronto/ont-peel-reversals-1.7058542" target="_blank">CBC</a>
+        </div>
       </div>
     </div>
   </div>
-  <div class="attr-bar">
-    <span class="attr-sources">CBC</span>
-    <span class="attr-handle">@the_delusioneers</span>
-  </div>
-</div>
 
-<!-- CARD 07: PANDEMIC ENFORCEMENT -->
-<div class="card case-card" id="card-07-pandemic">
-  <div class="brand-bar">
-    <span class="brand-name">The Delusioneers</span>
-    <span class="series-name">The Pattern · Case 07 of 09</span>
-  </div>
-  <div class="accent-line"></div>
-  <div class="card-content">
-    <div class="case-title">Pandemic<br>Enforcement Powers</div>
-    <div class="case-grid">
-      <div class="case-col decision-col">
-        <div class="col-head decision-head">Decision</div>
-        <div class="col-text">April 2021: Emergency orders expand police powers to stop individuals and close playgrounds as part of COVID-19 response.</div>
-        <div class="stated">Stated: reduce mobility and contacts to control spread.</div>
+  <!-- 06 PUBLIC HEALTH CUTS -->
+  <div class="case">
+    <div class="case-header">
+      <span class="case-n">06 / 09</span>
+      <span class="case-title">Public Health &amp; Municipal Funding Cuts</span>
+    </div>
+    <div class="cols">
+      <div class="col col-d">
+        <div class="col-head">Decision</div>
+        <div class="field">
+          <div class="fl">Decision</div>
+          <div class="ft">2019: Province changes cost-sharing formulas, cutting provincial contributions to public health units and municipal services. Changes applied retroactively to already-set municipal budgets.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Implementation</div>
+          <div class="ft">Retroactive changes take effect mid-budget-year. Municipalities scramble to absorb shortfalls. Public health units begin planning for reduced provincial funding.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Stated Reason</div>
+          <div class="ft">Fiscal restraint and rebalancing provincial-municipal cost sharing.</div>
+        </div>
+        <div class="srcs">
+          <a class="src" href="https://www.cbc.ca/news/canada/toronto/doug-ford-ontario-cuts-backtrack-1.5308060" target="_blank">CBC (Backtrack)</a>
+          <a class="src" href="https://www.cbc.ca/news/canada/toronto/ont-peel-reversals-1.7058542" target="_blank">CBC (Reversals)</a>
+        </div>
       </div>
-      <div class="case-col reversal-col">
-        <div class="col-head reversal-head">Reversal</div>
-        <div class="col-text">Civil liberties groups and experts criticize the measures. Several police services publicly state they will not use the expanded stop powers. Within days: playgrounds reopened, powers rolled back.</div>
-        <div class="forced">Civil liberties groups · police refusal to enforce · expert and public criticism</div>
-        <div class="claim">"We got it wrong."</div>
-        <div class="speed">Days</div>
+      <div class="col col-r">
+        <div class="col-head">Reversal</div>
+        <div class="field">
+          <div class="fl">Reversal</div>
+          <div class="ft">Mid-year retroactive cuts cancelled within 2019. Broader cuts paused during the pandemic. 2023: Government permanently reverses the planned public-health cost-sharing changes.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Who Forced It</div>
+          <div class="ft">Mayors across Ontario organize collective opposition to the retroactive cuts. The COVID-19 pandemic then exposes the consequences of weakened local public health capacity, adding political weight to permanent reversal.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Timeline</div>
+          <div class="ft">Retroactive cuts cancelled: 2019. Full permanent reversal confirmed: 2023.</div>
+          <span class="timetag">2019 – 2023</span>
+        </div>
+        <div class="srcs">
+          <a class="src" href="https://www.cbc.ca/news/canada/toronto/doug-ford-ontario-cuts-backtrack-1.5308060" target="_blank">CBC</a>
+        </div>
       </div>
     </div>
   </div>
-  <div class="attr-bar">
-    <span class="attr-sources">CBC · CTV</span>
-    <span class="attr-handle">@the_delusioneers</span>
-  </div>
-</div>
 
-<!-- CARD 08: URBAN BOUNDARIES -->
-<div class="card case-card" id="card-08-boundaries">
-  <div class="brand-bar">
-    <span class="brand-name">The Delusioneers</span>
-    <span class="series-name">The Pattern · Case 08 of 09</span>
-  </div>
-  <div class="accent-line"></div>
-  <div class="card-content">
-    <div class="case-title">Urban Boundary<br>Expansions</div>
-    <div class="case-grid">
-      <div class="case-col decision-col">
-        <div class="col-head decision-head">Decision</div>
-        <div class="col-text">Province uses ministerial powers to expand urban boundaries and override parts of municipal official plans across multiple regions.</div>
-        <div class="stated">Stated: increase land supply to support provincial housing goals.</div>
+  <!-- 07 PANDEMIC ENFORCEMENT -->
+  <div class="case">
+    <div class="case-header">
+      <span class="case-n">07 / 09</span>
+      <span class="case-title">Pandemic Enforcement Powers</span>
+    </div>
+    <div class="cols">
+      <div class="col col-d">
+        <div class="col-head">Decision</div>
+        <div class="field">
+          <div class="fl">Decision</div>
+          <div class="ft">April 2021: Emergency orders expand police powers to stop individuals anywhere without cause and close outdoor playgrounds as part of the COVID-19 response.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Implementation</div>
+          <div class="ft">Orders in force. Police given authority to stop and question individuals. Playgrounds closed across Ontario.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Stated Reason</div>
+          <div class="ft">Reduce mobility and contacts to control COVID-19 spread during a surge.</div>
+        </div>
+        <div class="srcs">
+          <a class="src" href="https://www.cbc.ca/news/canada/toronto/doug-ford-ontario-covid-19-news-conference-1.5997521" target="_blank">CBC</a>
+          <a class="src" href="https://www.ctvnews.ca/toronto/article/we-got-it-wrong-doug-ford-apologizes-for-some-of-ontarios-enhanced-public-health-measures/" target="_blank">CTV</a>
+        </div>
       </div>
-      <div class="case-col reversal-col">
-        <div class="col-head reversal-head">Reversal</div>
-        <div class="col-text">Municipalities argue extra land is unnecessary. Concerns raised about sprawl and servicing costs. Fall 2023: Minister reverses some boundary expansions, restoring local plans.</div>
-        <div class="forced">Municipal governments · planning staff · media attention to pattern of interventions</div>
-        <div class="speed">Fall 2023</div>
+      <div class="col col-r">
+        <div class="col-head">Reversal</div>
+        <div class="field">
+          <div class="fl">Reversal</div>
+          <div class="ft">Within days: playgrounds reopened, expanded stop powers rolled back. Ford holds a press conference to announce the changes and apologize.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Who Forced It</div>
+          <div class="ft">Civil liberties organizations and medical experts publicly criticize the proportionality of the measures. Multiple police services announce they will not use the expanded stop powers.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Timeline</div>
+          <div class="ft">Orders issued and reversed within days in April 2021.</div>
+          <span class="timetag">Days</span>
+        </div>
+        <div class="field">
+          <div class="fl">Ford's Claim</div>
+          <div class="ft quote">"We got it wrong."</div>
+        </div>
+        <div class="srcs">
+          <a class="src" href="https://www.cbc.ca/news/canada/toronto/doug-ford-ontario-covid-19-news-conference-1.5997521" target="_blank">CBC</a>
+          <a class="src" href="https://www.ctvnews.ca/toronto/article/we-got-it-wrong-doug-ford-apologizes-for-some-of-ontarios-enhanced-public-health-measures/" target="_blank">CTV</a>
+        </div>
       </div>
     </div>
   </div>
-  <div class="attr-bar">
-    <span class="attr-sources">CBC · CTV</span>
-    <span class="attr-handle">@the_delusioneers</span>
-  </div>
-</div>
 
-<!-- CARD 09: JET -->
-<div class="card case-card" id="card-09-jet">
-  <div class="brand-bar">
-    <span class="brand-name">The Delusioneers</span>
-    <span class="series-name">The Pattern · Case 09 of 09</span>
-  </div>
-  <div class="accent-line"></div>
-  <div class="card-content">
-    <div class="case-title">The Government<br>Jet</div>
-    <div class="case-grid">
-      <div class="case-col decision-col">
-        <div class="col-head decision-head">Decision</div>
-        <div class="col-text">Province purchases a $28.9M Bombardier Challenger 650. Purchase completed and disclosed retroactively — the public learned of it after the fact.</div>
-        <div class="stated">Stated: efficiency in official travel; secure transport including U.S. trips on tariff and investment matters.</div>
+  <!-- 08 URBAN BOUNDARIES -->
+  <div class="case">
+    <div class="case-header">
+      <span class="case-n">08 / 09</span>
+      <span class="case-title">Urban Boundary Expansions</span>
+    </div>
+    <div class="cols">
+      <div class="col col-d">
+        <div class="col-head">Decision</div>
+        <div class="field">
+          <div class="fl">Decision</div>
+          <div class="ft">Province uses ministerial powers to expand urban boundaries and override parts of municipal official plans across multiple regions.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Implementation</div>
+          <div class="ft">Ministerial zoning orders and policy changes take effect. Municipal official plans overridden. Boundary expansions approved over local objections.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Stated Reason</div>
+          <div class="ft">Increase land supply to support provincial housing targets.</div>
+        </div>
+        <div class="srcs">
+          <a class="src" href="https://www.ctvnews.ca/toronto/article/a-list-of-policies-and-cuts-the-doug-ford-government-has-reversed/" target="_blank">CTV</a>
+          <a class="src" href="https://www.cbc.ca/news/canada/toronto/ont-peel-reversals-1.7058542" target="_blank">CBC</a>
+        </div>
       </div>
-      <div class="case-col reversal-col">
-        <div class="col-head reversal-head">Reversal</div>
-        <div class="col-text">Media reports the purchase. Opposition labels it a "gravy plane." Backlash intensifies over cost during an affordability crisis. Within ~48 hours: Ford announces the province will sell the aircraft.</div>
-        <div class="forced">Media coverage · opposition parties · public backlash on cost</div>
-        <div class="claim">"Now is not the right time."</div>
-        <div class="speed">48 hours</div>
+      <div class="col col-r">
+        <div class="col-head">Reversal</div>
+        <div class="field">
+          <div class="fl">Reversal</div>
+          <div class="ft">Fall 2023: Minister announces reversals of some boundary expansions, restoring elements of local official plans.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Who Forced It</div>
+          <div class="ft">Municipal governments and planning staff argue the extra land is not needed to meet housing targets. Concerns raised about sprawl and infrastructure costs. Political fallout from Greenbelt increases sensitivity to further land-use interventions.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Timeline</div>
+          <div class="ft">Specific dates vary by municipality. Reversals announced fall 2023.</div>
+          <span class="timetag">Fall 2023</span>
+        </div>
+        <div class="srcs">
+          <a class="src" href="https://www.ctvnews.ca/toronto/article/a-list-of-policies-and-cuts-the-doug-ford-government-has-reversed/" target="_blank">CTV</a>
+        </div>
       </div>
     </div>
   </div>
-  <div class="attr-bar">
-    <span class="attr-sources">CBC · CKOM · The Deep Dive</span>
-    <span class="attr-handle">@the_delusioneers</span>
+
+  <!-- 09 JET -->
+  <div class="case">
+    <div class="case-header">
+      <span class="case-n">09 / 09</span>
+      <span class="case-title">The Government Jet</span>
+    </div>
+    <div class="cols">
+      <div class="col col-d">
+        <div class="col-head">Decision</div>
+        <div class="field">
+          <div class="fl">Decision</div>
+          <div class="ft">Province purchases a $28.9M Bombardier Challenger 650 jet for premier's travel. Purchase completed and not proactively disclosed — the public learned of the acquisition after the fact.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Implementation</div>
+          <div class="ft">Aircraft acquired and in provincial possession. No public announcement made.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Stated Reason</div>
+          <div class="ft">Efficiency and flexibility in official travel. Secure transport for the premier including U.S. trips related to tariff negotiations and investment promotion.</div>
+        </div>
+        <div class="srcs">
+          <a class="src" href="https://www.ckom.com/2026/04/19/ontario-to-sell-29-million-jet-bought-for-premier-doug-ford-after-backlash/" target="_blank">CKOM</a>
+          <a class="src" href="https://thedeepdive.ca/done-like-dinner-ontario-dumps-28-9m-gravy-plane-in-sharp-policy-reversal/" target="_blank">The Deep Dive</a>
+          <a class="src" href="https://ca.finance.yahoo.com/news/ontario-sell-29-million-jet-153205321.html" target="_blank">Yahoo Finance</a>
+        </div>
+      </div>
+      <div class="col col-r">
+        <div class="col-head">Reversal</div>
+        <div class="field">
+          <div class="fl">Reversal</div>
+          <div class="ft">Within approximately 48 hours of widespread media reporting, Ford announces the province will sell the aircraft.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Who Forced It</div>
+          <div class="ft">Media reports the purchase. Opposition parties and public label it a "gravy plane." Backlash intensifies over the cost of a $28.9M aircraft during a period of public affordability concerns.</div>
+        </div>
+        <div class="field">
+          <div class="fl">Timeline</div>
+          <div class="ft">Media reporting to announced reversal: approximately 48 hours. April 2026.</div>
+          <span class="timetag">48 hours</span>
+        </div>
+        <div class="field">
+          <div class="fl">Ford's Claim</div>
+          <div class="ft quote">"Now is not the right time."</div>
+        </div>
+        <div class="srcs">
+          <a class="src" href="https://www.ckom.com/2026/04/19/ontario-to-sell-29-million-jet-bought-for-premier-doug-ford-after-backlash/" target="_blank">CKOM</a>
+          <a class="src" href="https://ca.finance.yahoo.com/news/ontario-sell-29-million-jet-153205321.html" target="_blank">Yahoo Finance</a>
+        </div>
+      </div>
+    </div>
   </div>
+
 </div>
 
+<!-- SUMMARY -->
+<div class="summary" id="summary">
+  <div class="sum-label">The documented pattern</div>
+  <div class="sum-grid">
+    <div class="sum-cell">
+      <div class="sum-val">9</div>
+      <div class="sum-key">Reversals documented</div>
+    </div>
+    <div class="sum-cell">
+      <div class="sum-val">2018</div>
+      <div class="sum-key">Pattern begins</div>
+    </div>
+    <div class="sum-cell">
+      <div class="sum-val r">48 hrs</div>
+      <div class="sum-key">Fastest — Jet, 2026</div>
+    </div>
+    <div class="sum-cell">
+      <div class="sum-val">5 yrs</div>
+      <div class="sum-key">Longest — Bill 124</div>
+    </div>
+  </div>
+  <p class="sum-note">In each case the initial justification claimed the policy was necessary. In each case a record of who objected exists. In each case reversal came when opposition reached a threshold — courts, public pressure, police refusal, organized municipal action, oversight body findings, or media saturation. The justification that existed on Day One disappears. The reversal gets a new claim.</p>
+</div>
+
+<footer>
+  <div class="fl-l">
+    <p>Sources: CBC · CTV · The Narwhal · Globe &amp; Mail · AG Ontario · Integrity Commissioner · IPC Ontario</p>
+    <p><a href="https://thedelusioneers.substack.com">thedelusioneers.substack.com</a> &nbsp;·&nbsp; <a href="https://instagram.com/the_delusioneers">@the_delusioneers</a></p>
+  </div>
+  <div class="fl-r">The Delusioneers</div>
+</footer>
+
+<script>
+  const bar = document.getElementById('pb');
+  const cases = document.querySelectorAll('.case');
+  const summary = document.getElementById('summary');
+  function tick() {
+    const st = window.scrollY, dh = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = ((st/dh)*100)+'%';
+    cases.forEach(el => { if(el.getBoundingClientRect().top < window.innerHeight*.9) el.classList.add('visible'); });
+    if(summary.getBoundingClientRect().top < window.innerHeight*.88) summary.classList.add('visible');
+  }
+  window.addEventListener('scroll', tick, {passive:true});
+  window.addEventListener('load', tick);
+</script>
 </body>
 </html>
