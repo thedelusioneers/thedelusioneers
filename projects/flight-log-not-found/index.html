@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flight Log Not Found — The Delusioneers</title>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FEL9PLDP4L"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-FEL9PLDP4L');
+</script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+  :root {
+    --bg: #f5f0e8;
+    --bg-dark: #ede6d8;
+    --ink: #1a1a1a;
+    --ink-light: #4a4a4a;
+    --ink-faded: #8a8a7a;
+    --red: #c41e1e;
+    --red-dark: #8b1515;
+    --dark-bg: #2a2825;
+    --col-width: min(560px, 92vw);
+    --receipt-shadow: 2px 4px 20px rgba(0,0,0,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark-bg);
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    color: var(--ink);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: var(--red);
+    z-index: 200;
+    transition: width 0.05s linear;
+    box-shadow: 0 0 8px rgba(196,30,30,0.5);
+    width: 0%;
+  }
+
+  /* ─── MASTHEAD ─────────────────────────────────────── */
+  .masthead {
+    background: var(--bg);
+    border-bottom: 2px solid var(--ink);
+    padding: 18px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-image: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(0,0,0,0.008) 2px, rgba(0,0,0,0.008) 4px
+    );
+  }
+  .masthead-name {
+    font-family: 'Special Elite', monospace;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .masthead-handle {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--ink-faded);
+    text-transform: uppercase;
+  }
+
+  /* ─── HERO ─────────────────────────────────────────── */
+  .hero {
+    background: var(--bg);
+    background-image: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(0,0,0,0.008) 2px, rgba(0,0,0,0.008) 4px
+    );
+    width: 100%;
+    padding: 64px 32px 56px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-bottom: 1px dashed var(--ink-faded);
+  }
+
+  .hero-kicker {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    margin-bottom: 20px;
+  }
+
+  .hero-title {
+    font-family: 'Special Elite', monospace;
+    font-size: clamp(32px, 6vw, 52px);
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 20px;
+    max-width: 640px;
+  }
+
+  .hero-title .redact {
+    background: var(--ink);
+    color: var(--ink);
+    padding: 0 4px;
+    position: relative;
+    display: inline-block;
+  }
+
+  .hero-subtitle {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: var(--ink-light);
+    text-transform: uppercase;
+    max-width: 400px;
+    line-height: 1.8;
+    margin-bottom: 32px;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 24px;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--ink-faded);
+    text-transform: uppercase;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .hero-meta span { display: flex; align-items: center; gap: 6px; }
+  .hero-meta .dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--red);
+    display: inline-block;
+  }
+
+  /* ─── FINDING BOX ──────────────────────────────────── */
+  .finding-bar {
+    background: var(--ink);
+    color: var(--bg);
+    width: 100%;
+    padding: 20px 32px;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    line-height: 1.8;
+    text-transform: uppercase;
+  }
+  .finding-bar strong {
+    color: var(--red);
+    font-weight: 700;
+  }
+
+  /* ─── MAIN CONTENT ─────────────────────────────────── */
+  .content-wrap {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 0 80px;
+  }
+
+  /* Thread sections */
+  .thread {
+    width: var(--col-width);
+    background: var(--bg);
+    background-image: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(0,0,0,0.008) 2px, rgba(0,0,0,0.008) 4px
+    );
+    margin-top: 3px;
+    padding: 36px 32px 32px;
+    position: relative;
+    box-shadow: var(--receipt-shadow);
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .thread.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Tear top on first thread */
+  .thread:first-of-type {
+    margin-top: 40px;
+  }
+
+  .thread-number {
+    font-size: 8px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .thread-number::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(0,0,0,0.1);
+  }
+
+  .thread p {
+    font-size: 13px;
+    line-height: 1.9;
+    color: var(--ink-light);
+    margin-bottom: 16px;
+  }
+  .thread p:last-child { margin-bottom: 0; }
+
+  .thread p strong {
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  .thread p em {
+    font-style: normal;
+    color: var(--red-dark);
+    font-weight: 500;
+  }
+
+  /* The "before / after" comparison block */
+  .compare-block {
+    margin: 24px 0;
+    border: 1px dashed rgba(0,0,0,0.2);
+  }
+
+  .compare-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px dashed rgba(0,0,0,0.15);
+  }
+  .compare-row:last-child { border-bottom: none; }
+
+  .compare-col {
+    padding: 14px 16px;
+    font-size: 11px;
+    line-height: 1.7;
+    color: var(--ink-light);
+  }
+  .compare-col:first-child {
+    border-right: 1px dashed rgba(0,0,0,0.15);
+  }
+
+  .compare-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--bg-dark);
+    border-bottom: 1px solid rgba(0,0,0,0.15);
+  }
+  .compare-header-col {
+    padding: 8px 16px;
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    font-weight: 700;
+  }
+  .compare-header-col:first-child {
+    border-right: 1px dashed rgba(0,0,0,0.15);
+  }
+
+  .compare-col.redline {
+    color: var(--red-dark);
+    font-weight: 500;
+  }
+
+  /* The stacking summary */
+  .stack-block {
+    margin: 24px 0;
+    border-left: 3px solid var(--red);
+    padding-left: 20px;
+  }
+  .stack-item {
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--ink-light);
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px dotted rgba(0,0,0,0.12);
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .stack-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+  .stack-dash {
+    color: var(--red);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* Section dividers */
+  .divider {
+    width: var(--col-width);
+    text-align: center;
+    padding: 20px 0;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: rgba(245,240,232,0.3);
+    text-transform: uppercase;
+  }
+
+  /* ─── CLOSURE ──────────────────────────────────────── */
+  .closure {
+    width: var(--col-width);
+    background: var(--bg);
+    background-image: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(0,0,0,0.008) 2px, rgba(0,0,0,0.008) 4px
+    );
+    margin-top: 3px;
+    padding: 48px 32px 40px;
+    text-align: center;
+    box-shadow: var(--receipt-shadow);
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .closure.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .closure-question {
+    font-family: 'Special Elite', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink);
+    margin-bottom: 28px;
+    max-width: 380px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .closure-stamp {
+    font-family: 'Special Elite', monospace;
+    font-size: clamp(18px, 4vw, 24px);
+    color: var(--red);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    border: 3px solid var(--red);
+    padding: 14px 28px;
+    display: inline-block;
+    transform: rotate(-1.5deg);
+    position: relative;
+    line-height: 1.3;
+    margin-bottom: 32px;
+  }
+  .closure-stamp::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border: 1px solid var(--red);
+    opacity: 0.4;
+  }
+
+  .closure-note {
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--ink-faded);
+    line-height: 1.9;
+    text-transform: uppercase;
+    max-width: 340px;
+    margin: 0 auto;
+  }
+
+  /* ─── FOOTER ────────────────────────────────── */
+  .footer {
+    width: var(--col-width);
+    background: var(--bg);
+    background-image: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(0,0,0,0.008) 2px, rgba(0,0,0,0.008) 4px
+    );
+    margin-top: 3px;
+    padding: 24px 32px 36px;
+    text-align: center;
+    border-top: 1px dashed var(--ink-faded);
+    box-shadow: var(--receipt-shadow);
+  }
+  .footer p {
+    font-size: 9px;
+    color: var(--ink-faded);
+    letter-spacing: 1px;
+    line-height: 2.2;
+    text-transform: uppercase;
+  }
+  .footer a {
+    color: var(--ink-light);
+    text-decoration: none;
+  }
+
+  /* Tear edges */
+  .tear-top {
+    width: var(--col-width);
+    height: 24px;
+    background: var(--bg);
+    margin-top: 40px;
+    mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 420 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,24 L0,12 Q5,0 10,12 Q15,24 20,12 Q25,0 30,12 Q35,24 40,12 Q45,0 50,12 Q55,24 60,12 Q65,0 70,12 Q75,24 80,12 Q85,0 90,12 Q95,24 100,12 Q105,0 110,12 Q115,24 120,12 Q125,0 130,12 Q135,24 140,12 Q145,0 150,12 Q155,24 160,12 Q165,0 170,12 Q175,24 180,12 Q185,0 190,12 Q195,24 200,12 Q205,0 210,12 Q215,24 220,12 Q225,0 230,12 Q235,24 240,12 Q245,0 250,12 Q255,24 260,12 Q265,0 270,12 Q275,24 280,12 Q285,0 290,12 Q295,24 300,12 Q305,0 310,12 Q315,24 320,12 Q325,0 330,12 Q335,24 340,12 Q345,0 350,12 Q355,24 360,12 Q365,0 370,12 Q375,24 380,12 Q385,0 390,12 Q395,24 400,12 Q405,0 410,12 Q415,24 420,12 L420,24 Z' fill='white'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 420 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,24 L0,12 Q5,0 10,12 Q15,24 20,12 Q25,0 30,12 Q35,24 40,12 Q45,0 50,12 Q55,24 60,12 Q65,0 70,12 Q75,24 80,12 Q85,0 90,12 Q95,24 100,12 Q105,0 110,12 Q115,24 120,12 Q125,0 130,12 Q135,24 140,12 Q145,0 150,12 Q155,24 160,12 Q165,0 170,12 Q175,24 180,12 Q185,0 190,12 Q195,24 200,12 Q205,0 210,12 Q215,24 220,12 Q225,0 230,12 Q235,24 240,12 Q245,0 250,12 Q255,24 260,12 Q265,0 270,12 Q275,24 280,12 Q285,0 290,12 Q295,24 300,12 Q305,0 310,12 Q315,24 320,12 Q325,0 330,12 Q335,24 340,12 Q345,0 350,12 Q355,24 360,12 Q365,0 370,12 Q375,24 380,12 Q385,0 390,12 Q395,24 400,12 Q405,0 410,12 Q415,24 420,12 L420,24 Z' fill='white'/%3E%3C/svg%3E");
+    mask-size: cover;
+    -webkit-mask-size: cover;
+  }
+
+  .tear-bottom {
+    width: var(--col-width);
+    height: 24px;
+    background: var(--bg);
+    mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 420 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,0 L0,12 Q5,24 10,12 Q15,0 20,12 Q25,24 30,12 Q35,0 40,12 Q45,24 50,12 Q55,0 60,12 Q65,24 70,12 Q75,0 80,12 Q85,24 90,12 Q95,0 100,12 Q105,24 110,12 Q115,0 120,12 Q125,24 130,12 Q135,0 140,12 Q145,24 150,12 Q155,0 160,12 Q165,24 170,12 Q175,0 180,12 Q185,24 190,12 Q195,0 200,12 Q205,24 210,12 Q215,0 220,12 Q225,24 230,12 Q235,0 240,12 Q245,24 250,12 Q255,0 260,12 Q265,24 270,12 Q275,0 280,12 Q285,24 290,12 Q295,0 300,12 Q305,24 310,12 Q315,0 320,12 Q325,24 330,12 Q335,0 340,12 Q345,24 350,12 Q355,0 360,12 Q365,24 370,12 Q375,0 380,12 Q385,24 390,12 Q395,0 400,12 Q405,24 410,12 Q415,0 420,12 L420,0 Z' fill='white'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 420 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,0 L0,12 Q5,24 10,12 Q15,0 20,12 Q25,24 30,12 Q35,0 40,12 Q45,24 50,12 Q55,0 60,12 Q65,24 70,12 Q75,0 80,12 Q85,24 90,12 Q95,0 100,12 Q105,24 110,12 Q115,0 120,12 Q125,24 130,12 Q135,0 140,12 Q145,24 150,12 Q155,0 160,12 Q165,24 170,12 Q175,0 180,12 Q185,24 190,12 Q195,0 200,12 Q205,24 210,12 Q215,0 220,12 Q225,24 230,12 Q235,0 240,12 Q245,24 250,12 Q255,0 260,12 Q265,24 270,12 Q275,0 280,12 Q285,24 290,12 Q295,0 300,12 Q305,24 310,12 Q315,0 320,12 Q325,24 330,12 Q335,0 340,12 Q345,24 350,12 Q355,0 360,12 Q365,24 370,12 Q375,0 380,12 Q385,24 390,12 Q395,0 400,12 Q405,24 410,12 Q415,0 420,12 L420,0 Z' fill='white'/%3E%3C/svg%3E");
+    mask-size: cover;
+    -webkit-mask-size: cover;
+    box-shadow: var(--receipt-shadow);
+  }
+
+  .end-space { height: 60px; }
+
+  /* Scroll hint */
+  .scroll-hint {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(245,240,232,0.4);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    z-index: 100;
+    transition: opacity 0.6s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .scroll-hint .arrow {
+    animation: bobDown 1.5s ease-in-out infinite;
+    font-size: 14px;
+  }
+  .scroll-hint.hidden { opacity: 0; pointer-events: none; }
+  @keyframes bobDown {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+
+  @media (max-width: 480px) {
+    .masthead { padding: 14px 20px; }
+    .hero { padding: 48px 20px 40px; }
+    .thread { padding: 28px 20px 24px; }
+    .compare-col { font-size: 10px; padding: 10px 12px; }
+    .closure { padding: 36px 20px 32px; }
+    .footer { padding: 20px 20px 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="scroll-hint" id="scrollHint">
+  <span>Scroll</span>
+  <span class="arrow">↓</span>
+</div>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-name">The Delusioneers</div>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="sources.html" style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);text-decoration:none;border-bottom:1px solid var(--red);padding-bottom:1px;">Sources →</a>
+    <div class="masthead-handle">@the_delusioneers</div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-kicker">Ontario · April 2026</div>
+  <h1 class="hero-title">Flight Log<br>Not Found</h1>
+  <div class="hero-subtitle">
+    Ontario's $28.9M jet purchase moves the Premier's travel outside the public disclosure system — with no replacement regime announced.
+  </div>
+  <div class="hero-meta">
+    <span><span class="dot"></span>Bill 97 · FIPPA Schedule 7</span>
+    <span><span class="dot"></span>Bombardier Challenger 650</span>
+    <span><span class="dot"></span>Fleet sold 2015 · Reacquired 2026</span>
+  </div>
+</div>
+
+<!-- FINDING BAR -->
+<div class="finding-bar">
+  The government has not announced <strong>any disclosure regime</strong> for this aircraft's operations.
+  No custodian ministry. No operating cost estimate. No flight log commitment.
+</div>
+
+<!-- CONTENT -->
+<div class="content-wrap">
+
+  <div class="tear-top"></div>
+
+  <!-- THREAD 1 -->
+  <div class="thread" id="t1">
+    <div class="thread-number">1 / 4 — The existing system</div>
+
+    <p>Right now, when a senior government official flies commercial or charters a plane, that trip has to run through Ontario's standard expense system.</p>
+
+    <p>Someone buys a ticket, submits an expense claim with receipts, and that claim is reviewed and then posted online per public disclosure rules.</p>
+
+    <p>That's why we can see trip-by-trip entries for ministers today: the name, the destination, the purpose, and a breakdown of costs — airfare, hotels, meals.</p>
+
+    <p>The transparency exists because the rules are built around reimbursing <strong>individual expenses</strong> and publishing those claims.</p>
+
+    <p>Ontario sold off its government aircraft fleet in 2015. For <strong>eleven years</strong>, ministerial travel has run through the commercial and charter system — the same system that generates the expense claims you can look up today.</p>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- THREAD 2 -->
+  <div class="thread" id="t2">
+    <div class="thread-number">2 / 4 — How ownership changes the money flow</div>
+
+    <p>A government-owned jet changes how money moves.</p>
+
+    <p>Once the province owns the aircraft, the cost structure changes. Fuel, crew, hangar space, maintenance, insurance — all paid as operating costs against a ministry budget.</p>
+
+    <p>Those costs show up as <strong>aggregate line items</strong> in a ministry operating budget — not trip-by-trip records.</p>
+
+    <p>Disclosure rules are triggered by expense claims supported by receipts. Not by every use of a government-owned asset. If there's no personal travel expense claim filed, there's nothing that automatically feeds into the public expense-posting system.</p>
+
+    <p>When asked today, the government source who confirmed the purchase said they <em>could not provide a firm estimate of operating costs</em> — after several months of procurement work on a $28.9M acquisition.</p>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- THREAD 3 -->
+  <div class="thread" id="t3">
+    <div class="thread-number">3 / 4 — Before and after</div>
+
+    <p>The Premier's travel funded through a ministry operating budget produces aggregate line items. The expense-disclosure system requires individual claims backed by receipts. The two systems do not overlap.</p>
+
+    <div class="compare-block">
+      <div class="compare-header">
+        <div class="compare-header-col">Current pattern</div>
+        <div class="compare-header-col">New pattern</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-col">Premier flies to Washington → charter ticket + hotel</div>
+        <div class="compare-col redline">Premier boards government jet → fuel and crew paid from ministry operating budget</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-col">Receipts → expense claim filed</div>
+        <div class="compare-col redline">Internal operational record, no personal expense claim</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-col">Claim reviewed → posted publicly, searchable by name, date, destination</div>
+        <div class="compare-col redline">Aggregate budget line. Not searchable. Not trip-specific.</div>
+      </div>
+    </div>
+
+    <p>The government has not announced any disclosure regime for this aircraft's operations — no commitment to publish flight logs, passengers, destinations, or per-trip costs.</p>
+
+    <p>Without one, travel won't show up in the existing expense-disclosure machinery at all.</p>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- THREAD 4 -->
+  <div class="thread" id="t4">
+    <div class="thread-number">4 / 4 — The stack</div>
+
+    <p>On its own, that's already a significant drop in transparency: fewer trip-specific entries, less structured, searchable data about where and when the Premier travels on the public dime.</p>
+
+    <p>At the same time, the government is moving <strong>Bill 97</strong> through the legislature — amendments to Ontario's access-to-information law that would pull the Premier's Office and ministers' offices outside the reach of FOI, with <strong>retroactive effect</strong>.</p>
+
+    <p>The two moves stack:</p>
+
+    <div class="stack-block">
+      <div class="stack-item">
+        <span class="stack-dash">—</span>
+        <span>The plane moves the Premier's travel into operating budgets that don't naturally produce public expense records.</span>
+      </div>
+      <div class="stack-item">
+        <span class="stack-dash">—</span>
+        <span>Bill 97 narrows the legal tools available to pry open whatever internal flight and passenger records still exist.</span>
+      </div>
+    </div>
+
+    <p>If both go forward, the only information the public would have access to is whatever the government chooses to share.</p>
+
+    <p>The jet is a $28.9M purchase. The disclosure gap has no announced close date.</p>
+  </div>
+
+  <!-- CLOSURE -->
+  <div class="closure" id="closure">
+    <div class="closure-question">
+      Under what regime will the operations of the Premier's jet be disclosed to Ontarians?
+    </div>
+
+    <div class="closure-stamp">
+      No answer<br>on record
+    </div>
+
+    <div class="closure-note">
+      Premier's Office — no custodian ministry named<br>
+      No operating cost estimate after months of procurement<br>
+      No disclosure framework announced<br>
+      Bill 97 FIPPA amendments pending Royal Assent<br>
+      Retroactive application confirmed<br><br>
+      Questions put to the Premier's Office: April 17, 2026<br>
+      Response deadline: April 24, 2026<br><br>
+      This page will be updated when a response is received.
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <p>The Delusioneers</p>
+    <p>thedelusioneers.substack.com · @the_delusioneers</p>
+    <p style="margin-top: 10px;">All findings sourced from public statements and confirmed absences</p>
+    <p>Premier's Office statement · CBC News · Global News · Ontario Travel Directive · Bill 97 legislative record</p>
+    <p style="margin-top: 12px;"><a href="sources.html" style="color: var(--red); text-decoration: none; letter-spacing: 2px; font-size: 9px; text-transform: uppercase; border-bottom: 1px solid var(--red); padding-bottom: 2px;">View sources &amp; primary record →</a></p>
+    <p style="margin-top: 10px;">No returns. No refunds. No records.</p>
+  </div>
+
+  <div class="tear-bottom"></div>
+  <div class="end-space"></div>
+
+</div><!-- end content-wrap -->
+
+<script>
+  const progressBar = document.getElementById('progressBar');
+  const scrollHint = document.getElementById('scrollHint');
+  const threads = document.querySelectorAll('.thread');
+  const closure = document.getElementById('closure');
+
+  function onScroll() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    progressBar.style.width = ((scrollTop / docHeight) * 100) + '%';
+
+    if (scrollTop > 150) scrollHint.classList.add('hidden');
+    else scrollHint.classList.remove('hidden');
+
+    threads.forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight * 0.88) {
+        el.classList.add('visible');
+      }
+    });
+
+    if (closure.getBoundingClientRect().top < window.innerHeight * 0.85) {
+      closure.classList.add('visible');
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('load', onScroll);
+</script>
+
+</body>
+</html>

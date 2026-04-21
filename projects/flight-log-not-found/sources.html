@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sources — Flight Log Not Found — The Delusioneers</title>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FEL9PLDP4L"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-FEL9PLDP4L');
+</script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+  :root {
+    --bg: #f5f0e8;
+    --bg-dark: #ede6d8;
+    --ink: #1a1a1a;
+    --ink-light: #4a4a4a;
+    --ink-faded: #8a8a7a;
+    --red: #c41e1e;
+    --dark: #2a2825;
+    --col: min(680px, 92vw);
+    --shadow: 2px 4px 20px rgba(0,0,0,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    color: var(--ink);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: var(--red);
+    z-index: 200;
+    width: 0%;
+    transition: width 0.05s linear;
+    box-shadow: 0 0 8px rgba(196,30,30,0.5);
+  }
+
+  /* Masthead */
+  .masthead {
+    background: var(--bg);
+    border-bottom: 2px solid var(--ink);
+    padding: 16px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-image: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(0,0,0,0.008) 2px, rgba(0,0,0,0.008) 4px
+    );
+  }
+  .masthead-left { display: flex; flex-direction: column; gap: 2px; }
+  .masthead-name {
+    font-family: 'Special Elite', monospace;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .masthead-doc {
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: var(--ink-faded);
+    text-transform: uppercase;
+  }
+  .masthead-back {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    color: var(--ink-faded);
+    text-transform: uppercase;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+  }
+  .masthead-back:hover { color: var(--ink); }
+
+  /* Page wrap */
+  .wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 80px;
+  }
+
+  /* Tear top */
+  .tear-top {
+    width: var(--col);
+    height: 24px;
+    background: var(--bg);
+    margin-top: 40px;
+    mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 420 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,24 L0,12 Q5,0 10,12 Q15,24 20,12 Q25,0 30,12 Q35,24 40,12 Q45,0 50,12 Q55,24 60,12 Q65,0 70,12 Q75,24 80,12 Q85,0 90,12 Q95,24 100,12 Q105,0 110,12 Q115,24 120,12 Q125,0 130,12 Q135,24 140,12 Q145,0 150,12 Q155,24 160,12 Q165,0 170,12 Q175,24 180,12 Q185,0 190,12 Q195,24 200,12 Q205,0 210,12 Q215,24 220,12 Q225,0 230,12 Q235,24 240,12 Q245,0 250,12 Q255,24 260,12 Q265,0 270,12 Q275,24 280,12 Q285,0 290,12 Q295,24 300,12 Q305,0 310,12 Q315,24 320,12 Q325,0 330,12 Q335,24 340,12 Q345,0 350,12 Q355,24 360,12 Q365,0 370,12 Q375,24 380,12 Q385,0 390,12 Q395,24 400,12 Q405,0 410,12 Q415,24 420,12 L420,24 Z' fill='white'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 420 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,24 L0,12 Q5,0 10,12 Q15,24 20,12 Q25,0 30,12 Q35,24 40,12 Q45,0 50,12 Q55,24 60,12 Q65,0 70,12 Q75,24 80,12 Q85,0 90,12 Q95,24 100,12 Q105,0 110,12 Q115,24 120,12 Q125,0 130,12 Q135,24 140,12 Q145,0 150,12 Q155,24 160,12 Q165,0 170,12 Q175,24 180,12 Q185,0 190,12 Q195,24 200,12 Q205,0 210,12 Q215,24 220,12 Q225,0 230,12 Q235,24 240,12 Q245,0 250,12 Q255,24 260,12 Q265,0 270,12 Q275,24 280,12 Q285,0 290,12 Q295,24 300,12 Q305,0 310,12 Q315,24 320,12 Q325,0 330,12 Q335,24 340,12 Q345,0 350,12 Q355,24 360,12 Q365,0 370,12 Q375,24 380,12 Q385,0 390,12 Q395,24 400,12 Q405,0 410,12 Q415,24 420,12 L420,24 Z' fill='white'/%3E%3C/svg%3E");
+    mask-size: cover;
+    -webkit-mask-size: cover;
+  }
+
+  /* Header block */
+  .header-block {
+    width: var(--col);
+    background: var(--bg);
+    background-image: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(0,0,0,0.008) 2px, rgba(0,0,0,0.008) 4px
+    );
+    padding: 36px 36px 28px;
+    box-shadow: var(--shadow);
+    border-bottom: 2px dashed rgba(0,0,0,0.15);
+  }
+  .header-kicker {
+    font-size: 8px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    margin-bottom: 10px;
+  }
+  .header-title {
+    font-family: 'Special Elite', monospace;
+    font-size: 28px;
+    color: var(--ink);
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+  .header-note {
+    font-size: 10.5px;
+    line-height: 1.8;
+    color: var(--ink-light);
+  }
+
+  /* Category blocks */
+  .category {
+    width: var(--col);
+    background: var(--bg);
+    background-image: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(0,0,0,0.008) 2px, rgba(0,0,0,0.008) 4px
+    );
+    margin-top: 2px;
+    box-shadow: var(--shadow);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .category.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .category-header {
+    padding: 18px 36px 14px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .category-label {
+    font-size: 8px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+  }
+  .category-title {
+    font-family: 'Special Elite', monospace;
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .category-count {
+    font-size: 8px;
+    letter-spacing: 1px;
+    color: var(--ink-faded);
+    margin-left: auto;
+  }
+
+  /* Source rows */
+  .source-row {
+    padding: 18px 36px;
+    border-bottom: 1px dotted rgba(0,0,0,0.12);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: start;
+    transition: background 0.15s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .source-row:last-child { border-bottom: none; }
+  .source-row:hover { background: var(--bg-dark); }
+  .source-row:hover .source-arrow { opacity: 1; }
+
+  .source-inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: start;
+  }
+
+  .source-left {}
+
+  .source-type {
+    font-size: 7.5px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 4px;
+  }
+
+  .source-name {
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--ink);
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+
+  .source-desc {
+    font-size: 10px;
+    line-height: 1.6;
+    color: var(--ink-light);
+  }
+
+  .source-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .source-publisher {
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    text-align: right;
+  }
+
+  .source-arrow {
+    font-size: 14px;
+    color: var(--ink-faded);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  /* Status tags */
+  .source-status {
+    display: inline-block;
+    font-size: 7px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border: 1px solid currentColor;
+    margin-top: 4px;
+  }
+  .status-confirmed { color: var(--ink-faded); }
+  .status-key { color: var(--red); border-color: var(--red); }
+  .status-primary { color: #4a6741; border-color: #4a6741; }
+
+  /* Absence note */
+  .absence-block {
+    width: var(--col);
+    background: var(--ink);
+    color: var(--bg);
+    margin-top: 2px;
+    padding: 28px 36px;
+    box-shadow: var(--shadow);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .absence-block.visible { opacity: 1; transform: translateY(0); }
+  .absence-title {
+    font-size: 8px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.4);
+    margin-bottom: 14px;
+  }
+  .absence-item {
+    font-size: 11px;
+    line-height: 1.9;
+    color: rgba(245,240,232,0.85);
+    padding: 6px 0;
+    border-bottom: 1px dotted rgba(245,240,232,0.1);
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+  }
+  .absence-item:last-child { border-bottom: none; }
+  .absence-dash { color: var(--red); flex-shrink: 0; }
+
+  /* Footer */
+  .footer {
+    width: var(--col);
+    background: var(--bg);
+    background-image: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(0,0,0,0.008) 2px, rgba(0,0,0,0.008) 4px
+    );
+    margin-top: 2px;
+    padding: 24px 36px 32px;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  .footer p {
+    font-size: 9px;
+    color: var(--ink-faded);
+    letter-spacing: 1px;
+    line-height: 2.2;
+    text-transform: uppercase;
+  }
+
+  /* Tear bottom */
+  .tear-bottom {
+    width: var(--col);
+    height: 24px;
+    background: var(--bg);
+    mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 420 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,0 L0,12 Q5,24 10,12 Q15,0 20,12 Q25,24 30,12 Q35,0 40,12 Q45,24 50,12 Q55,0 60,12 Q65,24 70,12 Q75,0 80,12 Q85,24 90,12 Q95,0 100,12 Q105,24 110,12 Q115,0 120,12 Q125,24 130,12 Q135,0 140,12 Q145,24 150,12 Q155,0 160,12 Q165,24 170,12 Q175,0 180,12 Q185,24 190,12 Q195,0 200,12 Q205,24 210,12 Q215,0 220,12 Q225,24 230,12 Q235,0 240,12 Q245,24 250,12 Q255,0 260,12 Q265,24 270,12 Q275,0 280,12 Q285,24 290,12 Q295,0 300,12 Q305,24 310,12 Q315,0 320,12 Q325,24 330,12 Q335,0 340,12 Q345,24 350,12 Q355,0 360,12 Q365,24 370,12 Q375,0 380,12 Q385,24 390,12 Q395,0 400,12 Q405,24 410,12 Q415,0 420,12 L420,0 Z' fill='white'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 420 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,0 L0,12 Q5,24 10,12 Q15,0 20,12 Q25,24 30,12 Q35,0 40,12 Q45,24 50,12 Q55,0 60,12 Q65,24 70,12 Q75,0 80,12 Q85,24 90,12 Q95,0 100,12 Q105,24 110,12 Q115,0 120,12 Q125,24 130,12 Q135,0 140,12 Q145,24 150,12 Q155,0 160,12 Q165,24 170,12 Q175,0 180,12 Q185,24 190,12 Q195,0 200,12 Q205,24 210,12 Q215,0 220,12 Q225,24 230,12 Q235,0 240,12 Q245,24 250,12 Q255,0 260,12 Q265,24 270,12 Q275,0 280,12 Q285,24 290,12 Q295,0 300,12 Q305,24 310,12 Q315,0 320,12 Q325,24 330,12 Q335,0 340,12 Q345,24 350,12 Q355,0 360,12 Q365,24 370,12 Q375,0 380,12 Q385,24 390,12 Q395,0 400,12 Q405,24 410,12 Q415,0 420,12 L420,0 Z' fill='white'/%3E%3C/svg%3E");
+    mask-size: cover;
+    -webkit-mask-size: cover;
+    box-shadow: var(--shadow);
+  }
+
+  @media (max-width: 480px) {
+    .masthead { padding: 12px 20px; }
+    .header-block, .category-header, .source-row, .absence-block, .footer { padding-left: 20px; padding-right: 20px; }
+    .source-inner { grid-template-columns: 1fr; }
+    .source-right { align-items: flex-start; }
+    .source-arrow { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="masthead">
+  <div class="masthead-left">
+    <div class="masthead-name">The Delusioneers</div>
+    <div class="masthead-doc">Flight Log Not Found — Sources</div>
+  </div>
+  <a class="masthead-back" href="https://thedelusioneers.github.io/flight-log-not-found/">← Main piece</a>
+</div>
+
+<div class="wrap">
+
+  <div class="tear-top"></div>
+
+  <!-- HEADER -->
+  <div class="header-block">
+    <div class="header-kicker">Documentation — April 2026</div>
+    <div class="header-title">Sources & Primary Record</div>
+    <div class="header-note">
+      Every claim in this piece is sourced to a government statement, a named statute,
+      a published directive, or a confirmed absence of public record.
+      No speculation. Sources tagged by type and status below.
+    </div>
+  </div>
+
+  <!-- CATEGORY 1: Government statements -->
+  <div class="category" id="c1">
+    <div class="category-header">
+      <div class="category-label">Category 01</div>
+      <div class="category-title">Government Statements</div>
+      <div class="category-count">3 sources</div>
+    </div>
+
+    <a class="source-row" href="https://www.cbc.ca/news/canada/toronto/doug-ford-private-jet-9.7167824" target="_blank" rel="noopener">
+      <div class="source-inner">
+        <div class="source-left">
+          <div class="source-type">Named government source</div>
+          <div class="source-name">Ontario government confirms $28.9M Challenger 650 purchase</div>
+          <div class="source-desc">Premier's Office statement confirming the purchase, aircraft specs, intended use, and operational timeline. Government source confirmed sole-source procurement through Bombardier and stated no firm operating cost estimate was available.</div>
+          <div class="source-status status-key">Key source</div>
+        </div>
+        <div class="source-right">
+          <div class="source-publisher">CBC News<br>Apr 17, 2026</div>
+          <div class="source-arrow">↗</div>
+        </div>
+      </div>
+    </a>
+
+    <a class="source-row" href="https://globalnews.ca/news/11805718/doug-ford-government-private-jet-purchase/" target="_blank" rel="noopener">
+      <div class="source-inner">
+        <div class="source-left">
+          <div class="source-type">Premier's Office statement</div>
+          <div class="source-name">"Extensive travel within Ontario, a province twice the landmass of Texas"</div>
+          <div class="source-desc">Full Premier's Office statement on justification for purchase, including cross-Canada Council of the Federation meetings and U.S. trade mission travel. Confirms Pearson as operating base.</div>
+          <div class="source-status status-confirmed">Confirmed</div>
+        </div>
+        <div class="source-right">
+          <div class="source-publisher">Global News<br>Apr 17, 2026</div>
+          <div class="source-arrow">↗</div>
+        </div>
+      </div>
+    </a>
+
+    <a class="source-row" href="https://www.handsardontario.ca/parliament-44/session-1/2019-02-27" target="_blank" rel="noopener">
+      <div class="source-inner">
+        <div class="source-left">
+          <div class="source-type">Legislative record — Hansard</div>
+          <div class="source-name">Ford: "I'm the only premier in history that refuses to use the premier's plane, the King Air"</div>
+          <div class="source-desc">Ford's statement in the Ontario Legislature, February 27, 2019, in response to NDP questions about the custom OPP van. On-record confirmation that MNRF King Airs previously served as "the premier's plane" and that Ford had refused to use them.</div>
+          <div class="source-status status-primary">Primary — Legislative record</div>
+        </div>
+        <div class="source-right">
+          <div class="source-publisher">Ontario Hansard<br>Feb 27, 2019</div>
+          <div class="source-arrow">↗</div>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- CATEGORY 2: Statutes and directives -->
+  <div class="category" id="c2">
+    <div class="category-header">
+      <div class="category-label">Category 02</div>
+      <div class="category-title">Statutes, Directives & Orders in Council</div>
+      <div class="category-count">5 sources</div>
+    </div>
+
+    <a class="source-row" href="https://files.ontario.ca/tbs-travel-directive-en-2019-11-28.pdf" target="_blank" rel="noopener">
+      <div class="source-inner">
+        <div class="source-left">
+          <div class="source-type">Ontario directive — effective Jan 1, 2020</div>
+          <div class="source-name">Travel, Meal and Hospitality Expenses Directive</div>
+          <div class="source-desc">Sets rules for reimbursement of travel, meal and hospitality expenses for OPS employees. Establishes accountability framework and public disclosure requirements. Requires itemized receipts and quarterly posting. Governs the current expense-claim regime for ministerial travel.</div>
+          <div class="source-status status-primary">Primary — Directive text</div>
+        </div>
+        <div class="source-right">
+          <div class="source-publisher">Treasury Board<br>Secretariat</div>
+          <div class="source-arrow">↗</div>
+        </div>
+      </div>
+    </a>
+
+    <a class="source-row" href="https://www.ontario.ca/laws/statute/s02034" target="_blank" rel="noopener">
+      <div class="source-inner">
+        <div class="source-left">
+          <div class="source-type">Ontario statute</div>
+          <div class="source-name">Cabinet Ministers' and Opposition Leaders' Expenses Review and Accountability Act, 2002</div>
+          <div class="source-desc">The statutory basis for the Integrity Commissioner's review and public posting of Cabinet ministers' and opposition leaders' travel expenses. Section 67 mandates per-person attribution of expenses for public posting purposes.</div>
+          <div class="source-status status-primary">Primary — Statute</div>
+        </div>
+        <div class="source-right">
+          <div class="source-publisher">Ontario e-Laws<br>S.O. 2002 c.34</div>
+          <div class="source-arrow">↗</div>
+        </div>
+      </div>
+    </a>
+
+    <a class="source-row" href="https://www.ontario.ca/page/appendix-allowable-expense-rules-order-council-15702019" target="_blank" rel="noopener">
+      <div class="source-inner">
+        <div class="source-left">
+          <div class="source-type">Order in Council — OIC 1570/2019</div>
+          <div class="source-name">Appendix — Allowable Expense Rules</div>
+          <div class="source-desc">Section 67: expenses incurred on behalf of another designated person must be attributed to that person for the purpose of public posting. Sets rules for itemized receipts, retention of two copies of all claims, and quarterly disclosure. Governs ministers and Premier's Office designated persons.</div>
+          <div class="source-status status-primary">Primary — OIC text</div>
+        </div>
+        <div class="source-right">
+          <div class="source-publisher">Ontario.ca<br>Eff. Jan 1, 2020</div>
+          <div class="source-arrow">↗</div>
+        </div>
+      </div>
+    </a>
+
+    <a class="source-row" href="https://www.ola.org/en/legislative-business/bills/parliament-44/session-1/bill-97" target="_blank" rel="noopener">
+      <div class="source-inner">
+        <div class="source-left">
+          <div class="source-type">Ontario Bill — Schedule 7</div>
+          <div class="source-name">Bill 97 — Plan to Protect Ontario Act (Budget Measures), 2026 — FIPPA amendments</div>
+          <div class="source-desc">New FIPPA subsections 65(18) and 65(19) exclude records in the custody or control of a minister or their office from FOI access — even when those records are held by another institution. Retroactive application confirmed. Currently before Standing Committee on Finance and Economic Affairs.</div>
+          <div class="source-status status-key">Key source</div>
+        </div>
+        <div class="source-right">
+          <div class="source-publisher">Ontario Legislative<br>Assembly</div>
+          <div class="source-arrow">↗</div>
+        </div>
+      </div>
+    </a>
+
+    <a class="source-row" href="https://www.ola.org/en/members/expense-disclosure/expense-rules" target="_blank" rel="noopener">
+      <div class="source-inner">
+        <div class="source-left">
+          <div class="source-type">Board of Internal Economy order</div>
+          <div class="source-name">Rules governing MPP expense disclosures — quarterly posting obligation</div>
+          <div class="source-desc">Board of Internal Economy order under the Legislative Assembly Act requiring quarterly publication of members' expense information on the Assembly website. Establishes the statutory basis for per-trip MPP travel disclosure.</div>
+          <div class="source-status status-primary">Primary — Board order</div>
+        </div>
+        <div class="source-right">
+          <div class="source-publisher">Legislative Assembly<br>of Ontario</div>
+          <div class="source-arrow">↗</div>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- CATEGORY 3: Integrity Commissioner -->
+  <div class="category" id="c3">
+    <div class="category-header">
+      <div class="category-label">Category 03</div>
+      <div class="category-title">Office of the Integrity Commissioner</div>
+      <div class="category-count">2 sources</div>
+    </div>
+
+    <a class="source-row" href="https://www.oico.on.ca/en/ministers-and-opposition-leaders-public-posting" target="_blank" rel="noopener">
+      <div class="source-inner">
+        <div class="source-left">
+          <div class="source-type">Regulatory practice — public posting</div>
+          <div class="source-name">Public posting rules for Cabinet Ministers' and Opposition Leaders' expenses</div>
+          <div class="source-desc">Confirms quarterly posting of designated persons' expenses by the Integrity Commissioner. Expenses posted under individual names with destination, purpose, dates and cost breakdown by category. This is the current regime that produces trip-level travel records for the Premier and cabinet ministers.</div>
+          <div class="source-status status-key">Key source</div>
+        </div>
+        <div class="source-right">
+          <div class="source-publisher">OICO<br>Ongoing</div>
+          <div class="source-arrow">↗</div>
+        </div>
+      </div>
+    </a>
+
+    <a class="source-row" href="https://www.oico.on.ca/en/expense-disclosure" target="_blank" rel="noopener">
+      <div class="source-inner">
+        <div class="source-left">
+          <div class="source-type">Public expense record — example</div>
+          <div class="source-name">Integrity Commissioner expense disclosure portal — designated persons</div>
+          <div class="source-desc">Live example of current per-trip disclosure format for ministers and senior political staff: name, role, trip dates, destination, purpose, and cost breakdown (airfare, accommodation, meals). Demonstrates what the existing regime produces and what fleet ownership would no longer generate.</div>
+          <div class="source-status status-confirmed">Confirmed</div>
+        </div>
+        <div class="source-right">
+          <div class="source-publisher">OICO<br>Quarterly</div>
+          <div class="source-arrow">↗</div>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- CATEGORY 4: Fleet / asset reporting -->
+  <div class="category" id="c4">
+    <div class="category-header">
+      <div class="category-label">Category 04</div>
+      <div class="category-title">Fleet & Asset Reporting — The Contrast</div>
+      <div class="category-count">2 sources</div>
+    </div>
+
+    <a class="source-row" href="https://www.ontario.ca/page/aviation-services" target="_blank" rel="noopener">
+      <div class="source-inner">
+        <div class="source-left">
+          <div class="source-type">Ministry operational page</div>
+          <div class="source-name">MNRF Aviation, Forest Fire and Emergency Services — fleet operations</div>
+          <div class="source-desc">Describes the existing Ontario government aircraft fleet (CL-415 waterbombers, DHC-6 Twin Otters, helicopters). Confirms fleet managed by MNR's AFFES division. Aviation costs appear as aggregate program-level operating lines in ministry estimates — not per-trip, per-user public records. Establishes the reporting contrast with the expense-claim regime.</div>
+          <div class="source-status status-primary">Primary — Government page</div>
+        </div>
+        <div class="source-right">
+          <div class="source-publisher">Ministry of<br>Natural Resources</div>
+          <div class="source-arrow">↗</div>
+        </div>
+      </div>
+    </a>
+
+    <a class="source-row" href="https://www.ontario.ca/page/public-accounts-2024-25-annual-report" target="_blank" rel="noopener">
+      <div class="source-inner">
+        <div class="source-left">
+          <div class="source-type">Public accounts</div>
+          <div class="source-name">Ontario Public Accounts 2024–25 — ministry-level aggregate reporting</div>
+          <div class="source-desc">Confirms that OPS aviation and fleet costs are reported as aggregate standard objects (transportation and communication, services, supplies) at the vote/program level in Public Accounts — not broken down by user, flight, or passenger. Establishes that asset-level reporting is structurally coarse vs. the granular expense regime.</div>
+          <div class="source-status status-primary">Primary — Public Accounts</div>
+        </div>
+        <div class="source-right">
+          <div class="source-publisher">Treasury Board<br>Secretariat</div>
+          <div class="source-arrow">↗</div>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- CATEGORY 5: Civil society and IPC -->
+  <div class="category" id="c5">
+    <div class="category-header">
+      <div class="category-label">Category 05</div>
+      <div class="category-title">Regulator & Civil Society Commentary on Bill 97</div>
+      <div class="category-count">2 sources</div>
+    </div>
+
+    <a class="source-row" href="https://www.ipc.on.ca/en/media-centre/news-releases/statement-commissioner-patricia-kosseim-proposed-changes-ontarios-freedom-information-and-protection" target="_blank" rel="noopener">
+      <div class="source-inner">
+        <div class="source-left">
+          <div class="source-type">Regulatory statement</div>
+          <div class="source-name">IPC Commissioner Patricia Kosseim — statement on Bill 97 FIPPA amendments</div>
+          <div class="source-desc">Information and Privacy Commissioner urges removal of Bill 97 changes, stating they would "significantly weaken Ontarians' right of access to information." IPC written submissions call the ministerial records exemption disproportionate and inconsistent with open government principles.</div>
+          <div class="source-status status-key">Key source</div>
+        </div>
+        <div class="source-right">
+          <div class="source-publisher">IPC Ontario<br>Mar 2026</div>
+          <div class="source-arrow">↗</div>
+        </div>
+      </div>
+    </a>
+
+    <a class="source-row" href="https://ccla.org/fundamental-freedoms/freedoms-expression/access-to-information/ontarios-bill-97-threatens-government-accountability-and-privacy/" target="_blank" rel="noopener">
+      <div class="source-inner">
+        <div class="source-left">
+          <div class="source-type">Civil liberties analysis</div>
+          <div class="source-name">CCLA — Bill 97 threatens government accountability and privacy</div>
+          <div class="source-desc">CCLA analysis confirming retroactive application of Bill 97's FIPPA amendments — "some of the proposed exceptions will even apply retroactively, allowing the government to avoid existing information access orders and court decisions." Characterizes the changes as a "significant rollback."</div>
+          <div class="source-status status-confirmed">Confirmed</div>
+        </div>
+        <div class="source-right">
+          <div class="source-publisher">CCLA<br>Mar 2026</div>
+          <div class="source-arrow">↗</div>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- ABSENCE BLOCK -->
+  <div class="absence-block" id="absence">
+    <div class="absence-title">Confirmed absences — what has not been disclosed</div>
+    <div class="absence-item">
+      <span class="absence-dash">—</span>
+      <span>No ministry or Crown entity identified as custodian of the aircraft. Premier's Office, Ministry of Government and Consumer Services, MNRF, and Infrastructure Ontario all unreported as title holder.</span>
+    </div>
+    <div class="absence-item">
+      <span class="absence-dash">—</span>
+      <span>No operating cost estimate released. Government source confirmed inability to provide one after several months of procurement work on a $28.9M acquisition.</span>
+    </div>
+    <div class="absence-item">
+      <span class="absence-dash">—</span>
+      <span>No disclosure framework announced for flight operations — no commitment to publish trip dates, destinations, passengers, or per-trip costs.</span>
+    </div>
+    <div class="absence-item">
+      <span class="absence-dash">—</span>
+      <span>No contract award notice found on the Ontario public procurement portal (ontariotenders.ca) as of April 17, 2026 — required under OPS Procurement Directive for purchases over $100K.</span>
+    </div>
+    <div class="absence-item">
+      <span class="absence-dash">—</span>
+      <span>No disclosure of the aircraft in the Ontario Budget tabled March 25, 2026 — three weeks before the purchase announcement.</span>
+    </div>
+    <div class="absence-item">
+      <span class="absence-dash">—</span>
+      <span>Questions put to the Premier's Office (Hannah Jensen) and Ministry of Public and Business Service Delivery and Procurement (Giulia Paikin): April 17, 2026. Response deadline: April 24, 2026.</span>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <p>The Delusioneers · thedelusioneers.substack.com</p>
+    <p>Visibility not verdicts. Facts and primary sources only.</p>
+    <p style="margin-top: 8px;">No returns. No refunds. No records.</p>
+  </div>
+
+  <div class="tear-bottom"></div>
+
+</div>
+
+<script>
+  const progressBar = document.getElementById('progressBar');
+  const animEls = document.querySelectorAll('.category, .absence-block');
+
+  function onScroll() {
+    const st = window.scrollY;
+    const dh = document.documentElement.scrollHeight - window.innerHeight;
+    progressBar.style.width = ((st / dh) * 100) + '%';
+
+    animEls.forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight * 0.9) {
+        el.classList.add('visible');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('load', onScroll);
+</script>
+
+</body>
+</html>so
