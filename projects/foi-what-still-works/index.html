@@ -17,6 +17,66 @@
     --green: #1a5c2a;
     --amber: #7a4f00;
     --receipt-width: min(480px, 92vw);
+  --doc-width: min(480px, 92vw);
+  }
+
+  .site-header {
+    width: var(--doc-width);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0 12px;
+    margin-top: 40px;
+    margin-bottom: 0;
+  }
+  .site-header-left a {
+    font-family: 'Special Elite', monospace;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.85);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .site-header-left a:hover { color: #f5f0e8; }
+  .site-header-right { display: flex; align-items: center; gap: 16px; }
+  .header-social { display: flex; align-items: center; gap: 14px; }
+  .header-social-link {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    color: rgba(245,240,232,0.4);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .header-social-link:hover { color: rgba(245,240,232,0.9); }
+  .header-social-link svg { display: block; }
+  .header-social-link .icon-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .header-divider { width: 1px; height: 16px; background: rgba(245,240,232,0.15); }
+  .theme-toggle {
+    background: transparent;
+    border: 1px solid rgba(245,240,232,0.15);
+    color: rgba(245,240,232,0.45);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s;
+  }
+  .theme-toggle:hover {
+    color: rgba(245,240,232,0.85);
+    border-color: rgba(245,240,232,0.3);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -81,7 +141,7 @@
     -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 480 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,24 L0,12 Q6,0 12,12 Q18,24 24,12 Q30,0 36,12 Q42,24 48,12 Q54,0 60,12 Q66,24 72,12 Q78,0 84,12 Q90,24 96,12 Q102,0 108,12 Q114,24 120,12 Q126,0 132,12 Q138,24 144,12 Q150,0 156,12 Q162,24 168,12 Q174,0 180,12 Q186,24 192,12 Q198,0 204,12 Q210,24 216,12 Q222,0 228,12 Q234,24 240,12 Q246,0 252,12 Q258,24 264,12 Q270,0 276,12 Q282,24 288,12 Q294,0 300,12 Q306,24 312,12 Q318,0 324,12 Q330,24 336,12 Q342,0 348,12 Q354,24 360,12 Q366,0 372,12 Q378,24 384,12 Q390,0 396,12 Q402,24 408,12 Q414,0 420,12 Q426,24 432,12 Q438,0 444,12 Q450,24 456,12 Q462,0 468,12 Q474,24 480,12 L480,24 Z' fill='white'/%3E%3C/svg%3E");
     mask-size: cover;
     -webkit-mask-size: cover;
-    margin-top: 40px;
+    margin-top: 0;
   }
 
   .receipt {
@@ -449,6 +509,41 @@
   <span class="arrow">↓</span>
 </div>
 
+<header class="site-header">
+  <div class="site-header-left">
+    <a href="https://thedelusioneers.ca">The Delusioneers</a>
+  </div>
+  <div class="site-header-right">
+    <nav class="header-social" aria-label="Social links">
+      <a class="header-social-link" href="https://www.threads.net/@jeremycyrilwrites" target="_blank" rel="noopener" aria-label="Threads — @jeremycyrilwrites">
+        <svg width="14" height="16" viewBox="0 0 878 1000" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M446.7,1000h-0.3c-149.2-1-263.9-50.2-341-146.2C36.9,768.3,1.5,649.4,0.3,500.4v-0.7c1.2-149.1,36.6-267.9,105.2-353.4C182.5,50.2,297.3,1,446.4,0h0.3h0.3c114.4,0.8,210.1,30.2,284.4,87.4c69.9,53.8,119.1,130.4,146.2,227.8l-85,23.7c-46-165-162.4-249.3-346-250.6c-121.2,0.9-212.9,39-272.5,113.2C118.4,271,89.6,371.4,88.5,500c1.1,128.6,29.9,229,85.7,298.5c59.6,74.3,151.3,112.4,272.5,113.2c109.3-0.8,181.6-26.3,241.7-85.2c68.6-67.2,67.4-149.7,45.4-199.9c-12.9-29.6-36.4-54.2-68.1-72.9c-8,56.3-25.9,101.9-53.5,136.3c-36.9,45.9-89.2,71-155.4,74.6c-50.1,2.7-98.4-9.1-135.8-33.4c-44.3-28.7-70.2-72.5-73-123.5c-2.7-49.6,17-95.2,55.4-128.4c36.7-31.7,88.3-50.3,149.3-53.8c44.9-2.5,87-0.5,125.8,5.9c-5.2-30.9-15.6-55.5-31.2-73.2c-21.4-24.4-54.5-36.8-98.3-37.1c-0.4,0-0.8,0-1.2,0c-35.2,0-83,9.7-113.4,55L261.2,327c40.8-60.6,107-94,186.6-94c0.6,0,1.2,0,1.8,0c133.1,0.8,212.4,82.3,220.3,224.5c4.5,1.9,9,3.9,13.4,5.9c62.1,29.2,107.5,73.4,131.4,127.9c33.2,75.9,36.3,199.6-64.5,298.3C673.1,965,579.6,999.1,447,1000L446.7,1000L446.7,1000z M488.5,512.9c-10.1,0-20.3,0.3-30.8,0.9c-76.5,4.3-124.2,39.4-121.5,89.3c2.8,52.3,60.5,76.6,116,73.6c51-2.7,117.4-22.6,128.6-154.6C552.6,516,521.7,512.9,488.5,512.9z" fill="currentColor"/></svg>
+        <span class="icon-label">J</span>
+      </a>
+      <a class="header-social-link" href="https://www.threads.net/@the_delusioneers" target="_blank" rel="noopener" aria-label="Threads — @the_delusioneers">
+        <svg width="14" height="16" viewBox="0 0 878 1000" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M446.7,1000h-0.3c-149.2-1-263.9-50.2-341-146.2C36.9,768.3,1.5,649.4,0.3,500.4v-0.7c1.2-149.1,36.6-267.9,105.2-353.4C182.5,50.2,297.3,1,446.4,0h0.3h0.3c114.4,0.8,210.1,30.2,284.4,87.4c69.9,53.8,119.1,130.4,146.2,227.8l-85,23.7c-46-165-162.4-249.3-346-250.6c-121.2,0.9-212.9,39-272.5,113.2C118.4,271,89.6,371.4,88.5,500c1.1,128.6,29.9,229,85.7,298.5c59.6,74.3,151.3,112.4,272.5,113.2c109.3-0.8,181.6-26.3,241.7-85.2c68.6-67.2,67.4-149.7,45.4-199.9c-12.9-29.6-36.4-54.2-68.1-72.9c-8,56.3-25.9,101.9-53.5,136.3c-36.9,45.9-89.2,71-155.4,74.6c-50.1,2.7-98.4-9.1-135.8-33.4c-44.3-28.7-70.2-72.5-73-123.5c-2.7-49.6,17-95.2,55.4-128.4c36.7-31.7,88.3-50.3,149.3-53.8c44.9-2.5,87-0.5,125.8,5.9c-5.2-30.9-15.6-55.5-31.2-73.2c-21.4-24.4-54.5-36.8-98.3-37.1c-0.4,0-0.8,0-1.2,0c-35.2,0-83,9.7-113.4,55L261.2,327c40.8-60.6,107-94,186.6-94c0.6,0,1.2,0,1.8,0c133.1,0.8,212.4,82.3,220.3,224.5c4.5,1.9,9,3.9,13.4,5.9c62.1,29.2,107.5,73.4,131.4,127.9c33.2,75.9,36.3,199.6-64.5,298.3C673.1,965,579.6,999.1,447,1000L446.7,1000L446.7,1000z M488.5,512.9c-10.1,0-20.3,0.3-30.8,0.9c-76.5,4.3-124.2,39.4-121.5,89.3c2.8,52.3,60.5,76.6,116,73.6c51-2.7,117.4-22.6,128.6-154.6C552.6,516,521.7,512.9,488.5,512.9z" fill="currentColor"/></svg>
+        <span class="icon-label">D</span>
+      </a>
+      <a class="header-social-link" href="https://www.instagram.com/the_delusioneers" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="2"/>
+          <circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="2"/>
+          <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/>
+        </svg>
+      </a>
+      <a class="header-social-link" href="https://thedelusioneers.substack.com" target="_blank" rel="noopener" aria-label="Substack">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 4h18v2H3V4zm0 5h18v2H3V9zm0 5l9 5 9-5v2l-9 5-9-5v-2z"/>
+        </svg>
+      </a>
+    </nav>
+    <div class="header-divider"></div>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+      <span id="toggleIcon">○</span>
+      <span id="toggleLabel">Light</span>
+    </button>
+  </div>
+</header>
+
 <div class="receipt-wrapper">
   <div class="tear-top"></div>
   <div class="receipt">
@@ -706,6 +801,29 @@
   // Progress bar is green to signal "open" — different from Receipt's red
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('load', onScroll);
+
+  // Theme toggle
+  const htmlEl = document.documentElement;
+  const themeToggle = document.getElementById('themeToggle');
+  const toggleIcon = document.getElementById('toggleIcon');
+  const toggleLabel = document.getElementById('toggleLabel');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+  const saved = localStorage.getItem('delusioneers-theme');
+  const initialDark = saved ? saved === 'dark' : prefersDark.matches;
+  function setTheme(dark) {
+    htmlEl.setAttribute('data-theme', dark ? 'dark' : 'light');
+    toggleIcon.textContent = dark ? '●' : '○';
+    toggleLabel.textContent = dark ? 'Dark' : 'Light';
+  }
+  setTheme(initialDark);
+  themeToggle.addEventListener('click', () => {
+    const isDark = htmlEl.getAttribute('data-theme') === 'dark';
+    setTheme(!isDark);
+    localStorage.setItem('delusioneers-theme', !isDark ? 'dark' : 'light');
+  });
+  prefersDark.addEventListener('change', (e) => {
+    if (!localStorage.getItem('delusioneers-theme')) setTheme(e.matches);
+  });
 </script>
 
 </body>
