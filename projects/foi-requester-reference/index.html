@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The FOI Statute Still Has Teeth — The Delusioneers</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+  :root {
+    --receipt-bg: #f5f0e8;
+    --ink: #1a1a1a;
+    --ink-light: #4a4a4a;
+    --ink-faded: #8a8a7a;
+    --red: #c41e1e;
+    --red-dark: #8b1515;
+    --green: #1a5c2a;
+    --amber: #7a4f00;
+    --doc-width: min(680px, 92vw);
+  }
+
+  [data-theme="dark"] {
+    --bg: #1a1a18;
+    --ink: #f5f0e8;
+    --ink-light: rgba(245,240,232,0.78);
+    --ink-faded: rgba(245,240,232,0.38);
+    --red: #e03030;
+    --rule: rgba(255,255,255,0.038);
+    --rule-solid: rgba(255,255,255,0.12);
+    --tag-border: rgba(255,255,255,0.14);
+    --tag-red-border: rgba(224,48,48,0.4);
+    --header-border: rgba(245,240,232,0.2);
+    --toggle-bg: rgba(255,255,255,0.07);
+    --toggle-hover: rgba(255,255,255,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: #2a2825;
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 48px 0 80px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .doc-wrapper {
+    width: var(--doc-width);
+  }
+
+  .document {
+    background: var(--receipt-bg);
+    padding: 52px 52px 48px;
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.007) 2px,
+      rgba(0,0,0,0.007) 4px
+    );
+    box-shadow: 2px 4px 24px rgba(0,0,0,0.2);
+  }
+
+  /* MASTHEAD */
+  .masthead {
+    border-bottom: 2px dashed var(--ink-faded);
+    padding-bottom: 28px;
+    margin-bottom: 32px;
+    text-align: center;
+  }
+  .masthead-brand {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    margin-bottom: 16px;
+  }
+  .masthead-title {
+    font-family: 'Special Elite', monospace;
+    font-size: 28px;
+    line-height: 1.25;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .masthead-subtitle {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    line-height: 1.8;
+  }
+  .masthead-date {
+    font-size: 9px;
+    color: var(--ink-faded);
+    letter-spacing: 1px;
+    margin-top: 12px;
+  }
+
+  /* CONTEXT */
+  .context-block {
+    background: rgba(0,0,0,0.035);
+    border-left: 3px solid var(--red);
+    padding: 16px 20px;
+    margin-bottom: 36px;
+    font-size: 11px;
+    line-height: 1.75;
+    color: var(--ink-light);
+  }
+  .context-block strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* SECTION */
+  .section {
+    margin-bottom: 36px;
+    padding-bottom: 36px;
+    border-bottom: 1px dashed rgba(0,0,0,0.15);
+  }
+  .section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .section-number {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    margin-bottom: 6px;
+  }
+
+  .section-title {
+    font-family: 'Special Elite', monospace;
+    font-size: 20px;
+    color: var(--ink);
+    margin-bottom: 16px;
+    line-height: 1.2;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  /* TACTIC ROWS */
+  .tactic {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px dotted rgba(0,0,0,0.12);
+  }
+  .tactic:last-child {
+    border-bottom: none;
+  }
+
+  .tactic-bullet {
+    font-size: 10px;
+    color: var(--red);
+    font-weight: 700;
+    padding-top: 2px;
+  }
+
+  .tactic-body {
+    font-size: 11px;
+    line-height: 1.7;
+    color: var(--ink-light);
+  }
+
+  .tactic-body strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .tactic-cite {
+    display: inline-block;
+    font-size: 8.5px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    margin-top: 4px;
+    font-style: normal;
+  }
+
+  /* LATENT SECTION */
+  .latent-section {
+    margin-top: 36px;
+    padding: 20px 24px;
+    border: 1px solid rgba(0,0,0,0.15);
+    background: rgba(0,0,0,0.02);
+  }
+  .latent-label {
+    font-size: 8px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+  .latent-title {
+    font-family: 'Special Elite', monospace;
+    font-size: 16px;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .latent-body {
+    font-size: 11px;
+    line-height: 1.75;
+    color: var(--ink-light);
+  }
+  .latent-body strong {
+    color: var(--ink);
+  }
+
+  /* CLOSING */
+  .closing {
+    margin-top: 48px;
+    padding-top: 28px;
+    border-top: 2px solid var(--ink);
+    text-align: center;
+  }
+  .closing-stamp {
+    font-family: 'Special Elite', monospace;
+    font-size: 18px;
+    color: var(--green);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    border: 2px solid var(--green);
+    padding: 12px 24px;
+    display: inline-block;
+    transform: rotate(-1deg);
+    position: relative;
+    line-height: 1.3;
+    margin-bottom: 24px;
+  }
+  .closing-stamp::after {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    border: 1px solid var(--green);
+    opacity: 0.3;
+  }
+  .closing-note {
+    font-size: 10px;
+    color: var(--ink-faded);
+    line-height: 2;
+    letter-spacing: 0.5px;
+  }
+  .closing-note a {
+    color: var(--ink-light);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--ink-faded);
+  }
+
+  /* SOURCES FOOTER */
+  .sources-footer {
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--ink-faded);
+    font-size: 9px;
+    color: var(--ink-faded);
+    line-height: 2;
+    letter-spacing: 0.5px;
+  }
+  .sources-footer strong {
+    color: var(--ink-light);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 8px;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  @media (max-width: 600px) {
+    .document { padding: 32px 24px 36px; }
+    .masthead-title { font-size: 22px; }
+    .section-title { font-size: 17px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="doc-wrapper">
+<div class="document">
+<div class="header-right">
+
+  <!-- MASTHEAD -->
+  <div class="masthead">
+    <div class="masthead-brand">The Delusioneers · Civic Accountability Documentation</div>
+    <div class="masthead-title">The FOI Statute<br>Still Has Teeth</div>
+    <div class="masthead-subtitle">What the law still requires<br>A requester's reference — Bill 97, Ontario, April 2026</div>
+    <div class="masthead-date">Issued: April 24, 2026 · Primary sources: Bill 97 Schedules 7 & 11 · IPC bulletins</div>
+  </div>
+
+      <div class="header-right">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+          <span class="toggle-icon" id="toggleIcon">○</span>
+          <span id="toggleLabel">Light</span>
+        </button>
+
+  <!-- CONTEXT -->
+  <div class="context-block">
+    <strong>What Bill 97 did:</strong> Exempted the Premier's office, cabinet ministers, parliamentary assistants, and their staff from FIPPA — retroactively to 1988. Extended response timelines. Created staged access plans. Enhanced fee mechanisms.<br><br>
+    <strong>What it didn't do:</strong> Change how the statute operates for every other institution. The timeline rules, fee appeal rights, deemed refusal provisions, and IPC appeal mechanisms remain in force. This document maps what requesters can still do with them.
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="section">
+    <div class="section-number">Section 01</div>
+    <div class="section-title">Response Timelines</div>
+
+    <div class="tactic">
+      <div class="tactic-bullet">→</div>
+      <div class="tactic-body">
+        <strong>Track calendar vs. business days precisely.</strong> 30 business days equals approximately 42 calendar days. Institutions that conflate the two are non-compliant from day one.
+        <span class="tactic-cite">FIPPA s. 26, 27</span>
+      </div>
+    </div>
+
+    <div class="tactic">
+      <div class="tactic-bullet">→</div>
+      <div class="tactic-body">
+        <strong>Appeal any extension lacking reasonable grounds immediately.</strong> "Reasonable grounds" is a statutory standard, not institutional discretion. Extensions that don't meet it are appealable to the IPC without waiting for final response.
+        <span class="tactic-cite">FIPPA s. 27</span>
+      </div>
+    </div>
+
+    <div class="tactic">
+      <div class="tactic-bullet">→</div>
+      <div class="tactic-body">
+        <strong>Treat unreasonable delay as deemed refusal.</strong> When an institution fails to respond within the statutory window without a valid extension, the request is deemed refused. Deemed refusal triggers an immediate right of appeal to the IPC.
+        <span class="tactic-cite">FIPPA s. 29, 39, 41</span>
+      </div>
+    </div>
+
+    <div class="tactic">
+      <div class="tactic-bullet">→</div>
+      <div class="tactic-body">
+        <strong>Claim urgent public interest for active accountability files.</strong> Greenbelt follow-ups and cellphone case records have documented precedents for urgency arguments. File the claim in writing with the request.
+        <span class="tactic-cite">FIPPA s. 5, 21</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section">
+    <div class="section-number">Section 02</div>
+    <div class="section-title">Staged Access Plans</div>
+
+    <div class="tactic">
+      <div class="tactic-bullet">→</div>
+      <div class="tactic-body">
+        <strong>Staged plans are a new institutional tool — and rejectable.</strong> Bill 97 lets institutions propose releasing records in stages. Any stage longer than 30 days or carrying excessive fees can be appealed as a deemed refusal.
+        <span class="tactic-cite">New FIPPA s. 26.1</span>
+      </div>
+    </div>
+
+    <div class="tactic">
+      <div class="tactic-bullet">→</div>
+      <div class="tactic-body">
+        <strong>Demand a full record index upfront.</strong> An institution proposing staged release must disclose what records exist. Demand the full index before agreeing to any plan. Piecemeal disclosure of the index itself is not compliant.
+        <span class="tactic-cite">New FIPPA s. 26.1</span>
+      </div>
+    </div>
+
+    <div class="tactic">
+      <div class="tactic-bullet">→</div>
+      <div class="tactic-body">
+        <strong>Appeal unreasonable staged proposals as deemed refusal.</strong> A staged plan designed to delay rather than manage genuine volume is an abuse of the provision. Document the pattern across requests to support an IPC complaint.
+        <span class="tactic-cite">New FIPPA s. 26.1; IPC appeal jurisdiction</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="section">
+    <div class="section-number">Section 03</div>
+    <div class="section-title">Fee Contestation</div>
+
+    <div class="tactic">
+      <div class="tactic-bullet">→</div>
+      <div class="tactic-body">
+        <strong>Fee estimates over $25 are appealable.</strong> Don't pay before appealing. Demand a detailed breakdown of how the estimate was calculated before any fee is paid. Vague or padded estimates are IPC complaints.
+        <span class="tactic-cite">FIPPA s. 57</span>
+      </div>
+    </div>
+
+    <div class="tactic">
+      <div class="tactic-bullet">→</div>
+      <div class="tactic-body">
+        <strong>NGOs and community groups can claim economic hardship waivers.</strong> The waiver is available to requesters for whom the fee would cause economic hardship. Apply in writing with the initial request or on receipt of the estimate.
+        <span class="tactic-cite">FIPPA s. 57(4)</span>
+      </div>
+    </div>
+
+    <div class="tactic">
+      <div class="tactic-bullet">→</div>
+      <div class="tactic-body">
+        <strong>Public interest fee waivers have established precedent.</strong> Where disclosure serves a public interest that outweighs the institution's financial interest in collecting the fee, waiver is available. Cite IPC precedents when filing.
+        <span class="tactic-cite">FIPPA s. 57(4)(c); IPC Orders</span>
+      </div>
+    </div>
+
+    <div class="tactic">
+      <div class="tactic-bullet">→</div>
+      <div class="tactic-body">
+        <strong>Track total fees across a pattern of requests.</strong> Aggregate fee data across multiple requesters and institutions supports an abuse argument. Document and publish the pattern.
+        <span class="tactic-cite">IPC complaint jurisdiction</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="section">
+    <div class="section-number">Section 04</div>
+    <div class="section-title">Ministerial Exclusion Gaps</div>
+
+    <div class="tactic">
+      <div class="tactic-bullet">→</div>
+      <div class="tactic-body">
+        <strong>File pre-enactment requests now.</strong> Retroactivity applies differently to requests already in flight. File Greenbelt follow-ups, cellphone case-adjacent requests, and any other active accountability files immediately. The exclusion's retroactive reach is not unlimited.
+        <span class="tactic-cite">New FIPPA s. 65(18)–(19)</span>
+      </div>
+    </div>
+
+    <div class="tactic">
+      <div class="tactic-bullet">→</div>
+      <div class="tactic-body">
+        <strong>Challenge "ministerial record" claims on custody and function.</strong> The exclusion covers records in the custody or control of a ministerial office. Records held by a ministry that serve a ministry function — not a minister's political office — are not automatically excluded. The IPC has applied a custody/function test case by case. Institutions overclaim. Push back.
+        <span class="tactic-cite">FIPPA s. 10, s. 65(18); IPC Orders</span>
+      </div>
+    </div>
+
+    <div class="tactic">
+      <div class="tactic-bullet">→</div>
+      <div class="tactic-body">
+        <strong>Judicial review is available for Charter overreach.</strong> Where the exclusion removes the only source of public interest information, a s. 2(b) derivative access challenge is arguable. The retroactive voiding of live court orders raises a separate rule of law ground.
+        <span class="tactic-cite">Charter s. 2(b); rule of law</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5 -->
+  <div class="section">
+    <div class="section-number">Section 05</div>
+    <div class="section-title">Filing Strategy</div>
+
+    <div class="tactic">
+      <div class="tactic-bullet">→</div>
+      <div class="tactic-body">
+        <strong>File surgical requests.</strong> One request per developer parcel, per donation record, per calendar entry, per meeting. Narrow scope eliminates the surface area for vexatious claims and forces disclosure of specific records officials assumed would remain obscure.
+      </div>
+    </div>
+
+    <div class="tactic">
+      <div class="tactic-bullet">→</div>
+      <div class="tactic-body">
+        <strong>Document public interest purpose in every request.</strong> State the purpose in the cover letter. Clear public interest documentation defeats bad faith arguments and supports fee waivers, urgency claims, and vexatious defences simultaneously.
+      </div>
+    </div>
+
+    <div class="tactic">
+      <div class="tactic-bullet">→</div>
+      <div class="tactic-body">
+        <strong>Coordinate across requesters.</strong> Media organizations, NGOs, and individual requesters filing separate but complementary requests prevents any single requester from accumulating a vexatious profile. Each request stands alone. The pattern doesn't.
+        <span class="tactic-cite">FIPPA s. 10(1)(b) vexatious test</span>
+      </div>
+    </div>
+
+    <div class="tactic">
+      <div class="tactic-bullet">→</div>
+      <div class="tactic-body">
+        <strong>Vexatious designations require statutory proof.</strong> Bad faith. No reasonable basis. Abuse of the right of access. Narrow requests with documented public interest purpose don't meet the test. Politically motivated vexatious findings are judicially reviewable.
+        <span class="tactic-cite">FIPPA s. 10(1)(b); judicial review</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LATENT SECTION -->
+  <div class="latent-section">
+    <div class="latent-label">Status: Latent</div>
+    <div class="latent-title">Parliamentary Override</div>
+    <div class="latent-body">
+      Legislative committees retain the power to order production of records under the Legislative Assembly Act s. 35. The mechanism exists. A PC majority blocks any motion to compel production in the current parliament.<br><br>
+      <strong>The next government (2030) inherits a loaded gun.</strong> The Greenbelt records gap, the cellphone case record, and the full documentary vacuum created by Bill 97 will still be there. Production orders don't expire with the parliament that couldn't pass them.
+    </div>
+  </div>
+
+  <!-- CLOSING -->
+  <div class="closing">
+    <div class="closing-stamp">
+      The floor<br>is still open
+    </div>
+    <div class="closing-note">
+      They changed who is covered.<br>
+      They did not change how the statute works for everyone else.<br><br>
+      All items sourced from statutory text and IPC bulletins.<br>
+      <a href="https://thedelusioneers.ca">thedelusioneers.ca</a> · <a href="https://thedelusioneers.substack.com">Substack</a> · @the_delusioneers
+    </div>
+  </div>
+
+  <!-- SOURCES -->
+  <div class="sources-footer">
+    <strong>Primary Sources</strong>
+    Bill 97 (Protect Ontario by Reducing Barriers to Building and Growing the Economy Act, 2025), Schedules 7 & 11 · Freedom of Information and Protection of Privacy Act, R.S.O. 1990, c. F.31, as amended · IPC bulletins on Bill 97 · Legislative Assembly Act, R.S.O. 1990, c. L.10, s. 35 · Canadian Charter of Rights and Freedoms, s. 2(b)
+  </div>
+
+</div><!-- end .document -->
+</div><!-- end .doc-wrapper -->
+
+<script>
+  const html = document.documentElement;
+  const toggle = document.getElementById('themeToggle');
+  const icon = document.getElementById('toggleIcon');
+  const label = document.getElementById('toggleLabel');
+
+  // Detect system preference
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+  // Check for saved preference, fall back to system
+  const saved = localStorage.getItem('theme');
+  const initialDark = saved ? saved === 'dark' : prefersDark.matches;
+
+  function setTheme(dark) {
+    html.setAttribute('data-theme', dark ? 'dark' : 'light');
+    icon.textContent = dark ? '●' : '○';
+    label.textContent = dark ? 'Dark' : 'Light';
+  }
+
+  setTheme(initialDark);
+
+  toggle.addEventListener('click', () => {
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    const next = !isDark;
+    setTheme(next);
+    localStorage.setItem('theme', next ? 'dark' : 'light');
+  });
+
+  // Update if system preference changes and no manual override
+  prefersDark.addEventListener('change', (e) => {
+    if (!localStorage.getItem('theme')) {
+      setTheme(e.matches);
+    }
+  });
+</script>
+
+</body>
+</html>
