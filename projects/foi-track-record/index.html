@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The FOI Track Record — Ontario 1988–2026 | The Delusioneers</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+
+  :root {
+    --paper: #f5f0e8;
+    --paper-dark: #ede6d8;
+    --paper-ruled: rgba(0,0,0,0.06);
+    --ink: #1a1a1a;
+    --ink-light: #4a4a4a;
+    --ink-faded: #8a8a7a;
+    --red: #c41e1e;
+    --red-dark: #8b1515;
+    --green: #1a5c2a;
+    --green-light: #e8f2ea;
+    --amber: #8b5e00;
+    --amber-light: #fdf3dc;
+    --blue: #1a3a5c;
+    --blue-light: #e8eef5;
+    --page-width: min(920px, 96vw);
+    --col-gap: 0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: #2a2825;
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    color: var(--ink);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* === OUTER WRAPPER === */
+  .page-wrapper {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: 40px 0 80px;
+  }
+
+  /* === LEDGER PAPER === */
+  .ledger {
+    background: var(--paper);
+    position: relative;
+    box-shadow: 3px 6px 40px rgba(0,0,0,0.3);
+    /* Ruled paper lines */
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 27px,
+        var(--paper-ruled) 27px,
+        var(--paper-ruled) 28px
+      ),
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.004) 2px,
+        rgba(0,0,0,0.004) 4px
+      );
+  }
+
+  /* Red margin line */
+  .ledger::before {
+    content: '';
+    position: absolute;
+    left: 56px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: rgba(196,30,30,0.3);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* === DOCUMENT HEADER === */
+  .doc-header {
+    padding: 48px 48px 32px 72px;
+    border-bottom: 2px solid var(--ink);
+    position: relative;
+  }
+
+  .doc-header .crown {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    margin-bottom: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .doc-header .doc-title {
+    font-family: 'Special Elite', 'Courier New', monospace;
+    font-size: clamp(22px, 4vw, 36px);
+    line-height: 1.2;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+
+  .doc-header .doc-subtitle {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 15px;
+    font-style: italic;
+    color: var(--ink-light);
+    line-height: 1.5;
+    max-width: 640px;
+    margin-bottom: 20px;
+  }
+
+  .doc-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 16px;
+  }
+
+  .doc-meta-item {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+  }
+  .doc-meta-item strong {
+    display: block;
+    font-size: 10px;
+    color: var(--ink-light);
+    margin-bottom: 2px;
+    letter-spacing: 1px;
+  }
+
+  /* === LEGEND === */
+  .legend {
+    padding: 20px 48px 20px 72px;
+    border-bottom: 1px dashed rgba(0,0,0,0.2);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+    background: rgba(0,0,0,0.02);
+  }
+
+  .legend-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    margin-right: 4px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 8px;
+    border-radius: 0;
+    font-size: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    border: 1px solid currentColor;
+  }
+
+  .badge-foi {
+    color: var(--green);
+    background: var(--green-light);
+    border-color: var(--green);
+  }
+
+  .badge-ag {
+    color: var(--blue);
+    background: var(--blue-light);
+    border-color: var(--blue);
+  }
+
+  .badge-ipc {
+    color: var(--amber);
+    background: var(--amber-light);
+    border-color: var(--amber);
+  }
+
+  .badge-court {
+    color: var(--red-dark);
+    background: #fce8e8;
+    border-color: var(--red-dark);
+  }
+
+  .badge-watchdog {
+    color: #4a2080;
+    background: #f0eaf8;
+    border-color: #4a2080;
+  }
+
+  .badge-journalism {
+    color: #5a4520;
+    background: #f5ede0;
+    border-color: #5a4520;
+  }
+
+  .badge-mixed {
+    color: var(--ink-light);
+    background: var(--paper-dark);
+    border-color: var(--ink-faded);
+  }
+
+  /* === ERA DIVIDER === */
+  .era-header {
+    padding: 16px 48px 12px 72px;
+    background: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+
+  .era-header .era-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--paper);
+  }
+
+  .era-header .era-govt {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: rgba(245,240,232,0.5);
+    text-transform: uppercase;
+  }
+
+  /* === COLUMN HEADERS === */
+  .col-headers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 2px solid var(--ink);
+    padding: 0 48px 0 72px;
+  }
+
+  .col-header {
+    padding: 12px 16px 12px 0;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .col-header:last-child {
+    border-left: 1px solid rgba(0,0,0,0.15);
+    padding-left: 16px;
+  }
+
+  /* === ROW === */
+  .record-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    padding: 0 48px 0 72px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  .record-row.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .record-row:hover {
+    background: rgba(0,0,0,0.015);
+  }
+
+  .record-row.era-start {
+    border-top: 1px dashed rgba(0,0,0,0.15);
+  }
+
+  /* Left cell: official position */
+  .cell-left {
+    padding: 20px 20px 20px 0;
+    border-right: 1px solid rgba(0,0,0,0.12);
+  }
+
+  /* Right cell: what FOI/mechanism revealed */
+  .cell-right {
+    padding: 20px 0 20px 20px;
+  }
+
+  .record-date {
+    font-size: 8.5px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    margin-bottom: 5px;
+  }
+
+  .record-subject {
+    font-family: 'Special Elite', 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .record-text {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--ink-light);
+  }
+
+  .record-text em {
+    font-style: italic;
+    color: var(--ink);
+  }
+
+  /* Source tag */
+  .record-source {
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    margin-top: 8px;
+    display: block;
+  }
+
+  /* Mechanism badge in right cell */
+  .mechanism-line {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+  /* Key finding highlight */
+  .finding-text {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--ink-light);
+  }
+
+  .finding-text strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .finding-text .figure {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--red);
+  }
+
+  /* Note callout */
+  .note-callout {
+    font-size: 10px;
+    font-style: italic;
+    color: var(--ink-faded);
+    border-left: 2px solid var(--ink-faded);
+    padding-left: 8px;
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  /* === TOTALS === */
+  .totals-section {
+    padding: 32px 48px 32px 72px;
+    border-top: 2px solid var(--ink);
+    background: rgba(0,0,0,0.02);
+  }
+
+  .totals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+
+  .total-item {
+    border-left: 2px solid var(--ink-faded);
+    padding-left: 12px;
+  }
+
+  .total-label {
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    margin-bottom: 4px;
+  }
+
+  .total-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .total-value.red { color: var(--red); }
+  .total-value.green { color: var(--green); }
+
+  .totals-note {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 12px;
+    font-style: italic;
+    color: var(--ink-light);
+    line-height: 1.6;
+    max-width: 600px;
+    padding-top: 16px;
+    border-top: 1px dashed rgba(0,0,0,0.2);
+  }
+
+  /* === METHODOLOGY NOTE === */
+  .methodology {
+    padding: 24px 48px 24px 72px;
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .methodology-title {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.5);
+    margin-bottom: 10px;
+  }
+
+  .methodology-body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 12px;
+    line-height: 1.7;
+    color: rgba(245,240,232,0.8);
+    max-width: 720px;
+  }
+
+  /* === FOOTER === */
+  .doc-footer {
+    padding: 24px 48px 32px 72px;
+    border-top: 1px dashed rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .doc-footer .footer-left {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    color: var(--ink-faded);
+    text-transform: uppercase;
+    line-height: 2;
+  }
+
+  .doc-footer .footer-right {
+    font-family: 'Special Elite', monospace;
+    font-size: 13px;
+    color: var(--ink-light);
+    text-align: right;
+  }
+
+  /* Margin line numbers */
+  .line-num {
+    position: absolute;
+    left: 0;
+    width: 48px;
+    text-align: right;
+    padding-right: 8px;
+    font-size: 8px;
+    color: var(--ink-faded);
+    opacity: 0.4;
+    font-family: 'JetBrains Mono', monospace;
+    top: 22px;
+  }
+
+  /* Mobile */
+  @media (max-width: 640px) {
+    .page-wrapper { padding: 20px 0 60px; }
+    .doc-header, .legend, .doc-footer, .totals-section, .methodology { padding-left: 24px; }
+    .ledger::before { left: 16px; }
+    .col-headers, .record-row { padding-left: 24px; padding-right: 16px; }
+    .era-header { padding-left: 24px; }
+
+    .col-headers { display: none; }
+    .record-row {
+      grid-template-columns: 1fr;
+    }
+    .cell-left {
+      border-right: none;
+      border-bottom: 1px dashed rgba(0,0,0,0.15);
+      padding-bottom: 12px;
+    }
+    .cell-right { padding-top: 12px; }
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2px;
+    background: var(--red);
+    z-index: 200;
+    transition: width 0.05s linear;
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="page-wrapper">
+<div class="ledger">
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <div class="crown">Province of Ontario · Freedom of Information &amp; Protection of Privacy Act, 1988</div>
+    <div class="doc-title">The FOI Track Record</div>
+    <div class="doc-subtitle">A timeline of Ontario cases where FOI requests and follow‑up reviews actually changed what we know, either by releasing documents that weren't public before, or by revealing how records were handled behind the scenes. Ontario provincial scope only: FIPPA 1988–2026.</div>
+    <div class="doc-meta">
+      <div class="doc-meta-item"><strong>Period</strong>1988–2026</div>
+      <div class="doc-meta-item"><strong>Scope</strong>Ontario FIPPA only</div>
+      <div class="doc-meta-item"><strong>Excluded</strong>Federal ATIA · Municipal MFIPPA</div>
+      <div class="doc-meta-item"><strong>Published by</strong>The Delusioneers</div>
+      <div class="doc-meta-item"><strong>Substack</strong>thedelusioneers.substack.com</div>
+      <div class="doc-meta-item"><strong>Instagram</strong>@the_delusioneers</div>
+    </div>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <span class="legend-label">How it came out:</span>
+    <span class="badge badge-foi">✓ FOI Request</span>
+    <span class="badge badge-ag">AG Report</span>
+    <span class="badge badge-ipc">IPC Investigation</span>
+    <span class="badge badge-court">Court Proceeding</span>
+    <span class="badge badge-watchdog">Ombudsman / Commissioner</span>
+    <span class="badge badge-journalism">Journalism / Leak</span>
+    <span class="badge badge-mixed">Mixed</span>
+  </div>
+
+  <!-- COLUMN HEADERS -->
+  <div class="col-headers">
+    <div class="col-header">Official Position / Public Record</div>
+    <div class="col-header">What Was Actually Revealed</div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ERA 0: FIPPA FOUNDATIONS — PETERSON / RAE 1988–1995 -->
+  <!-- ============================================================ -->
+  <div class="era-header">
+    <span class="era-name">FIPPA Foundations · Peterson / Rae Eras · 1988–1995</span>
+    <span class="era-govt">Liberal · NDP</span>
+  </div>
+
+  <!-- PETERSON — IPC ORDERS P-48 / P-78 -->
+  <div class="record-row era-start" data-row="0a">
+    <div class="line-num">—</div>
+    <div class="cell-left">
+      <div class="record-date">1988–1989 · Peterson (Liberal)</div>
+      <div class="record-subject">FIPPA's First Orders — Burden of Justification</div>
+      <div class="record-text">Ontario ministries initially treated FIPPA refusals as a default option, providing minimal justification for withholding records. The legal standard for what the government had to demonstrate to refuse access was untested.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-ipc">IPC Adjudication</span>
+      </div>
+      <div class="finding-text">IPC Orders P-48 and P-78 established that Ontario ministries <strong>must justify refusals under the Act's specific exemptions</strong> — the burden of proof sits with the institution, not the requester. This laid the legal groundwork for every subsequent disclosure fight. Without this foundational precedent, the 407 fight, the gas plants battle, and the mandate letters case would have had no floor to stand on.
+      <div class="note-callout">FOI role: the requests triggered adjudication that built the legal architecture. No dramatic disclosure — these cases matter because they established what "access" actually means.</div>
+      </div>
+      <span class="record-source">IPC Order P-48 · IPC Order P-78</span>
+    </div>
+  </div>
+
+  <!-- RAE — IPC ORDER P-956 -->
+  <div class="record-row" data-row="0b">
+    <div class="line-num">—</div>
+    <div class="cell-left">
+      <div class="record-date">Early-to-mid 1990s · Rae (NDP)</div>
+      <div class="record-subject">Nuclear Emergency Planning — Public Safety Records</div>
+      <div class="record-text">The provincial government withheld records related to nuclear emergency planning, including potassium iodide distribution protocols. The government maintained these records fell outside the reach of public access on safety and security grounds.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-ipc">IPC Adjudication</span>
+      </div>
+      <div class="finding-text">IPC Order P-956 adjudicated an early test of whether public-safety planning records could be permanently shielded from access requests. The denial was upheld — but the case established that <strong>public-safety secrecy claims must still be evaluated against the Act's specific exemptions</strong>, not asserted as automatic. The government cannot invoke "safety" as a blanket override; it must justify each record.
+      <div class="note-callout">FOI role: the request was denied. The case's significance is the legal standard it produced, not a disclosure.</div>
+      </div>
+      <span class="record-source">IPC Order P-956</span>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ERA 1: HARRIS / EVES 1995–2003 -->
+  <!-- ============================================================ -->
+  <div class="era-header">
+    <span class="era-name">Harris / Eves Era · 1995–2003</span>
+    <span class="era-govt">Progressive Conservative</span>
+  </div>
+
+  <!-- WALKERTON -->
+  <div class="record-row era-start" data-row="1">
+    <div class="line-num">01</div>
+    <div class="cell-left">
+      <div class="record-date">1996–2000</div>
+      <div class="record-subject">Walkerton Water Safety / Privatization of Testing</div>
+      <div class="record-text">The Harris government maintained that privatizing water quality testing was a cost-saving measure consistent with public safety standards. The connection between that decision and the May 2000 E. coli outbreak — which killed seven people and sickened 2,300 — was disputed.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-court">Court Proceeding</span>
+        <span class="badge badge-journalism">Journalism</span>
+      </div>
+      <div class="finding-text">Internal Environment Ministry records showed the government had been warned about the risks of privatizing water testing <strong>before the disaster</strong>. The decisive disclosure came through the O'Connor Commission of Inquiry — not through successful FOI release. FOI attempts were largely frustrated. The inquiry compelled the documents.
+      <div class="note-callout">FOI role: supplementary and largely unsuccessful. The inquiry was the primary mechanism. This distinction matters.</div>
+      </div>
+      <span class="record-source">Report of the Walkerton Inquiry (O'Connor, 2002) · CBC</span>
+    </div>
+  </div>
+
+  <!-- HWY 407 -->
+  <div class="record-row" data-row="2">
+    <div class="line-num">02</div>
+    <div class="cell-left">
+      <div class="record-date">1999–2000</div>
+      <div class="record-subject">Highway 407 Sale — Highest Bid Selected</div>
+      <div class="record-text">The government maintained it selected the best bid for the 407 privatization, maximizing value for Ontario taxpayers in a competitive process.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-foi">✓ FOI Request</span>
+        <span class="badge badge-journalism">Journalism / Leak</span>
+      </div>
+      <div class="finding-text">Confidential documents obtained through FOI litigation and confidential sources revealed the Harris government <strong>rejected a bid that would have extended the 407 at no public construction cost</strong> — and chose the higher up-front cash bid instead. The shortfall would cost Ontarians for decades in tolls. IPC Orders PO-1974 and PO-1977 adjudicated related access disputes.</div>
+      <span class="record-source">Globe and Mail · IPC Orders PO-1974, PO-1977</span>
+    </div>
+  </div>
+
+  <!-- HARRIS NUCLEAR P-901 -->
+  <div class="record-row" data-row="2b">
+    <div class="line-num">—</div>
+    <div class="cell-left">
+      <div class="record-date">Mid-to-late 1990s · Harris (PC)</div>
+      <div class="record-subject">Nuclear Emergency Planning — Safety Records, Round Two</div>
+      <div class="record-text">A requester challenged provincial secrecy around nuclear emergency planning records under the Harris government. The government maintained these records were exempt from public access on safety grounds.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-ipc">IPC Adjudication</span>
+      </div>
+      <div class="finding-text">IPC Order P-901 adjudicated the challenge and the denial was upheld. Taken together with the Rae-era P-956, this established a consistent pattern: <strong>nuclear emergency planning records are shielded across administrations, regardless of party</strong>. The pattern itself is the finding — what the public cannot learn about emergency consequences near nuclear facilities is a structural feature of Ontario's access regime, not an anomaly.
+      <div class="note-callout">FOI role: denied. The significance is the durable precedent for public-safety secrecy, not a disclosure.</div>
+      </div>
+      <span class="record-source">IPC Order P-901</span>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ERA 2: MCGUINTY 2003–2013 -->
+  <!-- ============================================================ -->
+  <div class="era-header">
+    <span class="era-name">McGuinty Era · 2003–2013</span>
+    <span class="era-govt">Liberal</span>
+  </div>
+
+  <!-- BRAMPTON P3 -->
+  <div class="record-row era-start" data-row="3">
+    <div class="line-num">03</div>
+    <div class="cell-left">
+      <div class="record-date">2005–2007</div>
+      <div class="record-subject">Brampton Civic Hospital — P3 Contract Costs</div>
+      <div class="record-text">The government maintained the P3 financing model for Brampton's new hospital was cost-effective and represented sound value for public money.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-court">Court Proceeding</span>
+      </div>
+      <div class="finding-text">Court-ordered disclosure showed the government knew the P3 project could cost <strong>substantially more than public financing</strong>. FIPPA and commercial-confidentiality barriers had blocked direct access. The key records came through litigation — not a clean FOI release. FIPPA's commercial-confidentiality exemptions had held for years.
+      <div class="note-callout">FOI role: blocked. Court proceedings were the mechanism.</div>
+      </div>
+      <span class="record-source">CUPE Ontario · Ontario Health Coalition</span>
+    </div>
+  </div>
+
+  <!-- EHEALTH -->
+  <div class="record-row" data-row="4">
+    <div class="line-num">04</div>
+    <div class="cell-left">
+      <div class="record-date">May–Jun 2009</div>
+      <div class="record-subject">eHealth Ontario — Untendered Consulting Contracts</div>
+      <div class="record-text">The government defended eHealth Ontario's procurement processes and denied systemic contracting problems at the provincial health IT agency.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-foi">✓ FOI Request</span>
+        <span class="badge badge-ag">AG Report</span>
+      </div>
+      <div class="finding-text">PC caucus FOI requests revealed <strong>millions in untendered consulting contracts</strong> and absent procurement records, triggering executive resignations. The Auditor General later substantiated and expanded the findings. FOI was the primary trigger; the AG confirmed the full scope.
+      </div>
+      <span class="record-source">CBC · Ontario Auditor General · Public Accounts Committee</span>
+    </div>
+  </div>
+
+  <!-- GAS PLANTS -->
+  <div class="record-row" data-row="5">
+    <div class="line-num">05</div>
+    <div class="cell-left">
+      <div class="record-date">2012–2013</div>
+      <div class="record-subject">Gas Plants Cancellation — Missing Records</div>
+      <div class="record-text">The government initially produced limited documentation about the $1.1B cancellation of two gas plant contracts in Oakville and Mississauga. Senior political staff denied systemic deletion of relevant records.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-ipc">IPC Investigation</span>
+        <span class="badge badge-court">Legislative Order</span>
+      </div>
+      <div class="finding-text">Opposition FOI requests exposed conspicuously empty records from key aides — the <strong>absence itself became the story</strong>. A Speaker's contempt ruling followed when the Energy Minister refused legislative production orders. The IPC's 2013 special report <em>Deleting Accountability</em> found senior Liberal political staff had <strong>illegally deleted gas plant emails</strong>. OPP criminal investigation launched.
+      <div class="note-callout">FOI role: trigger. The decisive accountability came through an IPC special investigation and legislative contempt process, not the FOI release itself.</div>
+      </div>
+      <span class="record-source">IPC, Deleting Accountability (2013) · CTV · Global News · CBC</span>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ERA 3: WYNNE 2013–2018 -->
+  <!-- ============================================================ -->
+  <div class="era-header">
+    <span class="era-name">Wynne Era · 2013–2018</span>
+    <span class="era-govt">Liberal</span>
+  </div>
+
+  <!-- HYDRO ONE -->
+  <div class="record-row era-start" data-row="6">
+    <div class="line-num">06</div>
+    <div class="cell-left">
+      <div class="record-date">2015–2018</div>
+      <div class="record-subject">Hydro One Partial Privatization — Executive Compensation</div>
+      <div class="record-text">After the Wynne government partially privatized Hydro One, the corporation maintained that executive pay details were now private commercial information and not subject to normal public disclosure requirements.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-journalism">Journalism</span>
+      </div>
+      <div class="finding-text">FIPPA requests were resisted — the privatization had deliberately placed Hydro One outside FIPPA's reach. Some compensation figures eventually emerged through corporate disclosure routes rather than access law. The <strong>refusal to disclose became the accountability story</strong>: restructuring as a mechanism to block transparency.
+      <div class="note-callout">FOI role: blocked by design. The structural exclusion itself was the finding. No successful FOI disclosure.</div>
+      </div>
+      <span class="record-source">Ontario NDP · Ontario PC · CBC</span>
+    </div>
+  </div>
+
+  <!-- MINISTRY OF FINANCE IPC -->
+  <div class="record-row" data-row="7">
+    <div class="line-num">07</div>
+    <div class="cell-left">
+      <div class="record-date">2011–2012</div>
+      <div class="record-subject">Ministry of Finance — FOI Processing Practices</div>
+      <div class="record-text">The Ministry of Finance maintained its Freedom of Information processing procedures followed established protocols.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-ipc">IPC Investigation</span>
+      </div>
+      <div class="finding-text">An IPC investigation found that <strong>"contentious issues management"</strong> inside the Ministry had caused unacceptable delays on at least one FOI request — meaning political sensitivity was influencing which requests got answered and when.
+      </div>
+      <span class="record-source">IPC, Report into Contentious Issues Management in the Ministry of Finance</span>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ERA 4: FORD 2018–2026 -->
+  <!-- ============================================================ -->
+  <div class="era-header">
+    <span class="era-name">Ford Era · 2018–2026</span>
+    <span class="era-govt">Progressive Conservative</span>
+  </div>
+
+  <!-- MANDATE LETTERS -->
+  <div class="record-row era-start" data-row="8">
+    <div class="line-num">08</div>
+    <div class="cell-left">
+      <div class="record-date">2018–2024</div>
+      <div class="record-subject">Cabinet Mandate Letters — 23 Letters Withheld</div>
+      <div class="record-text">The Ford government argued its 23 ministerial mandate letters were exempt from FIPPA under the cabinet-records provision. The government fought disclosure for six years.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-foi">✓ FOI Request</span>
+        <span class="badge badge-court">Court Proceeding</span>
+      </div>
+      <div class="finding-text">CBC's 2018 FOI request triggered a six-year legal battle through IPC, Divisional Court, Court of Appeal, and the Supreme Court of Canada. The SCC ruled the letters were exempt — <strong>broadening cabinet secrecy beyond 30 years of IPC precedent</strong>. The mandate letter to Steve Clark instructing Greenbelt "expansions and contractions" was later independently confirmed by the Auditor General.
+      <div class="note-callout">FOI role: the trigger. The fight itself — not a successful disclosure — produced accountability. The government won, and the law got worse.</div>
+      </div>
+      <span class="record-source">CBC · IPC Order PO-3973 · SCC, Ontario (AG) v. Ontario (IPC), 2024</span>
+    </div>
+  </div>
+
+  <!-- LTC COVID -->
+  <div class="record-row" data-row="9">
+    <div class="line-num">09</div>
+    <div class="cell-left">
+      <div class="record-date">2020–2021</div>
+      <div class="record-subject">COVID-19 Long-Term Care — Government Preparedness</div>
+      <div class="record-text">The government maintained it had responded swiftly to protect long-term care residents when COVID-19 arrived. The Ombudsman found the system "wholly incapable" of protecting them.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-foi">✓ FOI Request</span>
+        <span class="badge badge-watchdog">Ombudsman</span>
+        <span class="badge badge-ag">AG Report</span>
+      </div>
+      <div class="finding-text">CBC FOI requests obtained internal documents showing Ontario gave <strong>far less early planning attention to long-term care than to hospitals</strong>. Zero inspections of LTC facilities for seven weeks during the deadliest period. <span class="figure">4,000+</span> LTC deaths. AG found <strong>$1.4 billion in PPE written off</strong>. The government is now burning expired equipment.
+      </div>
+      <span class="record-source">CBC · Ombudsman · AG · LTC Commission Final Report (2021)</span>
+    </div>
+  </div>
+
+  <!-- SCIENCE CENTRE -->
+  <div class="record-row" data-row="10">
+    <div class="line-num">10</div>
+    <div class="cell-left">
+      <div class="record-date">2023–2024</div>
+      <div class="record-subject">Ontario Science Centre — Closure Justified by Engineering</div>
+      <div class="record-text">The Ford government said the Ontario Science Centre at Don Mills had to be closed immediately due to structural safety concerns identified in engineering assessments. Infrastructure Ontario cited urgent building safety requirements.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-foi">✓ FOI Request</span>
+      </div>
+      <div class="finding-text">FOI requests filed by <em>Canadian Architect</em> produced draft engineering reports that <strong>did not support the government's public rationale</strong> for the closure. The drafts indicated the structural issues, while real, did not require immediate and permanent closure — materially advancing the case that the decision was political, made to clear the site for the Ontario Place / Therme development.
+      </div>
+      <span class="record-source">Canadian Architect · Infrastructure Ontario</span>
+    </div>
+  </div>
+
+  <!-- GREENPEACE / PICKERING NUCLEAR -->
+  <div class="record-row" data-row="10b">
+    <div class="line-num">—</div>
+    <div class="cell-left">
+      <div class="record-date">2016–2018 · Request originated under Wynne; orders issued under Ford</div>
+      <div class="record-subject">Pickering Nuclear — Accident Consequence Data</div>
+      <div class="record-text">Greenpeace Canada sought records from the province about the potential consequences of a serious accident at the Pickering Nuclear Generating Station — what would happen to people living near the facility in a major incident. The government withheld the records on safety and security grounds.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-ipc">IPC Adjudication</span>
+      </div>
+      <div class="finding-text">IPC Orders PO-2960-I, PO-3019-F, and PO-3909 adjudicated the challenge across multiple rounds. The denial was upheld at each stage. The result: <strong>what the province knows about nuclear accident consequences near Pickering is not public information</strong>. Combined with the Harris-era P-901 and Rae-era P-956, this establishes a 30-year pattern — nuclear emergency consequence data has been shielded from public access under every party in government.
+      <div class="note-callout">FOI role: denied across three IPC orders. The secrecy around emergency consequences is the story. No disclosure was made.</div>
+      </div>
+      <span class="record-source">IPC Orders PO-2960-I · PO-3019-F · PO-3909 · Greenpeace Canada</span>
+    </div>
+  </div>
+
+  <!-- GREENBELT -->
+  <div class="record-row" data-row="11">
+    <div class="line-num">11</div>
+    <div class="cell-left">
+      <div class="record-date">2022–Ongoing</div>
+      <div class="record-subject">Greenbelt Land Swap — Decision-Making Process</div>
+      <div class="record-text">The Ford government maintained the Greenbelt land swap — removing 7,400 acres for housing development — followed a proper, documented decision-making process. Key officials gave sworn accounts of how the decisions were made.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-foi">✓ FOI Request</span>
+        <span class="badge badge-ipc">IPC Investigation</span>
+        <span class="badge badge-ag">AG Report</span>
+      </div>
+      <div class="finding-text">NDP and journalist FOI requests exposed staff using <strong>coded language — "G*", "Special Project", "SP"</strong> — in emails specifically to evade FOI searches. Personal email accounts used for government business. The IPC found a <strong>"near-total absence"</strong> of decision-making records for a policy worth <span class="figure">$8.3B</span> to developers. Internal email retrieved from a personal account contradicted sworn testimony. Won the 2024 Code of Silence Award. <strong>RCMP investigation ongoing.</strong>
+      </div>
+      <span class="record-source">Ontario NDP · Global News · IPC Special Report · The Narwhal · The Globe and Mail</span>
+    </div>
+  </div>
+
+  <!-- ONTARIO PLACE THERME -->
+  <div class="record-row" data-row="12">
+    <div class="line-num">12</div>
+    <div class="cell-left">
+      <div class="record-date">2019–Ongoing</div>
+      <div class="record-subject">Ontario Place / Therme — Fair and Open Procurement</div>
+      <div class="record-text">The government described the Ontario Place redevelopment and Therme concession as the product of a fair, transparent, and accountable bidding process that selected the best operator for the site.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-foi">✓ FOI Request</span>
+        <span class="badge badge-ag">AG Report</span>
+      </div>
+      <div class="finding-text">FOI and AG investigations revealed: process was <strong>"not fair, transparent or accountable."</strong> Therme claimed to operate 6 spa locations; it operated 1. An Infrastructure Ontario VP made <strong>forbidden contact with bidders</strong>. Parking garage plans were dated <strong>seven months before the bid was even announced</strong>. The Science Centre was closed to clear the site. Total public cost ballooned from <span class="figure">$424M</span> to <span class="figure">$2.24B</span>.
+      </div>
+      <span class="record-source">AG Ontario (2024) · NDP FOI · CTV · Globe and Mail</span>
+    </div>
+  </div>
+
+  <!-- ONTARIO PLACE ADS -->
+  <div class="record-row" data-row="13">
+    <div class="line-num">13</div>
+    <div class="cell-left">
+      <div class="record-date">2023–2024</div>
+      <div class="record-subject">Ontario Place Advertising Campaign — Purpose</div>
+      <div class="record-text">The government did not proactively disclose the budget or purpose of its Ontario Place advertising campaigns. It initially refused to confirm the spending amount.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-foi">✓ FOI Request</span>
+      </div>
+      <div class="finding-text">NDP FOI requests revealed <span class="figure">$2M</span> was budgeted <strong>explicitly to counter negative public reaction</strong> to the Therme spa deal — not to inform, but to manage sentiment. A second <span class="figure">$1.74M</span> campaign followed. Total: <span class="figure">$3.74M</span> in taxpayer-funded advertising to defend a decision the public opposed.
+      </div>
+      <span class="record-source">Global News · NDP FOI · Chris Glover MPP</span>
+    </div>
+  </div>
+
+  <!-- SDF -->
+  <div class="record-row" data-row="14">
+    <div class="line-num">14</div>
+    <div class="cell-left">
+      <div class="record-date">Oct 2025</div>
+      <div class="record-subject">Skills Development Fund — Grant Selection Process</div>
+      <div class="record-text">The government maintained that SDF grants were awarded through a merit-based process administered by the Ministry of Labour to support genuine workforce training.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-foi">✓ FOI Request</span>
+        <span class="badge badge-ag">AG Special Report</span>
+      </div>
+      <div class="finding-text">A Trillium FOI request costing <span class="figure">$142.50</span> cracked open a <span class="figure">$1.3B</span> scandal. The AG Special Report confirmed: <span class="figure">$742M</span> in SDF grants went to projects ranked <strong>poor, low, or medium by career civil servants</strong> — overridden by the Labour Minister's office. <strong>64 of those projects hired registered lobbyists.</strong> OPP anti-rackets investigation launched.
+      <div class="note-callout">FOI was the trigger. The AG's special report was the scale-confirming mechanism.</div>
+      </div>
+      <span class="record-source">The Trillium / Village Media · AG Special Report · CTV</span>
+    </div>
+  </div>
+
+  <!-- RING OF FIRE ADS -->
+  <div class="record-row" data-row="15">
+    <div class="line-num">15</div>
+    <div class="cell-left">
+      <div class="record-date">2025</div>
+      <div class="record-subject">Ring of Fire Advertising — Promotional Campaign</div>
+      <div class="record-text">The government ran television advertising featuring footage presented as illustrating the Ring of Fire mining district in Northern Ontario.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-foi">✓ FOI Request</span>
+      </div>
+      <div class="finding-text">CBC FOI requests revealed <span class="figure">$7.5M</span> spent on ads for a mining project at least a decade from production. CBC verified <strong>zero footage in the ads was actually from the Ring of Fire</strong> — stock footage came from Australia, Sweden, and Russia. Total campaign budget: <span class="figure">$12.2M</span>. The production budget included <span class="figure">$60K</span> to remove a "shoe scene" from the TV spot.
+      </div>
+      <span class="record-source">CBC News FOI</span>
+    </div>
+  </div>
+
+  <!-- RECORD AD SPEND -->
+  <div class="record-row" data-row="16">
+    <div class="line-num">16</div>
+    <div class="cell-left">
+      <div class="record-date">2024–25 Fiscal Year</div>
+      <div class="record-subject">Government Advertising — Informing Ontarians</div>
+      <div class="record-text">The government characterized its advertising programs as public information campaigns serving the public interest, informing Ontarians about government programs and services.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-ag">AG Annual Report</span>
+      </div>
+      <div class="finding-text">The Auditor General found <span class="figure">$111.9M</span> in taxpayer-funded advertising in fiscal 2024–25 — <strong>the highest ever recorded</strong>. 38% was explicitly designed to create a <strong>"positive impression"</strong> of the government, timed before a snap election call. Lifetime total since 2018: <span class="figure">$452M</span>. Many ads contained unsupported claims.
+      <div class="note-callout">FOI role: none direct. This was an AG Annual Report finding. Included because it contextualizes the FOI record.</div>
+      </div>
+      <span class="record-source">Auditor General of Ontario, Annual Report 2025</span>
+    </div>
+  </div>
+
+  <!-- BIKE LANES -->
+  <div class="record-row" data-row="17">
+    <div class="line-num">17</div>
+    <div class="cell-left">
+      <div class="record-date">Jan 2026</div>
+      <div class="record-subject">Bike Lane Removal — Congestion Relief</div>
+      <div class="record-text">The Ford government argued that removing protected bike lanes from major Toronto streets would reduce traffic congestion and improve travel times for drivers. It hired external legal counsel to fight a court ruling against the removals.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-foi">✓ FOI Request</span>
+      </div>
+      <div class="finding-text">Cycle Toronto FOI requests revealed <span class="figure">$270K</span> spent on outside counsel to fight a court ruling that concluded removing the lanes would <strong>"put people at increased risk of harm and death."</strong> Internal documents showed the government's own ministry assessed that removal <strong>might not reduce congestion</strong> — contradicting the public rationale.
+      </div>
+      <span class="record-source">Cycle Toronto FOI · CBC News</span>
+    </div>
+  </div>
+
+  <!-- CELLPHONE RECORDS -->
+  <div class="record-row" data-row="18">
+    <div class="line-num">18</div>
+    <div class="cell-left">
+      <div class="record-date">Dec 2022–Mar 2026</div>
+      <div class="record-subject">Premier's Personal Cellphone — Government Use</div>
+      <div class="record-text">The government denied that records from Doug Ford's personal cellphone constituted government records subject to FIPPA, and fought disclosure for over three years.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-foi">✓ FOI Request</span>
+        <span class="badge badge-court">Court Proceeding</span>
+      </div>
+      <div class="finding-text">Global News FOI for Ford's personal phone call logs produced IPC orders, then a court finding: it was <strong>"reasonable to conclude"</strong> Ford uses his personal phone for government communications — making those records subject to FIPPA. The court sided with Global News in January 2026. Bill 97's retroactive amendment <strong>would eliminate this case entirely</strong>, applying backwards to January 1, 1988.
+      </div>
+      <span class="record-source">Global News · IPC · Ontario Divisional Court</span>
+    </div>
+  </div>
+
+  <!-- CHILD WELFARE -->
+  <div class="record-row" data-row="19">
+    <div class="line-num">19</div>
+    <div class="cell-left">
+      <div class="record-date">2020–2026</div>
+      <div class="record-subject">Child Welfare Deaths — Reporting Practices</div>
+      <div class="record-text">The government produced annual reports on child welfare system outcomes under standard reporting practices. No public announcement was made about changes to reporting.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-foi">✓ FOI Request</span>
+      </div>
+      <div class="finding-text">Global News FOI requests revealed a child in Ontario's welfare system died <strong>on average every three days</strong>: <span class="figure">354 deaths</span> between 2020–2022; <span class="figure">134 deaths</span> in 2023 alone. When the same FOI was refiled for 2024–2025, the government said the reports <strong>no longer exist</strong>. <em>They stopped making them.</em>
+      </div>
+      <span class="record-source">Global News FOI</span>
+    </div>
+  </div>
+
+  <!-- MZOs -->
+  <div class="record-row" data-row="20">
+    <div class="line-num">20</div>
+    <div class="cell-left">
+      <div class="record-date">2020–2024</div>
+      <div class="record-subject">Ministerial Zoning Orders — Housing Need</div>
+      <div class="record-text">The government maintained that Ministerial Zoning Orders were issued on the basis of housing need and community benefit, following normal planning considerations and independent of political relationships.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-foi">✓ FOI Request</span>
+        <span class="badge badge-ag">AG Report</span>
+        <span class="badge badge-journalism">Journalism</span>
+      </div>
+      <div class="finding-text">FOI requests and AG investigations found many MZOs benefited <strong>the same cluster of seven developers</strong>. Internal emails showed municipal concerns were systematically overridden. <strong>PC Party donor connections documented</strong> across multiple recipients. The pattern suggested political access, not planning need, was the operative criterion.
+      </div>
+      <span class="record-source">Global News · The Narwhal · Auditor General</span>
+    </div>
+  </div>
+
+  <!-- IPC NON-COMPLIANCE -->
+  <div class="record-row" data-row="21">
+    <div class="line-num">21</div>
+    <div class="cell-left">
+      <div class="record-date">2023–2025</div>
+      <div class="record-subject">IPC Orders — Compliance by Government Institutions</div>
+      <div class="record-text">The government did not publicly address IPC orders with which it had failed to comply, including orders related to the Solicitor General's office.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-ipc">IPC Investigation</span>
+        <span class="badge badge-journalism">Journalism</span>
+      </div>
+      <div class="finding-text">Ontario's transparency watchdog reported increasing non-compliance with its binding orders. The Solicitor General's office <strong>ignored an IPC order on Ford's driver notes</strong> and a two-year-old OPP detachment request. Work only restarted <strong>when Global News sent questions</strong> — suggesting political interference in the FOI process itself. The IPC said it was forced to "intervene directly."
+      <div class="note-callout">FOI role: the underlying requests triggered the orders; non-compliance was exposed by journalism, not FOI.</div>
+      </div>
+      <span class="record-source">Global News · IPC Annual Report</span>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE METRICS -->
+  <div class="record-row" data-row="22">
+    <div class="line-num">22</div>
+    <div class="cell-left">
+      <div class="record-date">2024–2026</div>
+      <div class="record-subject">Public Performance Metrics — Government Tracking</div>
+      <div class="record-text">The Premier's office called characterizations of its metrics removal "factually incorrect," disputing that key public accountability markers had been removed from government websites and reports.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-journalism">Journalism</span>
+      </div>
+      <div class="finding-text">Global News documented: transit opening dates deleted from public dashboards; greenhouse gas reduction targets scrapped after the AG found they would be missed; housing tracker frozen at 2024 data; hospital hallway care metrics eliminated. <strong>The scorecard was erased.</strong>
+      <div class="note-callout">FOI role: none direct. Investigative journalism tracked the removals. Included because it forms part of the same accountability pattern.</div>
+      </div>
+      <span class="record-source">Global News</span>
+    </div>
+  </div>
+
+  <!-- FOI DELAYS -->
+  <div class="record-row" data-row="23">
+    <div class="line-num">23</div>
+    <div class="cell-left">
+      <div class="record-date">Jan 2025</div>
+      <div class="record-subject">FOI Processing — Statutory Timelines</div>
+      <div class="record-text">Government institutions are required under FIPPA to respond to FOI requests within 30 days (extendable in defined circumstances). The government did not publicly acknowledge a pattern of election-period delays.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-foi">✓ FOI Request</span>
+        <span class="badge badge-journalism">Journalism</span>
+      </div>
+      <div class="finding-text">The Pointer documented that <strong>every FOI request it filed</strong> — some dating back to August 2024 — was delayed past the February 27, 2025 snap election. Extensions were granted by government institutions <strong>on the same day Premier Ford called the election</strong>. Ontario voters went to the polls without answers to outstanding public interest questions.
+      </div>
+      <span class="record-source">The Pointer</span>
+    </div>
+  </div>
+
+  <!-- STARLINK -->
+  <div class="record-row" data-row="24">
+    <div class="line-num">24</div>
+    <div class="cell-left">
+      <div class="record-date">Mar 2026</div>
+      <div class="record-subject">Starlink Contract Cancellation — Transparency Pledge</div>
+      <div class="record-text">Ford had pledged to disclose the terms of the cancelled <span class="figure">$100M</span> Starlink/SpaceX broadband contract, including any cancellation fee paid to Elon Musk's company.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-journalism">Journalism</span>
+      </div>
+      <div class="finding-text">Despite Ford's public pledge, the government announced the kill fee would be kept <strong>permanently confidential</strong>. The announcement came the same week as the Bill 97 FOI restriction changes — announced together, the effect is a government that can hide contract cancellation costs and exclude itself from FOI simultaneously.
+      <div class="note-callout">FOI role: none. The story is the refusal and the timing. No FOI disclosure was made or succeeded.</div>
+      </div>
+      <span class="record-source">Canadian Press · CBC</span>
+    </div>
+  </div>
+
+  <!-- STAG AND DOE -->
+  <div class="record-row" data-row="25">
+    <div class="line-num">25</div>
+    <div class="cell-left">
+      <div class="record-date">2023</div>
+      <div class="record-subject">Premier's Daughter's Stag and Doe — Developer Tickets</div>
+      <div class="record-text">The Premier did not proactively disclose that tickets to a family event had been sold to developers through the PC Party Fund Chair. He was ultimately cleared of an Integrity Act breach.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-watchdog">Integrity Commissioner</span>
+      </div>
+      <div class="finding-text">The Integrity Commissioner's review revealed the PC Fund Chair sold <strong>20 tickets to developers</strong> for Ford's daughter's event. The Commissioner cleared Ford of a technical Integrity Act breach — but the disclosure of the conduct came through the Commissioner's process, not proactively. <em>Cleared, not clean.</em>
+      <div class="note-callout">FOI role: none. Integrity Commissioner process.</div>
+      </div>
+      <span class="record-source">Integrity Commissioner · CTV · Globe and Mail</span>
+    </div>
+  </div>
+
+  <!-- BILL 97 / THE CLOSURE -->
+  <div class="record-row" data-row="26">
+    <div class="line-num">26</div>
+    <div class="cell-left">
+      <div class="record-date">March 13, 2026</div>
+      <div class="record-subject">Bill 97 — FIPPA Amendments</div>
+      <div class="record-text"><em>"This government has probably been one of the most transparent governments in the history of Ontario."</em> — Minister Stephen Crawford, March 13, 2026. The government characterized Bill 97's FIPPA amendments as routine modernization.</div>
+    </div>
+    <div class="cell-right">
+      <div class="mechanism-line">
+        <span class="badge badge-court">Legislative Action</span>
+      </div>
+      <div class="finding-text">Schedule 7 of Bill 97 inserts ss. 65(18)–(21) into FIPPA, exempting records of the Premier, cabinet ministers, parliamentary assistants, and their offices from access law — with a <strong>retroactive commencement clause deemed in force since January 1, 1988</strong>. This eliminates the Global News cellphone case, all outstanding minister's office FOI requests, and any future access to political-office records. Response timelines extended to 63 days. The IPC Commissioner publicly opposed the changes.
+      </div>
+      <span class="record-source">Bill 97, Plan to Protect Ontario Act, 2026, Schedule 7 · IPC Commissioner's Statement · CBC · CCLA</span>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- TOTALS -->
+  <!-- ============================================================ -->
+  <div class="totals-section">
+    <div class="totals-grid">
+      <div class="total-item">
+        <div class="total-label">Cases reviewed</div>
+        <div class="total-value">30</div>
+      </div>
+      <div class="total-item">
+        <div class="total-label">FOI was primary mechanism</div>
+        <div class="total-value green">13</div>
+      </div>
+      <div class="total-item">
+        <div class="total-label">FOI blocked or frustrated</div>
+        <div class="total-value red">5</div>
+      </div>
+      <div class="total-item">
+        <div class="total-label">FOI was trigger; other mechanism confirmed</div>
+        <div class="total-value">5</div>
+      </div>
+      <div class="total-item">
+        <div class="total-label">No FOI mechanism</div>
+        <div class="total-value">3</div>
+      </div>
+      <div class="total-item">
+        <div class="total-label">Years of FIPPA in effect</div>
+        <div class="total-value">38</div>
+      </div>
+    </div>
+    <div class="totals-note">
+      In the most consequential cases — Walkerton, gas plants, Hydro One — FOI either failed or was supplementary. The decisive mechanism was a commission of inquiry, legislative contempt, or IPC special investigation. FOI's record is strongest in the Ford era, where it consistently surfaced information the government did not intend to release. That is the record Bill 97 is designed to end.
+    </div>
+  </div>
+
+  <!-- METHODOLOGY NOTE -->
+  <div class="methodology">
+    <div class="methodology-title">A note on mechanism</div>
+    <div class="methodology-body">
+      This document distinguishes between FOI as the <em>primary</em> mechanism, FOI as a <em>trigger</em> (where the actual accountability came from a subsequent IPC investigation, court case, or AG report), and cases where FOI was attempted but <em>blocked</em>. That distinction is the point. A government that fights every significant FOI request through three courts — and then changes the law retroactively when it loses — is using the judicial process as delay, not transparency. The cases marked "FOI blocked" are accountability stories too: the absence of disclosure is data.
+      <br><br>
+      Sources: CBC, Global News, The Trillium, The Pointer, The Narwhal, Canadian Architect, Ontario NDP, IPC of Ontario, Auditor General of Ontario, Ontario Divisional Court, Supreme Court of Canada, Integrity Commissioner of Ontario.
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <div class="footer-left">
+      All items sourced from public reporting<br>
+      thedelusioneers.substack.com · @the_delusioneers<br>
+      No returns. No refunds. No records.
+    </div>
+    <div class="footer-right">
+      The Delusioneers<br>
+      <span style="font-family: 'JetBrains Mono'; font-size: 9px; color: var(--ink-faded);">FIPPA-1988-2026-RIP</span>
+    </div>
+  </div>
+
+</div><!-- end .ledger -->
+</div><!-- end .page-wrapper -->
+
+<script>
+  // Progress bar
+  const progressBar = document.getElementById('progressBar');
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    progressBar.style.width = ((scrollTop / docHeight) * 100) + '%';
+  }, { passive: true });
+
+  // Scroll-triggered row reveals
+  const rows = document.querySelectorAll('.record-row');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  rows.forEach(row => observer.observe(row));
+
+  // Line numbers — skip rows that are marked as unnumbered (data-row ending in letter)
+  let counter = 0;
+  rows.forEach((row) => {
+    const lineNum = row.querySelector('.line-num');
+    if (!lineNum) return;
+    const rowId = row.getAttribute('data-row') || '';
+    if (/[a-z]$/.test(rowId) || rowId === '') {
+      lineNum.textContent = '—';
+    } else {
+      counter++;
+      lineNum.textContent = String(counter).padStart(2, '0');
+    }
+  });
+</script>
+
+</body>
+</html>
