@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Maintenance Log — The Delusioneers</title>
+<style>
+  :root {
+    --bg: #f5f0e8;
+    --bg-aged: #ece5d8;
+    --ink: #1a1a18;
+    --ink-light: #4a4840;
+    --red-stamp: #8b1a1a;
+    --red-stamp-light: rgba(139, 26, 26, 0.12);
+    --rule: #b8b0a0;
+    --highlight: #c9a84c;
+    --form-line: #9e9688;
+
+    --font-body: 'TeX Gyre Cursor', 'Liberation Mono', 'DejaVu Sans Mono', 'Courier New', monospace;
+    --font-label: 'LM Mono Caps 10', 'Latin Modern Mono Caps', 'TeX Gyre Cursor', 'Liberation Mono', monospace;
+    --font-hand: 'Lora', 'DejaVu Serif', 'Bitstream Charter', 'Liberation Serif', serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #d6d0c4;
+    font-family: var(--font-body);
+    color: var(--ink);
+    display: flex;
+    justify-content: center;
+    padding: 24px 16px;
+    min-height: 100vh;
+  }
+
+  .page {
+    background: var(--bg);
+    max-width: 780px;
+    width: 100%;
+    padding: 48px 40px 56px;
+    position: relative;
+    box-shadow:
+      2px 2px 0 rgba(0,0,0,0.04),
+      inset 0 0 80px rgba(0,0,0,0.03);
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 27px,
+        rgba(180, 170, 155, 0.18) 27px,
+        rgba(180, 170, 155, 0.18) 28px
+      );
+  }
+
+  /* Hole punches */
+  .page::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 60px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--bg-aged);
+    box-shadow:
+      0 200px 0 var(--bg-aged),
+      0 400px 0 var(--bg-aged),
+      0 600px 0 var(--bg-aged);
+    border: 1px solid var(--rule);
+  }
+
+  /* Red margin line */
+  .page::after {
+    content: '';
+    position: absolute;
+    left: 52px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: rgba(139, 26, 26, 0.25);
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .header-label {
+    font-family: var(--font-label);
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin-bottom: 8px;
+  }
+
+  .header-title {
+    font-family: var(--font-hand);
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+
+  .header-subtitle {
+    font-family: var(--font-label);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin-bottom: 16px;
+  }
+
+  .header-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--ink-light);
+    border-top: 1px solid var(--rule);
+    padding-top: 12px;
+    margin-top: 12px;
+  }
+
+  .header-meta span {
+    font-family: var(--font-label);
+  }
+
+  .field-row {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-family: var(--font-label);
+  }
+
+  .field-label {
+    color: var(--ink-light);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  .field-value {
+    border-bottom: 1px solid var(--form-line);
+    flex-grow: 1;
+    padding-bottom: 2px;
+    color: var(--ink);
+  }
+
+  .field-value.handwritten {
+    font-family: var(--font-hand);
+    font-size: 14px;
+    font-style: italic;
+  }
+
+  /* Stamp overlay */
+  .stamp {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    font-family: var(--font-hand);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--red-stamp);
+    border: 3px solid var(--red-stamp);
+    padding: 6px 14px;
+    transform: rotate(-8deg);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+
+  .section-label {
+    font-family: var(--font-label);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin-top: 28px;
+    margin-bottom: 12px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* Log entries */
+  .log-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 8px;
+  }
+
+  .log-table th {
+    font-family: var(--font-label);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    text-align: left;
+    padding: 6px 8px 6px 0;
+    border-bottom: 2px solid var(--ink);
+    vertical-align: bottom;
+  }
+
+  .log-table td {
+    font-size: 12px;
+    padding: 10px 8px 10px 0;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+    line-height: 1.45;
+  }
+
+  .log-table td.date {
+    font-family: var(--font-label);
+    font-size: 11px;
+    white-space: nowrap;
+    width: 100px;
+  }
+
+  .log-table td.operator {
+    font-family: var(--font-hand);
+    font-size: 13px;
+    font-weight: 600;
+    width: 110px;
+  }
+
+  .log-table td.operator span {
+    font-family: var(--font-label);
+    font-size: 10px;
+    font-weight: normal;
+    color: var(--ink-light);
+  }
+
+  .log-table td.action {
+    font-family: var(--font-body);
+    font-size: 12px;
+  }
+
+  .log-table td.rights {
+    font-family: var(--font-label);
+    font-size: 10px;
+    color: var(--ink-light);
+    width: 100px;
+  }
+
+  .log-table td.status {
+    font-family: var(--font-label);
+    font-size: 10px;
+    width: 90px;
+    text-align: center;
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 2px 6px;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: 1px solid;
+  }
+
+  .status-badge.active {
+    color: var(--red-stamp);
+    border-color: var(--red-stamp);
+    background: var(--red-stamp-light);
+  }
+
+  .status-badge.repealed {
+    color: var(--ink-light);
+    border-color: var(--rule);
+    background: rgba(0,0,0,0.03);
+    text-decoration: line-through;
+  }
+
+  .status-badge.expired {
+    color: var(--ink-light);
+    border-color: var(--rule);
+    background: rgba(0,0,0,0.03);
+  }
+
+  .status-badge.renewed {
+    color: #6b4c11;
+    border-color: #b8922d;
+    background: rgba(184, 146, 45, 0.1);
+  }
+
+  .status-badge.not-in-force {
+    color: var(--ink-light);
+    border-color: var(--rule);
+    background: rgba(0,0,0,0.03);
+  }
+
+  /* Annotations */
+  .annotation {
+    font-family: var(--font-hand);
+    font-size: 12px;
+    font-style: italic;
+    color: var(--red-stamp);
+    opacity: 0.7;
+  }
+
+  /* Divider */
+  .era-divider {
+    text-align: center;
+    margin: 16px 0;
+    position: relative;
+  }
+
+  .era-divider::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background: var(--ink);
+  }
+
+  .era-divider span {
+    position: relative;
+    background: var(--bg);
+    padding: 0 16px;
+    font-family: var(--font-label);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--red-stamp);
+  }
+
+  /* Summary box */
+  .summary-box {
+    border: 2px solid var(--ink);
+    padding: 20px 24px;
+    margin-top: 24px;
+    background: rgba(255,255,255,0.3);
+  }
+
+  .summary-box h3 {
+    font-family: var(--font-label);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    color: var(--ink-light);
+  }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 24px;
+    font-size: 12px;
+  }
+
+  .summary-grid .stat-label {
+    font-family: var(--font-label);
+    font-size: 10px;
+    color: var(--ink-light);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .summary-grid .stat-value {
+    font-family: var(--font-hand);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .summary-grid .stat-value.alert {
+    color: var(--red-stamp);
+  }
+
+  /* Footer */
+  .footer-note {
+    margin-top: 28px;
+    padding-top: 16px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--font-body);
+    font-size: 10px;
+    color: var(--ink-light);
+    line-height: 1.6;
+  }
+
+  .footer-note em {
+    font-style: italic;
+    font-family: var(--font-hand);
+    color: var(--ink);
+  }
+
+  .footer-sig {
+    margin-top: 20px;
+    text-align: right;
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--ink-light);
+  }
+
+  .footer-sig .logo-text {
+    font-family: var(--font-hand);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: 1px;
+  }
+
+  @media (max-width: 600px) {
+    .page { padding: 32px 20px 40px; }
+    .header-title { font-size: 24px; }
+    .header-meta { flex-direction: column; gap: 4px; }
+    .log-table td.rights { display: none; }
+    .log-table th:nth-child(4) { display: none; }
+    .summary-grid { grid-template-columns: 1fr; }
+    .stamp { font-size: 11px; padding: 4px 10px; top: 24px; right: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="stamp">Overdue</div>
+
+  <div class="header">
+    <div class="header-label">Government of Canada &middot; Constitutional Infrastructure Division</div>
+    <div class="header-title">Equipment Maintenance Log</div>
+    <div class="header-subtitle">Unit: Section 33 &mdash; Charter Override Mechanism</div>
+    <div class="header-meta">
+      <span>Serial No. 1982-33-001</span>
+      <span>Commissioned: April 17, 1982</span>
+      <span>Log printed: March 22, 2026</span>
+    </div>
+  </div>
+
+  <div class="field-row">
+    <span class="field-label">Unit Description:</span>
+    <span class="field-value handwritten">Constitutional mechanism permitting temporary override of Charter rights (ss. 2, 7&ndash;15). Designed as emergency backstop. 5-year auto-expiry. No operator training required.</span>
+  </div>
+  <div class="field-row">
+    <span class="field-label">Intended Use:</span>
+    <span class="field-value handwritten">Exceptional circumstances only. Last resort.</span>
+  </div>
+  <div class="field-row">
+    <span class="field-label">Actual Use:</span>
+    <span class="field-value handwritten">See below.</span>
+  </div>
+
+  <div class="section-label">Usage Log &mdash; Post-Hibernation Period (2018&ndash;Present)</div>
+  <p style="font-family: var(--font-label); font-size: 10px; color: var(--ink-light); margin-bottom: 12px; letter-spacing: 0.5px;">
+    Note: Unit dormant outside Quebec from 2000 to 2018 (18 years). Reactivated below.
+  </p>
+
+  <table class="log-table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Operator</th>
+        <th>Action / Override Purpose</th>
+        <th>Rights Overridden</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="date">May 2018</td>
+        <td class="operator">Saskatchewan<br><span>Moe (SP)</span></td>
+        <td class="action">School Choice Protection Act. Override of court ruling on Catholic school funding for non-Catholic students.</td>
+        <td class="rights">ss. 2, 7&ndash;15</td>
+        <td class="status"><span class="status-badge not-in-force">Not in force</span></td>
+      </tr>
+      <tr>
+        <td class="date">Sep 2018</td>
+        <td class="operator">Ontario<br><span>Ford (PC)</span></td>
+        <td class="action">Efficient Local Government Act (Bill 31). Reduce Toronto city council from 47 to 25 wards. Threatened after adverse court ruling. <span class="annotation">Abandoned after stay granted.</span></td>
+        <td class="rights">ss. 2, 7&ndash;15</td>
+        <td class="status"><span class="status-badge expired">Abandoned</span></td>
+      </tr>
+      <tr>
+        <td class="date">Jun 2019</td>
+        <td class="operator">Quebec<br><span>Legault (CAQ)</span></td>
+        <td class="action">Bill 21 &mdash; Act Respecting the Laicity of the State. Ban religious symbols for public employees in authority. Pre-emptive invocation. No prior court ruling.</td>
+        <td class="rights">ss. 2, 7&ndash;15</td>
+        <td class="status"><span class="status-badge renewed">Renewed 2024</span></td>
+      </tr>
+      <tr>
+        <td class="date">2019</td>
+        <td class="operator">New Brunswick<br><span>Higgs (PC)</span></td>
+        <td class="action">Bill 11 &mdash; Immunization Act. Eliminate non-medical vaccine exemptions for school students. Invoked pre-emptively. <span class="annotation">Never advanced past second reading.</span></td>
+        <td class="rights">ss. 2, 7&ndash;15</td>
+        <td class="status"><span class="status-badge not-in-force">Stalled</span></td>
+      </tr>
+      <tr>
+        <td class="date">Jun 2021</td>
+        <td class="operator">Ontario<br><span>Ford (PC)</span></td>
+        <td class="action">Protecting Elections and Defending Democracy Act. Restrict third-party election advertising. Invoked after court struck down law. <span class="annotation">SCC struck down 2025 (s.3 not overridable).</span></td>
+        <td class="rights">ss. 2, 7&ndash;15</td>
+        <td class="status"><span class="status-badge expired">Struck down</span></td>
+      </tr>
+      <tr>
+        <td class="date">Jun 2022</td>
+        <td class="operator">Quebec<br><span>Legault (CAQ)</span></td>
+        <td class="action">Bill 96 &mdash; Act Respecting French. Sweeping language law reform. Clause applied to entire bill. Pre-emptive. No prior court ruling.</td>
+        <td class="rights">ss. 2, 7&ndash;15</td>
+        <td class="status"><span class="status-badge active">Active</span></td>
+      </tr>
+      <tr>
+        <td class="date">Nov 2022</td>
+        <td class="operator">Ontario<br><span>Ford (PC)</span></td>
+        <td class="action">Keeping Students in Class Act (Bill 28). Impose collective agreement on 55,000 CUPE education workers. Ban strikes. Pre-emptive. <span class="annotation">Repealed 14 days later after mass backlash.</span></td>
+        <td class="rights">ss. 2, 7, 15</td>
+        <td class="status"><span class="status-badge repealed">Repealed</span></td>
+      </tr>
+      <tr>
+        <td class="date">Oct 2023</td>
+        <td class="operator">Saskatchewan<br><span>Moe (SP)</span></td>
+        <td class="action">Parents&rsquo; Bill of Rights (Bill 137). Require parental consent for student pronoun/name changes under 16. Emergency session called. Override of court injunction.</td>
+        <td class="rights">ss. 2, 7&ndash;15</td>
+        <td class="status"><span class="status-badge active">Active</span></td>
+      </tr>
+      <tr>
+        <td class="date">May 2024</td>
+        <td class="operator">Quebec<br><span>Legault (CAQ)</span></td>
+        <td class="action">Bill 21 renewal. Notwithstanding clause re-enacted for 5 more years (to 2029). Vote: 83&ndash;26.</td>
+        <td class="rights">ss. 2, 7&ndash;15</td>
+        <td class="status"><span class="status-badge renewed">Renewed</span></td>
+      </tr>
+      <tr>
+        <td class="date">Oct 2025</td>
+        <td class="operator">Alberta<br><span>Smith (UCP)</span></td>
+        <td class="action">Back to School Act (Bill 2). Force 51,000 teachers back to work. Impose rejected contract. Override right to strike. Pre-emptive. Passed in single night session.</td>
+        <td class="rights">ss. 2, 7, 15</td>
+        <td class="status"><span class="status-badge active">Active</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="era-divider"><span>Current &mdash; SCC Hearing March 23&ndash;26, 2026</span></div>
+
+  <div class="summary-box">
+    <h3>Equipment Performance Summary</h3>
+    <div class="summary-grid">
+      <div>
+        <div class="stat-label">Invocations since reactivation (2018)</div>
+        <div class="stat-value alert">10</div>
+      </div>
+      <div>
+        <div class="stat-label">Invocations in prior 18 years (2000&ndash;2018)</div>
+        <div class="stat-value">0</div>
+      </div>
+      <div>
+        <div class="stat-label">Provinces operating unit</div>
+        <div class="stat-value">5</div>
+      </div>
+      <div>
+        <div class="stat-label">Pre-emptive uses (no prior court ruling)</div>
+        <div class="stat-value alert">6</div>
+      </div>
+      <div>
+        <div class="stat-label">Passed in emergency / overnight session</div>
+        <div class="stat-value">3</div>
+      </div>
+      <div>
+        <div class="stat-label">Subsequently repealed or struck down</div>
+        <div class="stat-value">3</div>
+      </div>
+      <div>
+        <div class="stat-label">Scheduled maintenance</div>
+        <div class="stat-value alert">None</div>
+      </div>
+      <div>
+        <div class="stat-label">Federal uses to date</div>
+        <div class="stat-value">0</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    <em>Inspector&rsquo;s note:</em> Unit was designed in 1982 as an emergency mechanism to be used, per its architect Peter Lougheed, as a &ldquo;last resort.&rdquo; Between 2000 and 2018, no province activated the unit. Since 2018, it has been deployed 10 times across 5 provinces. The majority of post-2018 activations were pre-emptive&mdash;invoked before any court had ruled, or in direct response to an unfavourable injunction. The unit has no built-in safety checks, requires no justification for activation, and has no operator training requirement. There is no maintenance schedule. There has never been a maintenance schedule.<br><br>
+    The Supreme Court of Canada begins a four-day inspection on March 23, 2026.
+  </div>
+
+  <div class="footer-sig">
+    <span class="logo-text">The Delusioneers</span><br>
+    We don&rsquo;t have opinions about what the clause protects.<br>
+    We count how many times they used it to stop you from asking.
+  </div>
+
+</div>
+
+</body>
+</html>
