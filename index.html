@@ -8,6 +8,7 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
+  /* ── THEME VARIABLES ── */
   :root {
     --bg: #f5f0e8;
     --ink: #0d0d0d;
@@ -19,8 +20,14 @@
     --tag-border: rgba(0,0,0,0.14);
     --tag-red-border: rgba(196,30,30,0.35);
     --header-border: #0d0d0d;
-    --toggle-bg: rgba(0,0,0,0.08);
-    --toggle-hover: rgba(0,0,0,0.14);
+    --hover-bg: rgba(0,0,0,0.025);
+    --toggle-border: rgba(0,0,0,0.15);
+
+    /* Header component vars */
+    --header-text: rgba(13,13,13,0.7);
+    --header-text-hover: #0d0d0d;
+    --header-link-border: rgba(0,0,0,0.14);
+    --header-link-hover-border: rgba(0,0,0,0.35);
   }
 
   [data-theme="dark"] {
@@ -34,8 +41,14 @@
     --tag-border: rgba(255,255,255,0.14);
     --tag-red-border: rgba(224,48,48,0.4);
     --header-border: rgba(245,240,232,0.2);
-    --toggle-bg: rgba(255,255,255,0.07);
-    --toggle-hover: rgba(255,255,255,0.12);
+    --hover-bg: rgba(255,255,255,0.04);
+    --toggle-border: rgba(245,240,232,0.15);
+
+    /* Header component vars — dark */
+    --header-text: rgba(245,240,232,0.45);
+    --header-text-hover: rgba(245,240,232,0.9);
+    --header-link-border: rgba(245,240,232,0.12);
+    --header-link-hover-border: rgba(245,240,232,0.3);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -63,75 +76,101 @@
     padding: 0 32px;
   }
 
-  /* ── HEADER ── */
-  header {
-    padding: 64px 0 48px;
-    border-bottom: 2px solid var(--header-border);
-  }
-
-  .header-inner {
+  /* ── HEADER COMPONENT ── */
+  .site-header {
+    width: 100%;
     display: flex;
-    align-items: flex-start;
     justify-content: space-between;
-    gap: 24px;
+    align-items: center;
+    padding: 24px 0 20px;
+    border-bottom: 2px solid var(--header-border);
+    margin-bottom: 0;
+    transition: border-color 0.25s;
   }
 
-  .wordmark {
+  .site-header-left a {
     font-family: 'Special Elite', monospace;
-    font-size: 28px;
+    font-size: 24px;
     letter-spacing: 1px;
     color: var(--ink);
-    line-height: 1;
+    text-decoration: none;
     transition: color 0.25s;
   }
+  .site-header-left a:hover { color: var(--red); }
 
-  .wordmark span { color: var(--red); }
-
-  .header-right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 10px;
-    padding-top: 2px;
-  }
-
-  .header-meta {
-    text-align: right;
-    font-size: 10px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--ink-faded);
-    line-height: 2;
-    transition: color 0.25s;
-  }
-
-  .header-meta a { color: var(--ink-faded); text-decoration: none; transition: color 0.25s; }
-  .header-meta a:hover { color: var(--ink); }
-
-  /* ── TOGGLE ── */
-  .theme-toggle {
-    background: var(--toggle-bg);
-    border: 1px solid var(--rule-solid);
-    color: var(--ink-faded);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 5px 10px;
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s, border 0.2s;
+  .site-header-right {
     display: flex;
     align-items: center;
     gap: 6px;
+  }
+
+  .header-social {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-right: 10px;
+  }
+
+  .header-social-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--header-text);
+    text-decoration: none;
+    padding: 4px 8px;
+    border: 1px solid var(--header-link-border);
+    transition: all 0.2s;
     white-space: nowrap;
   }
-
-  .theme-toggle:hover {
-    background: var(--toggle-hover);
-    color: var(--ink);
+  .header-social-link:hover {
+    color: var(--header-text-hover);
+    border-color: var(--header-link-hover-border);
+  }
+  .header-social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+  }
+  .header-social-icon svg {
+    display: block;
+    flex-shrink: 0;
+  }
+  .header-social-icon .icon-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
   }
 
-  .toggle-icon { font-size: 11px; }
+  .header-social-divider {
+    width: 1px;
+    height: 12px;
+    background: var(--header-link-border);
+    margin: 0 2px;
+    transition: background 0.25s;
+  }
+
+  .theme-toggle {
+    background: transparent;
+    border: 1px solid var(--toggle-border);
+    color: var(--header-text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s;
+  }
+  .theme-toggle:hover {
+    color: var(--header-text-hover);
+    border-color: var(--header-link-hover-border);
+  }
 
   /* ── LEDE ── */
   .lede {
@@ -204,7 +243,7 @@
   }
 
   .piece-item:last-child { border-bottom: none; }
-  .piece-item:hover { background: var(--toggle-bg); }
+  .piece-item:hover { background: var(--hover-bg); }
 
   .piece-date {
     font-size: 9px;
@@ -246,7 +285,7 @@
     color: var(--ink-faded);
     border: 1px solid var(--tag-border);
     padding: 2px 6px;
-    transition: color 0.25s, border 0.25s;
+    transition: color 0.25s, border-color 0.25s;
   }
 
   .tag.red {
@@ -301,7 +340,7 @@
     border: 1px solid var(--ink);
     padding: 10px 20px;
     text-decoration: none;
-    transition: background 0.15s, color 0.15s, border 0.25s;
+    transition: background 0.15s, color 0.15s, border-color 0.25s;
     white-space: nowrap;
   }
 
@@ -386,10 +425,9 @@
   /* ── RESPONSIVE ── */
   @media (max-width: 600px) {
     .container { padding: 0 20px; }
-    .header-inner { flex-direction: column; gap: 12px; }
-    .header-right { align-items: flex-start; }
-    .header-meta { text-align: left; }
-    .wordmark { font-size: 22px; }
+    .site-header-left a { font-size: 18px; }
+    .header-social-link { font-size: 7.5px; padding: 3px 6px; }
+    .theme-toggle { font-size: 7.5px; padding: 3px 7px; }
     .lede-text { font-size: 18px; }
     .piece-item {
       grid-template-columns: 1fr auto;
@@ -402,6 +440,7 @@
     .contact-block { flex-direction: column; align-items: flex-start; gap: 20px; }
     .footer-inner { flex-direction: column; gap: 16px; }
     .footer-right { text-align: left; }
+    .header-social { display: none; }
   }
 </style>
 </head>
@@ -409,26 +448,75 @@
 
 <div class="container">
 
-  <header>
-    <div class="header-inner">
-      <div class="wordmark">The Delusioneers<span>.</span></div>
-      <div class="header-right">
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-          <span class="toggle-icon" id="toggleIcon">○</span>
-          <span id="toggleLabel">Light</span>
-        </button>
-        <div class="header-meta">
-          <a href="https://thedelusioneers.substack.com" target="_blank">Substack</a> &nbsp;·&nbsp;
-          <a href="https://instagram.com/the_delusioneers" target="_blank">@the_delusioneers</a>
-        </div>
-      </div>
+  <!-- HEADER COMPONENT -->
+  <header class="site-header">
+    <div class="site-header-left">
+      <a href="https://thedelusioneers.ca">The Delusioneers</a>
+    </div>
+    <div class="site-header-right">
+      <nav class="header-social" aria-label="Social links">
+
+        <!-- Threads / J -->
+        <a class="header-social-link header-social-icon" href="https://www.threads.net/@jeremycyrilwrites" target="_blank" rel="noopener" aria-label="Threads — Jeremy">
+          <svg width="11" height="12" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path fill="currentColor" d="M141.537 88.988a66.667 66.667 0 0 0-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.036l13.779 9.452c5.73-8.695 14.724-10.548 21.348-10.548h.229c8.249.053 14.474 2.452 18.503 7.129 2.932 3.405 4.893 8.111 5.864 14.05-7.314-1.243-15.224-1.626-23.68-1.14-23.82 1.371-39.134 15.264-38.105 34.568.522 9.792 5.4 18.216 13.735 23.719 7.047 4.652 16.124 6.927 25.557 6.412 12.458-.683 22.231-5.436 29.049-14.127 5.178-6.6 8.452-15.153 9.898-25.93 5.937 3.583 10.337 8.298 12.767 13.966 4.132 9.635 4.373 25.468-8.546 38.376-11.319 11.308-24.925 16.2-45.488 16.351-22.809-.169-40.06-7.484-51.275-21.742C35.236 139.966 29.808 120.682 29.605 96c.203-24.682 5.63-43.966 16.133-57.317C56.954 24.425 74.204 17.11 97.013 16.941c22.975.17 40.526 7.52 52.171 21.847 5.71 7.026 10.015 15.86 12.853 26.162l16.147-4.308c-3.44-12.68-8.853-23.606-16.219-32.668C147.036 10.646 125.205 1.205 97.07 1 68.754 1.205 47.189 10.685 32.986 28.23 20.096 43.982 13.491 66.487 13.25 96v.027c.241 29.513 6.846 52.017 19.736 67.769C47.19 181.315 68.754 190.795 97.07 191c25.861-.182 44.084-6.953 59.271-22.123 20.537-20.515 19.984-46.6 13.2-62.525-4.643-10.82-13.585-19.531-28.004-25.364Z"/>
+          </svg>
+          <span class="icon-label">J</span>
+        </a>
+
+        <div class="header-social-divider"></div>
+
+        <!-- Threads / D -->
+        <a class="header-social-link header-social-icon" href="https://www.threads.net/@the_delusioneers" target="_blank" rel="noopener" aria-label="Threads — The Delusioneers">
+          <svg width="11" height="12" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path fill="currentColor" d="M141.537 88.988a66.667 66.667 0 0 0-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.036l13.779 9.452c5.73-8.695 14.724-10.548 21.348-10.548h.229c8.249.053 14.474 2.452 18.503 7.129 2.932 3.405 4.893 8.111 5.864 14.05-7.314-1.243-15.224-1.626-23.68-1.14-23.82 1.371-39.134 15.264-38.105 34.568.522 9.792 5.4 18.216 13.735 23.719 7.047 4.652 16.124 6.927 25.557 6.412 12.458-.683 22.231-5.436 29.049-14.127 5.178-6.6 8.452-15.153 9.898-25.93 5.937 3.583 10.337 8.298 12.767 13.966 4.132 9.635 4.373 25.468-8.546 38.376-11.319 11.308-24.925 16.2-45.488 16.351-22.809-.169-40.06-7.484-51.275-21.742C35.236 139.966 29.808 120.682 29.605 96c.203-24.682 5.63-43.966 16.133-57.317C56.954 24.425 74.204 17.11 97.013 16.941c22.975.17 40.526 7.52 52.171 21.847 5.71 7.026 10.015 15.86 12.853 26.162l16.147-4.308c-3.44-12.68-8.853-23.606-16.219-32.668C147.036 10.646 125.205 1.205 97.07 1 68.754 1.205 47.189 10.685 32.986 28.23 20.096 43.982 13.491 66.487 13.25 96v.027c.241 29.513 6.846 52.017 19.736 67.769C47.19 181.315 68.754 190.795 97.07 191c25.861-.182 44.084-6.953 59.271-22.123 20.537-20.515 19.984-46.6 13.2-62.525-4.643-10.82-13.585-19.531-28.004-25.364Z"/>
+          </svg>
+          <span class="icon-label">D</span>
+        </a>
+
+        <div class="header-social-divider"></div>
+
+        <!-- Instagram -->
+        <a class="header-social-link header-social-icon" href="https://www.instagram.com/the_delusioneers" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg width="12" height="12" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <circle cx="12" cy="12" r="4"/>
+            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+          </svg>
+        </a>
+
+        <div class="header-social-divider"></div>
+
+        <!-- Substack -->
+        <a class="header-social-link header-social-icon" href="https://thedelusioneers.substack.com" target="_blank" rel="noopener" aria-label="Substack">
+          <svg width="12" height="12" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path fill="currentColor" d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/>
+          </svg>
+        </a>
+
+        <div class="header-social-divider"></div>
+
+        <!-- Bluesky -->
+        <a class="header-social-link header-social-icon" href="https://bsky.app/profile/thedelusioneers.bsky.social" target="_blank" rel="noopener" aria-label="Bluesky">
+          <svg width="12" height="11" viewBox="0 0 600 530" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path fill="currentColor" d="m135.72 44.03c66.496 49.921 138.02 151.14 164.28 205.46 26.262-54.316 97.782-155.54 164.28-205.46 47.98-36.021 125.72-63.892 125.72 24.795 0 17.712-10.155 148.79-16.111 170.07-20.703 73.984-96.144 92.854-163.25 81.433 117.3 19.964 147.14 86.092 82.697 152.22-122.39 125.59-175.91-31.511-189.63-71.766-2.514-7.3797-3.6904-10.832-3.7077-7.8964-0.0174-2.9357-1.1937 0.51669-3.7077 7.8964-13.714 40.255-67.233 197.36-189.63 71.766-64.444-66.128-34.605-132.26 82.697-152.22-67.108 11.421-142.55-7.4491-163.25-81.433-5.9562-21.282-16.111-152.36-16.111-170.07 0-88.687 77.742-60.816 125.72-24.795z"/>
+          </svg>
+        </a>
+
+      </nav>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <span id="toggleIcon">○</span>
+        <span id="toggleLabel">Light</span>
+      </button>
     </div>
   </header>
 
+  <!-- LEDE -->
   <div class="lede">
     <p class="lede-text">Following the boring things to the truth<br>and making it <em>impossible to look away</em> from.</p>
   </div>
 
+  <!-- ABOUT -->
   <section id="about">
     <div class="section-label">About</div>
     <div class="about-body">
@@ -439,67 +527,10 @@
     </div>
   </section>
 
+  <!-- WORK -->
   <section id="work">
     <div class="section-label">Work</div>
     <ul class="piece-list">
-      <li>
-        <a class="piece-item" href="https://thedelusioneers.ca/projects/foi-requester-reference/" target="_blank">
-          <div class="piece-date">Apr 2026</div>
-          <div class="piece-content">
-            <div class="piece-title">What the law still requires: A requester's reference — Bill 97 Sec 7 & 11</div>
-            <div class="piece-desc">The FOI statute still requires institutions to meet timelines, justify fees, and accept appeals — here's how to use every remaining mechanism against them.</div>
-            <div class="piece-tags">
-              <span class="tag red">New</span>
-              <span class="tag">Ontario</span>
-            </div>
-          </div>
-          <div class="piece-arrow">→</div>
-        </a>
-      </li>
-      <li>
-        <a class="piece-item" href="https://thedelusioneers.ca/projects/the-floor/" target="_blank">
-          <div class="piece-date">Apr 2026</div>
-          <div class="piece-content">
-            <div class="piece-title">The Floor - A History of Floor Crossings in the House of Commons</div>
-            <div class="piece-desc">Federal Floor Crossings, 1867 to 2026</div>
-            <div class="piece-tags">
-              <span class="tag red">New</span>
-              <span class="tag">Canada</span>
-              <span class="tag">Parliament</span>
-            </div>
-          </div>
-          <div class="piece-arrow">→</div>
-        </a>      
-
-      <li>
-        <a class="piece-item" href="https://thedelusioneers.ca/projects/foi-what-still-works/" target="_blank">
-          <div class="piece-date">Apr 2026</div>
-          <div class="piece-content">
-            <div class="piece-title">What Still Works - The accountability mechanisms Bill 97 did not touch</div>
-            <div class="piece-desc">This document maps what accountability mechanisms remain open. Status is based on statutory text as of April 23, 2026.</div>
-            <div class="piece-tags">
-              <span class="tag red">New</span>
-              <span class="tag">Ontario</span>
-            </div>
-          </div>
-          <div class="piece-arrow">→</div>
-        </a>
-      </li>
-      
-      <li>
-        <a class="piece-item" href="https://thedelusioneers.ca/projects/ontario-reversal-patterns/" target="_blank">
-          <div class="piece-date">Apr 2026</div>
-          <div class="piece-content">
-            <div class="piece-title">The Pattern: Ontario Reversals 2018-2026</div>
-            <div class="piece-desc">Nine times since 2018, the Ontario government announced a major decision, implemented it, faced backlash, and reversed course. What varies is who forced the reversal, and what the government claimed was the reason.</div>
-            <div class="piece-tags">
-              <span class="tag red">New</span>
-              <span class="tag">Ontario</span>
-            </div>
-          </div>
-          <div class="piece-arrow">→</div>
-        </a>
-      </li>
 
       <li>
         <a class="piece-item" href="https://thedelusioneers.github.io/flight-log-not-found/" target="_blank">
@@ -536,7 +567,7 @@
       </li>
 
       <li>
-        <a class="piece-item" href="https://thedelusioneers.ca/projects/bill97-explainer/" target="_blank">
+        <a class="piece-item" href="https://delusioneers-ont-bill97-sec7.netlify.app/" target="_blank">
           <div class="piece-date">Apr 2026</div>
           <div class="piece-content">
             <div class="piece-title">Bill 97, Schedule 7 — Policy in Parallel</div>
@@ -553,7 +584,7 @@
       </li>
 
       <li>
-        <a class="piece-item" href="https://thedelusioneers.ca/projects/foi-track-record/" target="_blank">
+        <a class="piece-item" href="https://delusioneers-rip-ontario-foi.netlify.app/" target="_blank">
           <div class="piece-date">Mar 2026</div>
           <div class="piece-content">
             <div class="piece-title">The FOI Track Record — Ontario 1988–2026</div>
@@ -562,22 +593,6 @@
               <span class="tag">Ontario</span>
               <span class="tag">FIPPA</span>
               <span class="tag">History</span>
-            </div>
-          </div>
-          <div class="piece-arrow">→</div>
-        </a>
-      </li>
-      <li>
-        <a class="piece-item" href="https://thedelusioneers.ca/projects/democracy-notwithstanding/" target="_blank">
-          <div class="piece-date">Mar 2026</div>
-          <div class="piece-content">
-            <div class="piece-title">Democracy NotWithstanding: The Maintenence Log</div>
-            <div class="piece-desc">The Supreme Court is examining whether there are limits to Section 33, or if the mechanism operates exactly as designed: without checks, without justification, without review. This is a log of activations between 2000 and 2026.</div>
-            <div class="piece-tags">
-              <span class="tag">Canada</span>
-              <span class="tag">Charter of Rights & Freedoms</span>
-              <span class="tag">Supreme Court</span>
-              <span class="tag">Section 33</span>
             </div>
           </div>
           <div class="piece-arrow">→</div>
@@ -635,6 +650,7 @@
     </ul>
   </section>
 
+  <!-- CONTACT -->
   <section id="contact">
     <div class="section-label">Contact</div>
     <div class="contact-block">
@@ -646,6 +662,7 @@
     </div>
   </section>
 
+  <!-- STAMP -->
   <div class="stamp-block">
     <div class="stamp">Visibility<br>not verdicts</div>
     <div class="stamp-text">
@@ -679,11 +696,8 @@
   const icon = document.getElementById('toggleIcon');
   const label = document.getElementById('toggleLabel');
 
-  // Detect system preference
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-
-  // Check for saved preference, fall back to system
-  const saved = localStorage.getItem('theme');
+  const saved = localStorage.getItem('delusioneers-theme');
   const initialDark = saved ? saved === 'dark' : prefersDark.matches;
 
   function setTheme(dark) {
@@ -698,14 +712,11 @@
     const isDark = html.getAttribute('data-theme') === 'dark';
     const next = !isDark;
     setTheme(next);
-    localStorage.setItem('theme', next ? 'dark' : 'light');
+    localStorage.setItem('delusioneers-theme', next ? 'dark' : 'light');
   });
 
-  // Update if system preference changes and no manual override
   prefersDark.addEventListener('change', (e) => {
-    if (!localStorage.getItem('theme')) {
-      setTheme(e.matches);
-    }
+    if (!localStorage.getItem('delusioneers-theme')) setTheme(e.matches);
   });
 </script>
 
