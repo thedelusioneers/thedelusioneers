@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kingston's New Urban Boundary — What It Is and What You Can Do Before May 3</title>
+<meta name="description" content="Kingston is proposing to add more than 1,000 hectares to its urban boundary. Comments are due May 3, 2026.">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+  :root {
+    --bg: #f5f0e8;
+    --ink: #1a1a1a;
+    --ink-light: #4a4a4a;
+    --ink-faded: #8a8a7a;
+    --red: #c41e1e;
+    --border: rgba(26,26,26,0.15);
+    --surround: #2a2825;
+    --ruled-line: rgba(0,0,0,0.04);
+    --margin-line: rgba(196,30,30,0.25);
+    --width: min(680px, 92vw);
+  }
+
+  /* Dark mode overrides — toggled via data-theme="dark" on <html> */
+  [data-theme="dark"] {
+    --bg: #1e1c1a;
+    --ink: #e8e3d8;
+    --ink-light: #b0a898;
+    --ink-faded: #6a6458;
+    --red: #e03535;
+    --border: rgba(232,227,216,0.15);
+    --surround: #111010;
+    --ruled-line: rgba(255,255,255,0.03);
+    --margin-line: rgba(224,53,53,0.2);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--surround);
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  .page {
+    background: var(--bg);
+    max-width: var(--width);
+    margin: 0 auto;
+    min-height: 100vh;
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 23px,
+      var(--ruled-line) 23px,
+      var(--ruled-line) 24px
+    );
+    position: relative;
+  }
+
+  /* Red margin line */
+  .page::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 52px;
+    width: 2px;
+    background: var(--margin-line);
+    pointer-events: none;
+  }
+
+  .inner {
+    padding: 48px 32px 48px 72px;
+  }
+
+  /* Header */
+  .masthead {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .brand {
+    font-family: 'Special Elite', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+  }
+
+  .brand a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .doc-date {
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--ink-faded);
+    text-transform: uppercase;
+  }
+
+  /* Deadline banner */
+  .deadline-banner {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 16px 20px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .deadline-label {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+
+  .deadline-date {
+    font-family: 'Special Elite', monospace;
+    font-size: 20px;
+    letter-spacing: 1px;
+    flex-grow: 1;
+  }
+
+  .deadline-sub {
+    font-size: 9px;
+    letter-spacing: 1px;
+    opacity: 0.6;
+    text-transform: uppercase;
+    width: 100%;
+    margin-top: 4px;
+  }
+
+  /* Title block */
+  .title-block {
+    margin-bottom: 40px;
+  }
+
+  .title-block h1 {
+    font-family: 'Special Elite', monospace;
+    font-size: clamp(22px, 5vw, 32px);
+    line-height: 1.25;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+
+  .title-block .byline {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+  }
+
+  /* Section structure */
+  .section {
+    margin-bottom: 40px;
+  }
+
+  .section-label {
+    font-size: 8.5px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .section h2 {
+    font-family: 'Special Elite', monospace;
+    font-size: 17px;
+    line-height: 1.35;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+
+  .section p {
+    font-size: 11.5px;
+    line-height: 1.75;
+    color: var(--ink-light);
+    margin-bottom: 10px;
+  }
+
+  /* The numbers table */
+  .numbers-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 11px;
+  }
+
+  .numbers-table tr {
+    border-bottom: 1px dotted rgba(0,0,0,0.12);
+  }
+
+  .numbers-table tr:last-child {
+    border-bottom: none;
+  }
+
+  .numbers-table td {
+    padding: 10px 0;
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  .numbers-table td:first-child {
+    color: var(--ink-light);
+    padding-right: 20px;
+    width: 60%;
+  }
+
+  .numbers-table td:last-child {
+    font-weight: 700;
+    color: var(--ink);
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .numbers-table td:last-child.red {
+    color: var(--red);
+  }
+
+  /* The five areas */
+  .area-list {
+    list-style: none;
+    margin: 16px 0;
+  }
+
+  .area-list li {
+    padding: 12px 0;
+    border-bottom: 1px dotted rgba(0,0,0,0.12);
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--ink-light);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+    align-items: start;
+  }
+
+  .area-list li:last-child {
+    border-bottom: none;
+  }
+
+  .area-tag {
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: var(--bg);
+    padding: 3px 7px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .area-tag.emp {
+    background: var(--ink-faded);
+  }
+
+  .area-name {
+    font-family: 'Special Elite', monospace;
+    font-size: 13px;
+    color: var(--ink);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  /* The gap callout */
+  .gap-box {
+    border: 2px solid var(--ink);
+    padding: 20px;
+    margin: 20px 0;
+    position: relative;
+  }
+
+  .gap-box-label {
+    position: absolute;
+    top: -9px;
+    left: 12px;
+    background: var(--bg);
+    padding: 0 6px;
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+  }
+
+  .gap-box p {
+    font-size: 11.5px;
+    line-height: 1.7;
+    color: var(--ink-light);
+    margin-bottom: 0;
+  }
+
+  .gap-box .math-line {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 10px 0 6px;
+  }
+
+  /* The questions */
+  .question-list {
+    list-style: none;
+    margin: 16px 0;
+    counter-reset: q;
+  }
+
+  .question-list li {
+    counter-increment: q;
+    padding: 12px 0 12px 32px;
+    border-bottom: 1px dotted rgba(0,0,0,0.12);
+    font-size: 11px;
+    line-height: 1.7;
+    color: var(--ink-light);
+    position: relative;
+  }
+
+  .question-list li:last-child {
+    border-bottom: none;
+  }
+
+  .question-list li::before {
+    content: counter(q) ".";
+    position: absolute;
+    left: 0;
+    top: 12px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--ink-faded);
+  }
+
+  /* The action block */
+  .action-block {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 28px 24px;
+    margin-top: 40px;
+  }
+
+  .action-block .action-head {
+    font-family: 'Special Elite', monospace;
+    font-size: 18px;
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+
+  .action-block p {
+    font-size: 11px;
+    line-height: 1.75;
+    opacity: 0.8;
+    margin-bottom: 16px;
+  }
+
+  .action-steps {
+    list-style: none;
+    margin: 0;
+    counter-reset: step;
+  }
+
+  .action-steps li {
+    counter-increment: step;
+    padding: 10px 0 10px 28px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    font-size: 11px;
+    line-height: 1.6;
+    opacity: 0.9;
+    position: relative;
+  }
+
+  .action-steps li:last-child {
+    border-bottom: none;
+  }
+
+  .action-steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 10px;
+    font-size: 9px;
+    font-weight: 700;
+    opacity: 0.5;
+  }
+
+  .action-link {
+    display: block;
+    margin-top: 20px;
+    padding: 14px 20px;
+    background: var(--red);
+    color: #fff;
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-align: center;
+    transition: background 0.2s;
+  }
+
+  .action-link:hover {
+    background: #a01515;
+  }
+
+  .email-line {
+    margin-top: 12px;
+    font-size: 10px;
+    opacity: 0.6;
+    text-align: center;
+  }
+
+  .email-line a {
+    color: inherit;
+  }
+
+  /* Divider */
+  hr.ruled {
+    border: none;
+    border-top: 1px dashed var(--border);
+    margin: 32px 0;
+  }
+
+  /* Footer */
+  .doc-footer {
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    margin-top: 16px;
+  }
+
+  .doc-footer p {
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--ink-faded);
+    line-height: 2;
+    text-transform: uppercase;
+  }
+
+  .doc-footer a {
+    color: var(--ink-light);
+  }
+
+  /* Note style */
+  .note {
+    font-size: 10px;
+    color: var(--ink-faded);
+    font-style: italic;
+    line-height: 1.6;
+    margin-top: 8px;
+  }
+
+  /* Bar chart */
+  .bar-chart { margin: 20px 0 8px; }
+  .bar-label {
+    font-size: 10px;
+    color: var(--ink-faded);
+    margin: 8px 0 3px;
+    line-height: 1.5;
+  }
+  .bar {
+    position: relative;
+    height: 18px;
+    background: rgba(26,26,26,0.07);
+    margin-bottom: 4px;
+  }
+  .bar-watson::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 63.3%;
+    background: var(--ink-light);
+  }
+  .bar-envelope::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 100%;
+    background: var(--red);
+  }
+  .bar span {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 9px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.5px;
+  }
+
+  /* Legend */
+  .legend {
+    margin: 20px 0;
+    padding: 12px 14px;
+    border: 1px dashed var(--border);
+    background: rgba(26,26,26,0.02);
+  }
+  .legend-title {
+    font-size: 8.5px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    margin-bottom: 10px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 10px;
+    color: var(--ink-light);
+    margin: 6px 0;
+    line-height: 1.5;
+  }
+  .legend-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 2px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .swatch-10c1 { background: #c8954a; }
+  .swatch-10c2 { background: #5a8a6a; }
+  .swatch-10c3 { background: #4a7a9b; }
+  .swatch-10c4 { background: #7a5a8a; }
+  .swatch-10c5 { background: #c41e1e; }
+  .legend-code {
+    font-weight: 700;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  /* Timeline */
+  .timeline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    margin: 20px 0;
+  }
+  .tl-item {
+    flex: 1 1 110px;
+    border-top: 2px solid var(--ink);
+    padding: 8px 12px 8px 0;
+  }
+  .tl-item.tl-now { border-top-color: var(--red); }
+  .tl-item.tl-election {
+    border-top-color: var(--ink-faded);
+    border-top-style: dashed;
+  }
+  .tl-date {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 3px;
+  }
+  .tl-item.tl-now .tl-date { color: var(--red); }
+  .tl-item.tl-election .tl-date { color: var(--ink-faded); }
+  .tl-caption {
+    font-size: 9.5px;
+    color: var(--ink-light);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 480px) {
+    .inner { padding: 32px 16px 32px 40px; }
+    .page::before { left: 28px; }
+    .title-block h1 { font-size: 22px; }
+    .deadline-date { font-size: 17px; }
+    .tl-item { flex: 1 1 140px; }
+  }
+
+  /* ── Site header ── */
+  .site-header {
+    width: var(--width);
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0 12px;
+  }
+  .site-header-left a {
+    font-family: 'Special Elite', monospace;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #f5f0e8;
+    text-decoration: none;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+  }
+  .site-header-left a:hover { opacity: 1; }
+  .site-header-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .header-social {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-right: 10px;
+  }
+  .header-social-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.45);
+    text-decoration: none;
+    padding: 4px 8px;
+    border: 1px solid rgba(245,240,232,0.12);
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .header-social-link:hover {
+    color: rgba(245,240,232,0.85);
+    border-color: rgba(245,240,232,0.3);
+  }
+  .header-social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 4px 8px;
+  }
+  .header-social-icon svg { display: block; flex-shrink: 0; }
+  .header-social-icon .icon-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .header-social-divider {
+    width: 1px;
+    height: 12px;
+    background: rgba(245,240,232,0.12);
+    margin: 0 2px;
+  }
+  .theme-toggle {
+    background: transparent;
+    border: 1px solid rgba(245,240,232,0.12);
+    color: rgba(245,240,232,0.45);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s;
+  }
+  .theme-toggle:hover {
+    color: rgba(245,240,232,0.85);
+    border-color: rgba(245,240,232,0.3);
+  }
+  @media (max-width: 480px) {
+    .site-header-left a { font-size: 11px; letter-spacing: 2px; }
+    .header-social-link { font-size: 7.5px; padding: 3px 6px; }
+    .header-social-icon .icon-label { font-size: 7.5px; }
+    .theme-toggle { font-size: 7.5px; padding: 3px 7px; }
+  }
+
+  [data-theme="dark"] .action-block {
+    background: var(--ink);
+    color: var(--bg);
+  }
+  [data-theme="dark"] .action-block p,
+  [data-theme="dark"] .action-steps li {
+    opacity: 0.85;
+  }
+  [data-theme="dark"] .action-link {
+    background: var(--red);
+  }
+  [data-theme="dark"] .deadline-banner {
+    background: var(--ink);
+    color: var(--bg);
+  }
+  [data-theme="dark"] .bar-watson::before {
+    background: var(--ink-light);
+  }
+  [data-theme="dark"] .numbers-table td:last-child {
+    color: var(--ink);
+  }
+
+  /* Map link */
+  .map-link-block {
+    margin: 16px 0;
+    border: 1px solid var(--border);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(26,26,26,0.03);
+  }
+  [data-theme="dark"] .map-link-block {
+    background: rgba(232,227,216,0.03);
+  }
+  .map-link-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .map-link-text {
+    flex: 1;
+  }
+  .map-link-label {
+    font-size: 8.5px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    margin-bottom: 3px;
+  }
+  .map-link-title {
+    font-family: 'Special Elite', monospace;
+    font-size: 13px;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .map-link-sub {
+    font-size: 9.5px;
+    color: var(--ink-light);
+    line-height: 1.5;
+  }
+  .map-link-btn {
+    display: inline-block;
+    padding: 8px 14px;
+    background: var(--ink);
+    color: var(--bg);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+  .map-link-btn:hover { background: var(--ink-light); }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="site-header-left">
+    <a href="https://thedelusioneers.ca">The Delusioneers</a>
+  </div>
+  <div class="site-header-right">
+    <nav class="header-social" aria-label="Social links">
+      <!-- Threads / J -->
+      <a class="header-social-link header-social-icon" href="https://www.threads.net/@jeremycyrilwrites" target="_blank" rel="noopener" aria-label="Threads — Jeremy">
+        <svg width="11" height="12" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path fill="currentColor" d="M141.537 88.988a66.667 66.667 0 0 0-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.036l13.779 9.452c5.73-8.695 14.724-10.548 21.348-10.548h.229c8.249.053 14.474 2.452 18.503 7.129 2.932 3.405 4.893 8.111 5.864 14.05-7.314-1.243-15.224-1.626-23.68-1.14-23.82 1.371-39.134 15.264-38.105 34.568.522 9.792 5.4 18.216 13.735 23.719 7.047 4.652 16.124 6.927 25.557 6.412 12.458-.683 22.231-5.436 29.049-14.127 5.178-6.6 8.452-15.153 9.898-25.93 5.937 3.583 10.337 8.298 12.767 13.966 4.132 9.635 4.373 25.468-8.546 38.376-11.319 11.308-24.925 16.2-45.488 16.351-22.809-.169-40.06-7.484-51.275-21.742C35.236 139.966 29.808 120.682 29.605 96c.203-24.682 5.63-43.966 16.133-57.317C56.954 24.425 74.204 17.11 97.013 16.941c22.975.17 40.526 7.52 52.171 21.847 5.71 7.026 10.015 15.86 12.853 26.162l16.147-4.308c-3.44-12.68-8.853-23.606-16.219-32.668C147.036 10.646 125.205 1.205 97.07 1 68.754 1.205 47.189 10.685 32.986 28.23 20.096 43.982 13.491 66.487 13.25 96v.027c.241 29.513 6.846 52.017 19.736 67.769C47.19 181.315 68.754 190.795 97.07 191c25.861-.182 44.084-6.953 59.271-22.123 20.537-20.515 19.984-46.6 13.2-62.525-4.643-10.82-13.585-19.531-28.004-25.364Z"/>
+        </svg>
+        <span class="icon-label">J</span>
+      </a>
+      <div class="header-social-divider"></div>
+      <!-- Threads / D -->
+      <a class="header-social-link header-social-icon" href="https://www.threads.net/@the_delusioneers" target="_blank" rel="noopener" aria-label="Threads — The Delusioneers">
+        <svg width="11" height="12" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path fill="currentColor" d="M141.537 88.988a66.667 66.667 0 0 0-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.036l13.779 9.452c5.73-8.695 14.724-10.548 21.348-10.548h.229c8.249.053 14.474 2.452 18.503 7.129 2.932 3.405 4.893 8.111 5.864 14.05-7.314-1.243-15.224-1.626-23.68-1.14-23.82 1.371-39.134 15.264-38.105 34.568.522 9.792 5.4 18.216 13.735 23.719 7.047 4.652 16.124 6.927 25.557 6.412 12.458-.683 22.231-5.436 29.049-14.127 5.178-6.6 8.452-15.153 9.898-25.93 5.937 3.583 10.337 8.298 12.767 13.966 4.132 9.635 4.373 25.468-8.546 38.376-11.319 11.308-24.925 16.2-45.488 16.351-22.809-.169-40.06-7.484-51.275-21.742C35.236 139.966 29.808 120.682 29.605 96c.203-24.682 5.63-43.966 16.133-57.317C56.954 24.425 74.204 17.11 97.013 16.941c22.975.17 40.526 7.52 52.171 21.847 5.71 7.026 10.015 15.86 12.853 26.162l16.147-4.308c-3.44-12.68-8.853-23.606-16.219-32.668C147.036 10.646 125.205 1.205 97.07 1 68.754 1.205 47.189 10.685 32.986 28.23 20.096 43.982 13.491 66.487 13.25 96v.027c.241 29.513 6.846 52.017 19.736 67.769C47.19 181.315 68.754 190.795 97.07 191c25.861-.182 44.084-6.953 59.271-22.123 20.537-20.515 19.984-46.6 13.2-62.525-4.643-10.82-13.585-19.531-28.004-25.364Z"/>
+        </svg>
+        <span class="icon-label">D</span>
+      </a>
+      <div class="header-social-divider"></div>
+      <!-- Instagram -->
+      <a class="header-social-link header-social-icon" href="https://www.instagram.com/the_delusioneers" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg width="12" height="12" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+      </a>
+      <div class="header-social-divider"></div>
+      <!-- Substack -->
+      <a class="header-social-link header-social-icon" href="https://thedelusioneers.substack.com" target="_blank" rel="noopener" aria-label="Substack">
+        <svg width="12" height="12" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path fill="currentColor" d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/>
+        </svg>
+      </a>
+      <div class="header-social-divider"></div>
+      <!-- Bluesky -->
+      <a class="header-social-link header-social-icon" href="https://bsky.app/profile/thedelusioneers.bsky.social" target="_blank" rel="noopener" aria-label="Bluesky">
+        <svg width="12" height="11" viewBox="0 0 600 530" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path fill="currentColor" d="m135.72 44.03c66.496 49.921 138.02 151.14 164.28 205.46 26.262-54.316 97.782-155.54 164.28-205.46 47.98-36.021 125.72-63.892 125.72 24.795 0 17.712-10.155 148.79-16.111 170.07-20.703 73.984-96.144 92.854-163.25 81.433 117.3 19.964 147.14 86.092 82.697 152.22-122.39 125.59-175.91-31.511-189.63-71.766-2.514-7.3797-3.6904-10.832-3.7077-7.8964-0.0174-2.9357-1.1937 0.51669-3.7077 7.8964-13.714 40.255-67.233 197.36-189.63 71.766-64.444-66.128-34.605-132.26 82.697-152.22-67.108 11.421-142.55-7.4491-163.25-81.433-5.9562-21.282-16.111-152.36-16.111-170.07 0-88.687 77.742-60.816 125.72-24.795z"/>
+        </svg>
+      </a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+      <span id="toggleIcon">○</span>
+      <span id="toggleLabel">Light</span>
+    </button>
+  </div>
+</header>
+<div class="page">
+<div class="inner">
+
+  <!-- Deadline banner -->
+  <div class="deadline-banner">
+    <span class="deadline-label">Comment deadline</span>
+    <span class="deadline-date">Saturday, May 3, 2026</span>
+    <span class="deadline-sub">Written comments on Kingston's Second Draft Official Plan — YG220K</span>
+  </div>
+
+  <!-- Title -->
+  <div class="title-block">
+    <h1>Kingston is proposing to move its urban boundary. Here is what that means.</h1>
+    <div class="byline">A plain-language guide for residents · All figures sourced from primary documents</div>
+  </div>
+
+  <!-- Section 1: What is being decided -->
+  <div class="section">
+    <div class="section-label">What is being decided</div>
+    <h2>The urban boundary is the line that separates city from countryside. The City wants to move it.</h2>
+    <p>Kingston is rewriting its Official Plan — the document that controls what gets built, where, and on what kind of land — through a process called YG220K. The Second Draft of that plan was released in March 2026. Public comments are due May 3.</p>
+    <p>The most consequential decision in this draft is a proposed expansion of the urban boundary. Once land is inside that boundary, it can be planned, serviced, and eventually developed as part of the city. Once that line moves, it is very difficult to move back.</p>
+    <p>The plan would add land in five designated expansion areas — identified as sections 10C1 through 10C5 on Map 15 of the Official Plan — concentrated in Kingston West and Kingston East.</p>
+  </div>
+
+  <!-- Section 2: The numbers -->
+  <div class="section">
+    <div class="section-label">What the background studies say</div>
+    <h2>Two independent analyses identified a land need. The proposed expansion is larger than either.</h2>
+
+    <p>The City commissioned Watson &amp; Associates Economists Ltd. to assess how much land Kingston actually needs to accommodate growth to 2051. Their findings are in two Council-endorsed reports: Report 24-172 (community area) and Report 24-221 (employment area).</p>
+
+    <table class="numbers-table">
+      <tr>
+        <td>Projected new residents by 2051</td>
+        <td>66,800</td>
+      </tr>
+      <tr>
+        <td>Projected new housing units needed</td>
+        <td>29,300</td>
+      </tr>
+      <tr>
+        <td>Projected new jobs needed</td>
+        <td>33,400</td>
+      </tr>
+      <tr>
+        <td>Watson minimum community area land need<br><span class="note" style="font-style:normal;font-size:9px;color:var(--ink-faded);">Residential, commercial, institutional, roads, parks — excluding environmental features · Report 24-172</span></td>
+        <td>340 ha</td>
+      </tr>
+      <tr>
+        <td>Watson employment area land need<br><span class="note" style="font-style:normal;font-size:9px;color:var(--ink-faded);">325 ha industrial + 80 ha other business uses · Report 24-221</span></td>
+        <td>405 ha</td>
+      </tr>
+      <tr>
+        <td>Combined Watson-identified land need</td>
+        <td>~745 ha</td>
+      </tr>
+      <tr>
+        <td>Total expansion designated in the Second Draft OP<br><span class="note" style="font-style:normal;font-size:9px;color:var(--ink-faded);">Per Map 15 and staff reporting; includes 169 ha EPA and ~433 ha mapped natural heritage · Kingstonist / joint staff report, Mar. 2026</span></td>
+        <td class="red">~1,176 ha</td>
+      </tr>
+    </table>
+
+    <div class="gap-box">
+      <div class="gap-box-label">The gap</div>
+      <p>Watson's own reports acknowledge the identified land needs are a "conceptual starting point" and that the final expansion area "may be higher" to allow planning flexibility. But there is a meaningful difference between the technical land need (~745 ha) and what appears on the map.</p>
+      <div class="math-line">Watson studies identified need: ~745 ha&nbsp;&nbsp;·&nbsp;&nbsp;Map 15 designated: ~1,176 ha</div>
+      <p>Watson's scope did not include choosing which lands to expand into. That location decision was made through the Official Plan process — partly in response to the 21 Notices of Intent the City received from private landowners requesting boundary expansions.</p>
+    </div>
+  </div>
+
+
+  <!-- Bar chart visual -->
+  <div class="section" style="margin-top:-8px;">
+    <div class="section-label">The gap — illustrated</div>
+    <div class="bar-chart">
+      <div class="bar-label">Watson community + employment land need outside current boundary (Reports 24-172 &amp; 24-221)</div>
+      <div class="bar bar-watson"><span>≈ 745 ha</span></div>
+      <div class="bar-label">Total expansion envelope on Map 15 — 10C1 through 10C5 combined (staff reporting, Second Draft OP)</div>
+      <div class="bar bar-envelope"><span>≈ 1,176 ha</span></div>
+      <p class="note" style="margin-top:8px;">Bars scaled proportionally: 745 ÷ 1,176 ≈ 0.63. Source: Council Reports 24-172 and 24-221 (Watson &amp; Associates) and joint staff report on Map 15 expansion areas, as reported by Kingstonist, March 2026.</p>
+    </div>
+  </div>
+
+  <!-- Section 3: The five areas -->
+  <div class="section">
+    <div class="section-label">Where the boundary moves</div>
+    <h2>Five expansion areas are designated in the Second Draft. All require additional infrastructure before development can proceed.</h2>
+    <p>Each area is governed by phasing policies in Chapter 10C of the Second Draft OP. No development is permitted in any of these areas until infrastructure plans — the Integrated Mobility Plan and the Water and Wastewater Master Plan — are completed and Council invests accordingly. The policy language is consistent: these lands are approved for expansion, but are not needed in the short term.</p>
+
+    <div class="legend">
+      <div class="legend-title">Expansion areas — Map 15 key</div>
+      <div class="legend-item">
+        <span class="legend-swatch swatch-10c1"></span>
+        <span><span class="legend-code">10C1</span> · 1504 &amp; 1623 Highway 15 — Kingston East · Future community area · Ecological corridor required</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-swatch swatch-10c2"></span>
+        <span><span class="legend-code">10C2</span> · 3279–3403 Creekford Road — Kingston West · Future community area</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-swatch swatch-10c3"></span>
+        <span><span class="legend-code">10C3</span> · Creekford North Industrial Area — Kingston West · Future industrial employment</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-swatch swatch-10c4"></span>
+        <span><span class="legend-code">10C4</span> · Taylor Kidd Industrial Area — Kingston West · Future industrial employment</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-swatch swatch-10c5"></span>
+        <span><span class="legend-code">10C5</span> · Urban Area Expansion Lands — East &amp; West · Future community areas (catch-all designation)</span>
+      </div>
+    </div>
+
+    <ul class="area-list">
+      <li>
+        <span class="area-tag">10C1</span>
+        <div>
+          <span class="area-name">1504 and 1623 Highway 15</span>
+          Kingston East. Rural lands south of Gore Road. Policy requires a coordinated Official Plan amendment across all property owners before any development can proceed. Must provide an ecological corridor doubling the one at 1429 Highway 15.
+        </div>
+      </li>
+      <li>
+        <span class="area-tag">10C2</span>
+        <div>
+          <span class="area-name">3279 to 3403 Creekford Road</span>
+          Kingston West. Community area expansion lands west of the existing urban area. Development requires a master servicing plan and full infrastructure completion.
+        </div>
+      </li>
+      <li>
+        <span class="area-tag emp">10C3</span>
+        <div>
+          <span class="area-name">Creekford North Industrial Area</span>
+          Kingston West. Designated for industrial transition. Intended to meet projected employment area land needs. Proceeds when Council determines infrastructure investment is warranted.
+        </div>
+      </li>
+      <li>
+        <span class="area-tag emp">10C4</span>
+        <div>
+          <span class="area-name">Taylor Kidd Industrial Area</span>
+          Kingston West. Employment area expansion near the Taylor Kidd corridor. Not required in the short term; proceeds on Council's infrastructure timeline.
+        </div>
+      </li>
+      <li>
+        <span class="area-tag">10C5</span>
+        <div>
+          <span class="area-name">Urban Area Expansion Lands</span>
+          The catch-all designation for remaining expansion lands on Map 15. Community area uses. Same phasing conditions: no development until infrastructure plans are satisfied and Council commits.
+        </div>
+      </li>
+    </ul>
+
+    <p class="note">Source: Second Draft Official Plan, Chapter 10C, Policies 10C1.1–10C5.4. Phasing policies may be updated in the Third Draft based on ongoing Water and Wastewater Master Plan and Integrated Mobility Plan work.</p>
+  </div>
+
+  <!-- Section 4: How it got here -->
+  <div class="section">
+    <div class="section-label">How the lands were selected</div>
+    <h2>Watson identified how much land was needed. The City chose where.</h2>
+    <p>In December 2023, the City published a notice inviting private landowners to submit a "Notice of Intent" if they wanted their land considered for urban boundary expansion. The City received 21 such notices. Staff reviewed them and, according to Report 24-172, assessed approximately 219 hectares as potentially supportable for inclusion, with others unclear or not supportable.</p>
+    <p>The report is explicit: Watson's scope "does not include providing recommendations on the location of the urban boundary expansion lands." The location decisions were made by City staff and will be recommended to Council. The Minister of Municipal Affairs and Housing is the final approval authority.</p>
+    <p>The connection between which landowners submitted Notices of Intent and which lands appear inside the boundary on Map 15 is a matter of public record — but one that requires cross-referencing the NOI mapping in Report 24-172 (Exhibit B) against Map 15 of the Second Draft OP.</p>
+
+    <div class="map-link-block">
+      <div class="map-link-icon">⊕</div>
+      <div class="map-link-text">
+        <div class="map-link-label">Companion map</div>
+        <div class="map-link-title">Notice of Intent Sites — All 18 locations plotted</div>
+        <div class="map-link-sub">Private landowner expansion requests received December 2023 – January 2024. Filterable by proposed use category. Source: Report 24-172, Exhibit B.</div>
+      </div>
+      <a class="map-link-btn" href="kingston-boundary-map.html">Open map →</a>
+    </div>
+  </div>
+
+  <!-- Section 5: The timeline -->
+  <div class="section">
+    <div class="section-label">What happens next</div>
+    <h2>This is the last public comment window before the plan goes to a statutory public meeting.</h2>
+
+    <div class="timeline">
+      <div class="tl-item tl-now">
+        <div class="tl-date">Now — May 3</div>
+        <div class="tl-caption">Public comment on Second Draft OP (YG220K)</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">Mid–late May</div>
+        <div class="tl-caption">Third / final draft prepared</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">~June 18</div>
+        <div class="tl-caption">Statutory public meeting at Planning Committee</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">End of June</div>
+        <div class="tl-caption">Council considers final OP · Minister of Municipal Affairs is final approval authority</div>
+      </div>
+      <div class="tl-item tl-election">
+        <div class="tl-date">Oct 26, 2026</div>
+        <div class="tl-caption">Municipal election — new Council and Mayor elected</div>
+      </div>
+    </div>
+
+    <p>The Second Draft is explicitly labelled "For Consultation Purposes Only" and has no legal effect. But comments submitted now inform what changes between the Second and Third Drafts. The statutory public meeting in June is a later, more formal window — but this comment period is where the plan is still actively being shaped.</p>
+  </div>
+
+  <!-- Section 6: Questions to ask -->
+  <div class="section">
+    <div class="section-label">Questions you can put on the record</div>
+    <h2>You do not need to oppose expansion to participate. You can ask for facts.</h2>
+    <p>Written comments submitted before May 3 become part of the public record. The following questions are grounded in the background studies and the Second Draft's own policy language. They do not require a position on whether expansion is good or bad.</p>
+
+    <ol class="question-list">
+      <li>Watson's analysis identified a community area land need of at least 340 ha and an employment area need of 405 ha — a combined figure of approximately 745 ha. The Second Draft designates approximately 1,176 ha on Map 15. What accounts for the difference, and where is that explained in the public record?</li>
+      <li>Report 24-172 lists 21 Notices of Intent from private landowners requesting boundary expansions. Which of the five 10C expansion areas originated as applicant-driven requests, and what criteria were applied in selecting them over other locations?</li>
+      <li>The phasing policies in Chapter 10C state that none of the expansion lands can be developed until the Integrated Mobility Plan and the Water and Wastewater Master Plan are completed and infrastructure is in place. What is the projected cost of that infrastructure, and who will pay for it?</li>
+      <li>Report 24-172 identifies 169 hectares of Environmental Protection Area and approximately 433 hectares of other mapped natural heritage features within the proposed expansion envelope — figures confirmed in a joint staff report cited by Kingstonist. How does the Natural Heritage Study, currently in draft, address development pressure on those features once the boundary is set?</li>
+      <li>The Second Draft is expected to guide development until 2051, but will be reviewed every five to ten years. Why is this boundary expansion being finalized by a Council in the final months of its term rather than presented as a decision for the council elected on October 26, 2026?</li>
+    </ol>
+  </div>
+
+  <hr class="ruled">
+
+  <!-- Action block -->
+  <div class="action-block">
+    <div class="action-head">How to submit a comment before May 3</div>
+    <p>Comments can be submitted by anyone. You do not need to be a planning expert. The record of who commented and what they said is public.</p>
+    <ol class="action-steps">
+      <li>Go to <strong>GetInvolved.CityofKingston.ca/yg220k</strong> and use the project website comment form, or send an email directly.</li>
+      <li>State your name and your connection to Kingston (resident, property owner, business owner, etc.).</li>
+      <li>Identify the section or topic you are commenting on. Chapter 10C (phasing), Map 15 (expansion lands), and Section 2A (growth projections) are the most relevant to the boundary expansion.</li>
+      <li>Ask specific questions or raise specific concerns. Vague comments are harder to respond to. Reference the report numbers or policy numbers where possible.</li>
+      <li>Copy your city councillor. Councillor contact information is at <strong>www.cityofkingston.ca/council</strong>.</li>
+    </ol>
+    <a class="action-link" href="mailto:newofficialplan@cityofkingston.ca?subject=Second Draft Official Plan Comment — YG220K">Email newofficialplan@cityofkingston.ca</a>
+    <div class="email-line">Or submit through the project website: <a href="https://getinvolved.cityofkingston.ca/yg220k">GetInvolved.CityofKingston.ca/yg220k</a></div>
+  </div>
+
+  <!-- Footer -->
+  <div class="doc-footer" style="margin-top:32px;">
+    <p>Sources: Second Draft Official Plan — YG220K (City of Kingston, March 2026) · Report 24-172: Community Area Land Needs and Intensification Analysis (Watson &amp; Associates, July 2024) · Report 24-221: Employment Area Lands Review (Watson &amp; Associates, August 2024) · City of Kingston 2023 Growth Study — Final Growth Analysis Report (Watson &amp; Associates, September 2024)</p>
+    <p style="margin-top:8px;">The Delusioneers · <a href="https://thedelusioneers.substack.com">thedelusioneers.substack.com</a> · @the_delusioneers</p>
+    <p style="margin-top:4px;">Visibility not verdicts. We file. We publish. You decide.</p>
+  </div>
+
+</div>
+</div>
+
+<script>
+  const html = document.documentElement;
+  const toggle = document.getElementById('themeToggle');
+  const icon = document.getElementById('toggleIcon');
+  const label = document.getElementById('toggleLabel');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+  const saved = localStorage.getItem('delusioneers-theme');
+  const initialDark = saved ? saved === 'dark' : prefersDark.matches;
+  function setTheme(dark) {
+    html.setAttribute('data-theme', dark ? 'dark' : 'light');
+    icon.textContent = dark ? '●' : '○';
+    label.textContent = dark ? 'Dark' : 'Light';
+  }
+  setTheme(initialDark);
+  toggle.addEventListener('click', () => {
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    setTheme(!isDark);
+    localStorage.setItem('delusioneers-theme', !isDark ? 'dark' : 'light');
+  });
+  prefersDark.addEventListener('change', (e) => {
+    if (!localStorage.getItem('delusioneers-theme')) setTheme(e.matches);
+  });
+</script>
+</body>
+</html>
