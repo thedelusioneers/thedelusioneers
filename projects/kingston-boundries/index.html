@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kingston Urban Boundary — Notice of Intent Sites · The Delusioneers</title>
+<meta name="description" content="18 private landowner Notice of Intent sites from the 2024 urban boundary expansion request process. A companion map to the Kingston boundary explainer.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" crossorigin=""/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" crossorigin=""></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+  /* ── Theme vars ── */
+  :root {
+    --bg: #f5f0e8;
+    --ink: #1a1a1a;
+    --ink-light: #4a4a4a;
+    --ink-faded: #8a8a7a;
+    --red: #c41e1e;
+    --border: rgba(26,26,26,0.15);
+    --border-dashed: rgba(26,26,26,0.2);
+    --surround: #2a2825;
+    --panel-bg: #f0ebe0;
+    --ruled-line: rgba(0,0,0,0.04);
+    --width: min(680px, 92vw);
+    --shadow: 0 2px 12px rgba(0,0,0,0.12);
+  }
+  [data-theme="dark"] {
+    --bg: #1e1c1a;
+    --ink: #e8e3d8;
+    --ink-light: #b0a898;
+    --ink-faded: #6a6458;
+    --red: #e03535;
+    --border: rgba(232,227,216,0.15);
+    --border-dashed: rgba(232,227,216,0.2);
+    --surround: #111010;
+    --panel-bg: #242220;
+    --ruled-line: rgba(255,255,255,0.03);
+    --shadow: 0 2px 12px rgba(0,0,0,0.4);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    background: var(--surround);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Site header ── */
+  .site-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 2000;
+    background: var(--surround);
+    border-bottom: 1px solid rgba(245,240,232,0.08);
+  }
+  .site-header-left a {
+    font-family: 'Special Elite', monospace;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #f5f0e8;
+    text-decoration: none;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+  }
+  .site-header-left a:hover { opacity: 1; }
+  .site-header-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .header-social {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-right: 10px;
+  }
+  .header-social-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.45);
+    text-decoration: none;
+    padding: 4px 8px;
+    border: 1px solid rgba(245,240,232,0.12);
+    transition: all 0.2s;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .header-social-link:hover {
+    color: rgba(245,240,232,0.85);
+    border-color: rgba(245,240,232,0.3);
+  }
+  .header-social-link svg { display: block; flex-shrink: 0; }
+  .header-social-divider {
+    width: 1px;
+    height: 12px;
+    background: rgba(245,240,232,0.12);
+    margin: 0 2px;
+  }
+  .theme-toggle {
+    background: transparent;
+    border: 1px solid rgba(245,240,232,0.12);
+    color: rgba(245,240,232,0.45);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s;
+  }
+  .theme-toggle:hover {
+    color: rgba(245,240,232,0.85);
+    border-color: rgba(245,240,232,0.3);
+  }
+
+  /* ── Layout ── */
+  .shell {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    height: calc(100dvh - 53px);
+  }
+
+  /* ── Sidebar ── */
+  aside {
+    background: var(--bg);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 23px,
+      var(--ruled-line) 23px,
+      var(--ruled-line) 24px
+    );
+    position: relative;
+  }
+  aside::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 32px;
+    width: 1px;
+    background: rgba(196,30,30,0.2);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .panel-inner {
+    padding: 24px 20px 24px 48px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .panel-section {
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px dashed var(--border-dashed);
+  }
+  .panel-section:last-child {
+    border-bottom: none;
+  }
+
+  .section-label {
+    font-size: 8.5px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .panel-title {
+    font-family: 'Special Elite', monospace;
+    font-size: 17px;
+    line-height: 1.3;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .panel-body {
+    font-size: 10.5px;
+    line-height: 1.7;
+    color: var(--ink-light);
+  }
+
+  /* Stats */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .stat {
+    border: 1px solid var(--border);
+    padding: 10px;
+    background: var(--panel-bg);
+  }
+  .stat-label {
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    margin-bottom: 4px;
+  }
+  .stat-value {
+    font-family: 'Special Elite', monospace;
+    font-size: 16px;
+    color: var(--ink);
+  }
+  .stat-value.red { color: var(--red); }
+
+  /* Legend */
+  .legend { margin-top: 10px; }
+  .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 10px;
+    color: var(--ink-light);
+    margin: 6px 0;
+    line-height: 1.5;
+  }
+  .legend-swatch {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    border-radius: 2px;
+  }
+  .legend-label strong {
+    color: var(--ink);
+    font-size: 10px;
+    display: block;
+  }
+
+  /* Filters */
+  .filter-chips {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border: 1px solid var(--border);
+    background: var(--panel-bg);
+    color: var(--ink-light);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s;
+    width: 100%;
+  }
+  .chip:hover { border-color: var(--ink-light); }
+  .chip[data-active="false"] {
+    opacity: 0.4;
+  }
+  .chip-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* Fit button */
+  .fit-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: var(--ink);
+    color: var(--bg);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    margin-top: 12px;
+    transition: background 0.15s;
+  }
+  .fit-btn:hover { background: var(--ink-light); }
+
+  /* Site list */
+  .site-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .site-card {
+    border: 1px solid var(--border);
+    padding: 10px;
+    background: var(--panel-bg);
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .site-card:hover { border-color: var(--ink-light); }
+  .site-card.active { border-color: var(--red); }
+  .site-name {
+    font-family: 'Special Elite', monospace;
+    font-size: 12px;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .site-meta {
+    font-size: 9.5px;
+    color: var(--ink-light);
+    line-height: 1.6;
+  }
+  .site-category-tag {
+    display: inline-block;
+    font-size: 8px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    margin-top: 5px;
+    color: var(--bg);
+  }
+
+  /* ── Map ── */
+  .map-wrap {
+    position: relative;
+  }
+  #map {
+    height: 100%;
+    min-height: calc(100dvh - 53px);
+    width: 100%;
+  }
+
+  /* Floating note */
+  .floating-note {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    z-index: 500;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 12px 14px;
+    max-width: 280px;
+    font-size: 9.5px;
+    line-height: 1.6;
+    color: var(--ink-light);
+    box-shadow: var(--shadow);
+  }
+  .floating-note strong {
+    display: block;
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    margin-bottom: 4px;
+  }
+
+  /* Leaflet overrides */
+  .leaflet-popup-content-wrapper,
+  .leaflet-popup-tip {
+    background: var(--bg);
+    color: var(--ink);
+    border-radius: 0;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+  .leaflet-popup-content-wrapper {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+  }
+  .leaflet-control-zoom a {
+    background: var(--bg);
+    color: var(--ink);
+    border-color: var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    border-radius: 0 !important;
+  }
+  .leaflet-control-zoom a:hover {
+    background: var(--panel-bg);
+  }
+  .leaflet-control-attribution {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    background: var(--bg) !important;
+    color: var(--ink-faded) !important;
+  }
+  .leaflet-control-attribution a { color: var(--ink-faded) !important; }
+  .popup-title {
+    font-family: 'Special Elite', monospace;
+    font-size: 13px;
+    color: var(--ink);
+    margin-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px;
+  }
+  .popup-row {
+    margin: 3px 0;
+    font-size: 9.5px;
+    line-height: 1.6;
+  }
+  .popup-label {
+    color: var(--ink-faded);
+    text-transform: uppercase;
+    font-size: 8px;
+    letter-spacing: 1px;
+    display: block;
+    margin-top: 4px;
+  }
+
+  /* Back link */
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    text-decoration: none;
+    margin-bottom: 14px;
+    transition: color 0.15s;
+  }
+  .back-link:hover { color: var(--ink); }
+
+  /* Source note */
+  .source-note {
+    font-size: 9px;
+    color: var(--ink-faded);
+    line-height: 1.7;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border-dashed);
+  }
+
+  @media (max-width: 860px) {
+    .shell {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 55dvh;
+      height: auto;
+    }
+    aside { max-height: 45dvh; }
+    aside::before { display: none; }
+    #map { min-height: 55dvh; }
+    .floating-note { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Standard site header -->
+<header class="site-header">
+  <div class="site-header-left">
+    <a href="https://thedelusioneers.ca">The Delusioneers</a>
+  </div>
+  <div class="site-header-right">
+    <nav class="header-social" aria-label="Social links">
+      <a class="header-social-link" href="https://www.threads.net/@jeremycyrilwrites" target="_blank" rel="noopener" aria-label="Threads — Jeremy">
+        <svg width="11" height="12" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="currentColor" d="M141.537 88.988a66.667 66.667 0 0 0-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.036l13.779 9.452c5.73-8.695 14.724-10.548 21.348-10.548h.229c8.249.053 14.474 2.452 18.503 7.129 2.932 3.405 4.893 8.111 5.864 14.05-7.314-1.243-15.224-1.626-23.68-1.14-23.82 1.371-39.134 15.264-38.105 34.568.522 9.792 5.4 18.216 13.735 23.719 7.047 4.652 16.124 6.927 25.557 6.412 12.458-.683 22.231-5.436 29.049-14.127 5.178-6.6 8.452-15.153 9.898-25.93 5.937 3.583 10.337 8.298 12.767 13.966 4.132 9.635 4.373 25.468-8.546 38.376-11.319 11.308-24.925 16.2-45.488 16.351-22.809-.169-40.06-7.484-51.275-21.742C35.236 139.966 29.808 120.682 29.605 96c.203-24.682 5.63-43.966 16.133-57.317C56.954 24.425 74.204 17.11 97.013 16.941c22.975.17 40.526 7.52 52.171 21.847 5.71 7.026 10.015 15.86 12.853 26.162l16.147-4.308c-3.44-12.68-8.853-23.606-16.219-32.668C147.036 10.646 125.205 1.205 97.07 1 68.754 1.205 47.189 10.685 32.986 28.23 20.096 43.982 13.491 66.487 13.25 96v.027c.241 29.513 6.846 52.017 19.736 67.769C47.19 181.315 68.754 190.795 97.07 191c25.861-.182 44.084-6.953 59.271-22.123 20.537-20.515 19.984-46.6 13.2-62.525-4.643-10.82-13.585-19.531-28.004-25.364Z"/></svg>
+        <span>J</span>
+      </a>
+      <div class="header-social-divider"></div>
+      <a class="header-social-link" href="https://www.threads.net/@the_delusioneers" target="_blank" rel="noopener" aria-label="Threads — The Delusioneers">
+        <svg width="11" height="12" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="currentColor" d="M141.537 88.988a66.667 66.667 0 0 0-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.036l13.779 9.452c5.73-8.695 14.724-10.548 21.348-10.548h.229c8.249.053 14.474 2.452 18.503 7.129 2.932 3.405 4.893 8.111 5.864 14.05-7.314-1.243-15.224-1.626-23.68-1.14-23.82 1.371-39.134 15.264-38.105 34.568.522 9.792 5.4 18.216 13.735 23.719 7.047 4.652 16.124 6.927 25.557 6.412 12.458-.683 22.231-5.436 29.049-14.127 5.178-6.6 8.452-15.153 9.898-25.93 5.937 3.583 10.337 8.298 12.767 13.966 4.132 9.635 4.373 25.468-8.546 38.376-11.319 11.308-24.925 16.2-45.488 16.351-22.809-.169-40.06-7.484-51.275-21.742C35.236 139.966 29.808 120.682 29.605 96c.203-24.682 5.63-43.966 16.133-57.317C56.954 24.425 74.204 17.11 97.013 16.941c22.975.17 40.526 7.52 52.171 21.847 5.71 7.026 10.015 15.86 12.853 26.162l16.147-4.308c-3.44-12.68-8.853-23.606-16.219-32.668C147.036 10.646 125.205 1.205 97.07 1 68.754 1.205 47.189 10.685 32.986 28.23 20.096 43.982 13.491 66.487 13.25 96v.027c.241 29.513 6.846 52.017 19.736 67.769C47.19 181.315 68.754 190.795 97.07 191c25.861-.182 44.084-6.953 59.271-22.123 20.537-20.515 19.984-46.6 13.2-62.525-4.643-10.82-13.585-19.531-28.004-25.364Z"/></svg>
+        <span>D</span>
+      </a>
+      <div class="header-social-divider"></div>
+      <a class="header-social-link" href="https://www.instagram.com/the_delusioneers" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <div class="header-social-divider"></div>
+      <a class="header-social-link" href="https://thedelusioneers.substack.com" target="_blank" rel="noopener" aria-label="Substack">
+        <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
+      </a>
+      <div class="header-social-divider"></div>
+      <a class="header-social-link" href="https://bsky.app/profile/thedelusioneers.bsky.social" target="_blank" rel="noopener" aria-label="Bluesky">
+        <svg width="12" height="11" viewBox="0 0 600 530" aria-hidden="true"><path fill="currentColor" d="m135.72 44.03c66.496 49.921 138.02 151.14 164.28 205.46 26.262-54.316 97.782-155.54 164.28-205.46 47.98-36.021 125.72-63.892 125.72 24.795 0 17.712-10.155 148.79-16.111 170.07-20.703 73.984-96.144 92.854-163.25 81.433 117.3 19.964 147.14 86.092 82.697 152.22-122.39 125.59-175.91-31.511-189.63-71.766-2.514-7.3797-3.6904-10.832-3.7077-7.8964-0.0174-2.9357-1.1937 0.51669-3.7077 7.8964-13.714 40.255-67.233 197.36-189.63 71.766-64.444-66.128-34.605-132.26 82.697-152.22-67.108 11.421-142.55-7.4491-163.25-81.433-5.9562-21.282-16.111-152.36-16.111-170.07 0-88.687 77.742-60.816 125.72-24.795z"/></svg>
+      </a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+      <span id="toggleIcon">○</span>
+      <span id="toggleLabel">Light</span>
+    </button>
+  </div>
+</header>
+
+<div class="shell">
+
+  <!-- Sidebar -->
+  <aside>
+    <div class="panel-inner">
+
+      <a class="back-link" href="kingston-boundary.html">← Back to boundary explainer</a>
+
+      <div class="panel-section">
+        <div class="section-label">Companion map</div>
+        <div class="panel-title">Notice of Intent Sites — Urban Boundary Expansion Requests</div>
+        <div class="panel-body">18 private landowner sites from the 2024 Notice of Intent process. These are the locations staff reviewed when determining where to move the urban boundary. Watson chose the land quantum. The City chose the geography.</div>
+        <div class="stat-grid">
+          <div class="stat">
+            <div class="stat-label">Sites plotted</div>
+            <div class="stat-value" id="siteCount">18</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">NOI deadline</div>
+            <div class="stat-value">Jan 2024</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Watson land need</div>
+            <div class="stat-value">~745 ha</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Map 15 envelope</div>
+            <div class="stat-value red">~1,176 ha</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div class="section-label">Legend</div>
+        <div class="legend">
+          <div class="legend-item">
+            <span class="legend-swatch" style="background:#8a6a3a"></span>
+            <div class="legend-label"><strong>Residential</strong>Pure residential proposals</div>
+          </div>
+          <div class="legend-item">
+            <span class="legend-swatch" style="background:#4a7a6a"></span>
+            <div class="legend-label"><strong>Residential + commercial / institutional</strong>Mixed proposals with non-residential support uses</div>
+          </div>
+          <div class="legend-item">
+            <span class="legend-swatch" style="background:#c41e1e"></span>
+            <div class="legend-label"><strong>Residential + open space</strong>Housing with open-space component</div>
+          </div>
+          <div class="legend-item">
+            <span class="legend-swatch" style="background:#4a5a7a"></span>
+            <div class="legend-label"><strong>Employment / business park / rural industrial</strong>Non-residential expansion requests</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div class="section-label">Filter by category</div>
+        <div class="filter-chips" id="filters"></div>
+        <button class="fit-btn" id="fitAllBtn">Fit all sites</button>
+      </div>
+
+      <div class="panel-section">
+        <div class="section-label">All sites — <span id="visibleCount">18</span> shown</div>
+        <div class="site-list" id="siteList"></div>
+        <div class="source-note">Source: City of Kingston Report 24-172, Exhibit B — Urban Boundary Expansion Notice of Intent Mapping (August 2024). Point locations assigned from street addresses in the exhibits. Official exhibit maps are the controlling source.</div>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- Map -->
+  <main class="map-wrap">
+    <div id="map" aria-label="Map of Kingston urban boundary Notice of Intent sites"></div>
+    <div class="floating-note">
+      <strong>Note on accuracy</strong>
+      Approximate point locations assigned from street addresses in Report 24-172 Exhibit B. Official exhibit maps remain the controlling source for interpretation.
+    </div>
+  </main>
+
+</div>
+
+<script>
+  // ── Data ──
+  const sites = [
+    {name:'1324–1332 Westbrook Rd',    lat:44.2868, lng:-76.6415, use:'Residential',                                              density:'37.5 units/ha',                      category:'residential'},
+    {name:'3125 Creekford Rd',          lat:44.2896, lng:-76.6508, use:'Residential',                                              density:'37.5–75.0 units/ha',                 category:'residential'},
+    {name:'3403 Creekford Rd',          lat:44.2925, lng:-76.6432, use:'Residential',                                              density:'40.1 units/ha',                      category:'residential'},
+    {name:'3279 Creekford Rd',          lat:44.2911, lng:-76.6472, use:'Residential',                                              density:'37.6 units/ha',                      category:'residential'},
+    {name:'3606 Princess St',           lat:44.2708, lng:-76.6588, use:'Residential + Open Space',                                 density:'37.5 units/ha',                      category:'res_open'},
+    {name:'2250 Burbrook Rd',           lat:44.3375, lng:-76.7192, use:'Residential + Commercial',                                 density:'Low to mid',                         category:'res_mix'},
+    {name:'1736 Perth Rd',              lat:44.3252, lng:-76.5716, use:'Residential + Open Space',                                 density:'37.5 units/ha',                      category:'res_open'},
+    {name:'1702 Battersea Rd',          lat:44.3204, lng:-76.5148, use:'Residential + Open Space',                                 density:'37.5 units/ha',                      category:'res_open'},
+    {name:'1660–1674 Sydenham Rd',     lat:44.2856, lng:-76.5712, use:'Rural Industrial',                                         density:'N/A',                                category:'employment'},
+    {name:'1358 Perth Rd',              lat:44.3108, lng:-76.5845, use:'Business Park / Industrial',                               density:'N/A',                                category:'employment'},
+    {name:'1623 Highway 15',            lat:44.2768, lng:-76.4696, use:'Residential + Commercial + Open Space + Institutional',    density:'40 units/ha',                        category:'res_mix'},
+    {name:'1376 Butternut Creek Rd',    lat:44.2563, lng:-76.4318, use:'Residential',                                              density:'24 units/ha',                        category:'residential'},
+    {name:'811 Gore Rd',                lat:44.2522, lng:-76.4055, use:'Residential',                                              density:'TBD',                                category:'residential'},
+    {name:'630 Gore Rd',                lat:44.2488, lng:-76.4201, use:'Residential + Open Space',                                 density:'37.6 units/ha',                      category:'res_open'},
+    {name:'1587 Highway 2',             lat:44.2235, lng:-76.3858, use:'Residential',                                              density:'5.3 units/ha',                       category:'residential'},
+    {name:'1052 Highway 2',             lat:44.2328, lng:-76.4283, use:'Residential + Commercial',                                 density:'587 lots; apts at 62–185 units/ha',  category:'res_mix'},
+    {name:'790 Highway 2',              lat:44.2388, lng:-76.4476, use:'Residential',                                              density:'57 units/ha',                        category:'residential'},
+    {name:'697 Rogers Side Rd',         lat:44.2458, lng:-76.4652, use:'Residential',                                              density:'Subject to OPA/ZBA',                 category:'residential'},
+  ];
+
+  const categoryMeta = {
+    residential: { label:'Residential',                              color:'#8a6a3a' },
+    res_mix:     { label:'Residential + commercial / institutional', color:'#4a7a6a' },
+    res_open:    { label:'Residential + open space',                 color:'#c41e1e' },
+    employment:  { label:'Employment / business park / industrial',  color:'#4a5a7a' },
+  };
+
+  // ── Hoist map and tileLayer so setTheme closure can reference them ──
+  let map;
+  let tileLayer;
+
+  // ── Theme ──
+  const html = document.documentElement;
+  const toggle = document.getElementById('themeToggle');
+  const icon = document.getElementById('toggleIcon');
+  const label = document.getElementById('toggleLabel');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+  const saved = localStorage.getItem('delusioneers-theme');
+  const initialDark = saved ? saved === 'dark' : prefersDark.matches;
+
+  function setTheme(dark) {
+    html.setAttribute('data-theme', dark ? 'dark' : 'light');
+    icon.textContent = dark ? '●' : '○';
+    label.textContent = dark ? 'Dark' : 'Light';
+    if (map && tileLayer) {
+      map.removeLayer(tileLayer);
+      tileLayer = L.tileLayer(
+        dark
+          ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+          : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+        { maxZoom:19, attribution:'&copy; OpenStreetMap contributors &copy; CARTO' }
+      ).addTo(map);
+    }
+  }
+
+  // ── Map init ──
+  map = L.map('map', { zoomControl:true }).setView([44.249, -76.54], 11);
+  // Force tile render after container dimensions settle
+  setTimeout(() => map.invalidateSize(), 100);
+  window.addEventListener('load', () => map.invalidateSize());
+  tileLayer = L.tileLayer(
+    initialDark
+      ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+      : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+    { maxZoom:19, attribution:'&copy; OpenStreetMap contributors &copy; CARTO' }
+  ).addTo(map);
+
+  // Apply initial theme (tile layer already correct; this syncs toggle UI only)
+  setTheme(initialDark);
+
+  toggle.addEventListener('click', () => {
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    setTheme(!isDark);
+    localStorage.setItem('delusioneers-theme', !isDark ? 'dark' : 'light');
+  });
+  prefersDark.addEventListener('change', e => {
+    if (!localStorage.getItem('delusioneers-theme')) setTheme(e.matches);
+  });
+
+  // ── Layers ──
+  const layers = {};
+  Object.keys(categoryMeta).forEach(k => layers[k] = L.layerGroup().addTo(map));
+
+  function markerIcon(color) {
+    return L.divIcon({
+      className: '',
+      html: `<span style="display:block;width:14px;height:14px;background:${color};border:2px solid rgba(245,240,232,0.9);box-shadow:0 1px 6px rgba(0,0,0,0.3)"></span>`,
+      iconSize: [14,14],
+      iconAnchor: [7,7],
+      popupAnchor: [0,-8]
+    });
+  }
+
+  let activeCard = null;
+
+  sites.forEach((site, i) => {
+    const meta = categoryMeta[site.category];
+    const marker = L.marker([site.lat, site.lng], { icon: markerIcon(meta.color) });
+    marker.bindPopup(`
+      <div class="popup-title">${site.name}</div>
+      <span class="popup-label">Proposed use</span>
+      <div class="popup-row">${site.use}</div>
+      <span class="popup-label">Proposed density</span>
+      <div class="popup-row">${site.density}</div>
+      <span class="popup-label">Category</span>
+      <div class="popup-row">${meta.label}</div>
+    `);
+    marker.on('click', () => {
+      map.flyTo([site.lat, site.lng], Math.max(map.getZoom(), 13), {duration:0.6});
+      highlightCard(i);
+    });
+    site.marker = marker;
+    layers[site.category].addLayer(marker);
+  });
+
+  const featureGroup = L.featureGroup(sites.map(s => s.marker));
+  function fitAll() { map.fitBounds(featureGroup.getBounds().pad(0.12)); }
+  fitAll();
+  document.getElementById('fitAllBtn').addEventListener('click', fitAll);
+
+  // ── Filters ──
+  const filtersEl = document.getElementById('filters');
+  const activeCategories = new Set(Object.keys(categoryMeta));
+
+  Object.entries(categoryMeta).forEach(([key, meta]) => {
+    const btn = document.createElement('button');
+    btn.className = 'chip';
+    btn.setAttribute('data-active', 'true');
+    btn.setAttribute('data-category', key);
+    btn.innerHTML = `<span class="chip-dot" style="background:${meta.color}"></span>${meta.label}`;
+    btn.addEventListener('click', () => {
+      const active = btn.getAttribute('data-active') === 'true';
+      btn.setAttribute('data-active', String(!active));
+      if (active) {
+        map.removeLayer(layers[key]);
+        activeCategories.delete(key);
+      } else {
+        map.addLayer(layers[key]);
+        activeCategories.add(key);
+      }
+      updateSiteList();
+    });
+    filtersEl.appendChild(btn);
+  });
+
+  // ── Site list ──
+  const siteListEl = document.getElementById('siteList');
+  const cards = [];
+
+  function highlightCard(i) {
+    if (activeCard !== null) cards[activeCard].classList.remove('active');
+    cards[i].classList.add('active');
+    activeCard = i;
+    cards[i].scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }
+
+  function updateSiteList() {
+    let visible = 0;
+    sites.forEach((site, i) => {
+      const show = activeCategories.has(site.category);
+      cards[i].style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    document.getElementById('visibleCount').textContent = String(visible);
+  }
+
+  sites.forEach((site, i) => {
+    const meta = categoryMeta[site.category];
+    const card = document.createElement('article');
+    card.className = 'site-card';
+    card.innerHTML = `
+      <div class="site-name">${site.name}</div>
+      <div class="site-meta">${site.use}</div>
+      <div class="site-meta">Density: ${site.density}</div>
+      <span class="site-category-tag" style="background:${meta.color}">${meta.label}</span>
+    `;
+    card.addEventListener('click', () => {
+      map.flyTo([site.lat, site.lng], 13, {duration:0.7});
+      site.marker.openPopup();
+      highlightCard(i);
+    });
+    siteListEl.appendChild(card);
+    cards.push(card);
+  });
+</script>
+</body>
+</html>
