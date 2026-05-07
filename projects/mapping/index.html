@@ -56,11 +56,11 @@
     canvas{display:block;width:100%!important;height:100%!important;}
     .overlay-note{position:absolute;bottom:1rem;right:1rem;max-width:300px;z-index:2;background:color-mix(in srgb,var(--color-surface-2) 82%,transparent);border:1px solid var(--color-border);border-radius:var(--r-lg);padding:var(--sp4);box-shadow:var(--sh-md);backdrop-filter:blur(14px);}
     .overlay-note p{color:var(--color-muted);font-size:var(--text-sm);}
-    .tooltip{position:fixed;pointer-events:none;z-index:4;max-width:280px;padding:.85rem 1rem;border-radius:var(--r-md);background:rgba(10,12,14,.92);color:#f4f1ea;border:1px solid rgba(255,255,255,.12);box-shadow:var(--sh-md);transform:translate(14px,14px);opacity:0;transition:opacity .15s ease;}
+    .tooltip{position:fixed;pointer-events:none;z-index:4;max-width:290px;padding:.85rem 1rem;border-radius:var(--r-md);background:rgba(10,12,14,.92);color:#f4f1ea;border:1px solid rgba(255,255,255,.12);box-shadow:var(--sh-md);transform:translate(14px,14px);opacity:0;transition:opacity .15s ease;}
     .tooltip.visible{opacity:1;}
     .tooltip strong{display:block;font-size:.98rem;margin-bottom:.2rem;}
     .tooltip span{display:block;font-size:.82rem;color:rgba(244,241,234,.72);margin-bottom:.4rem;}
-    .tooltip p{font-size:.9rem;line-height:1.45;}
+    .tooltip p{font-size:.88rem;line-height:1.45;}
     .loading-badge{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(10,12,14,.82);color:#b2aea8;font-size:.85rem;padding:.6rem 1.1rem;border-radius:var(--r-full);border:1px solid rgba(255,255,255,.1);pointer-events:none;z-index:3;transition:opacity .4s ease;}
     @media(max-width:920px){body{overflow:auto;}.app{grid-template-columns:1fr;height:auto;overflow:visible;}.sidebar{height:auto;overflow-y:visible;border-right:none;border-bottom:1px solid var(--color-border);}.globe-stage{height:68dvh;}.overlay-note{left:1rem;right:1rem;max-width:none;}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
@@ -72,12 +72,12 @@
     <div class="brand">
       <div class="logo-wrap">
         <svg class="logo" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="26" stroke="currentColor" stroke-width="3.5"/><path d="M9 32h46M32 6c7 7 11 16 11 26S39 51 32 58M32 6C25 13 21 22 21 32s4 19 11 26M14 19c5 4 11 6 18 6 8 0 14-2 18-6M14 45c5-4 11-6 18-6 8 0 14 2 18 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
-        <div><h1>Energy Globe</h1><p>Speculative coverage zones for continent-scale energy sources.</p></div>
+        <div><h1>Energy Globe</h1><p>Continent-scale energy possibilities mapped as speculative coverage zones.</p></div>
       </div>
       <button class="icon-btn" id="themeToggle" aria-label="Switch theme"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
     </div>
     <section class="lede">
-      <div class="meta"><span class="chip">3D globe</span><span class="chip">Coverage zones</span><span class="chip">Speculative scale</span></div>
+      <div class="meta"><span class="chip">17 zones</span><span class="chip">Coverage overlay</span><span class="chip">Speculative scale</span></div>
       <h2>Where geography becomes an energy system.</h2>
       <p>Shaded zones show the area each source could theoretically power. Zones overlap — that's the point.</p>
     </section>
@@ -95,10 +95,12 @@
     <section class="panel">
       <h3>Legend</h3>
       <div class="legend">
-        <div class="legend-item"><span class="legend-swatch" style="background:#38bdf8"></span>Hydropower corridors</div>
-        <div class="legend-item"><span class="legend-swatch" style="background:#f59e0b"></span>Solar macro-regions</div>
-        <div class="legend-item"><span class="legend-swatch" style="background:#a78bfa"></span>Geothermal provinces</div>
-        <div class="legend-item"><span class="legend-swatch" style="background:#4ade80"></span>Wind and tidal zones</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:#38bdf8"></span>Hydropower</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:#f59e0b"></span>Solar</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:#a78bfa"></span>Geothermal</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:#4ade80"></span>Wind</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:#22d3ee"></span>Tidal / Marine</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:#fb923c"></span>Mixed / Multi-source</div>
       </div>
       <p class="footnote" style="margin-top:.75rem">Drag to rotate · scroll to zoom · click marker or toggle to isolate</p>
     </section>
@@ -107,7 +109,7 @@
   <main class="globe-stage">
     <div id="scene"></div>
     <div class="loading-badge" id="loadingBadge">Loading Earth geography…</div>
-    <div class="overlay-note"><p>Zones show theoretical reach assuming transmission and storage were solved — not current infrastructure.</p></div>
+    <div class="overlay-note"><p>Zones show theoretical reach assuming transmission and storage were solved — not current infrastructure. Overlap is intentional.</p></div>
     <div id="tooltip" class="tooltip" role="status" aria-live="polite"></div>
   </main>
 </div>
@@ -116,10 +118,9 @@
 import * as THREE from 'https://esm.sh/three@0.161.0';
 import { OrbitControls } from 'https://esm.sh/three@0.161.0/examples/jsm/controls/OrbitControls.js';
 
-// ── Project data ─────────────────────────────────────────────────────────────
-// coverageAngle: spherical cap half-angle in degrees — how far the zone spreads
-// from the source point across the globe surface
+// ── Project data ──────────────────────────────────────────────────────────────
 const PROJECTS = [
+  // ── Original 8 ──
   {
     id:'congo', name:'Congo Basin / Grand Inga', region:'Africa', type:'Hydropower',
     color:'#38bdf8', lat:-5.52, lon:13.62, scale:'Africa-wide', coverageAngle:42,
@@ -127,7 +128,7 @@ const PROJECTS = [
   },
   {
     id:'sahara', name:'Sahara Solar Belt', region:'Europe / North Africa', type:'Solar',
-    color:'#f59e0b', lat:23.5, lon:13, scale:'Intercontinental', coverageAngle:48,
+    color:'#f59e0b', lat:23.5, lon:13, scale:'Intercontinental', coverageAngle:50,
     summary:'The Sahara has so much insolation that a fraction of its surface is used in thought experiments about powering all of Europe and Africa combined.'
   },
   {
@@ -157,12 +158,65 @@ const PROJECTS = [
   },
   {
     id:'fundy', name:'Bay of Fundy / North Atlantic Marine Power', region:'Atlantic Canada', type:'Tidal',
-    color:'#4ade80', lat:45.35, lon:-64.4, scale:'Regional niche giant', coverageAngle:25,
+    color:'#22d3ee', lat:45.35, lon:-64.4, scale:'Regional niche giant', coverageAngle:25,
     summary:'The Bay of Fundy\'s extreme tidal range and the broader North Atlantic marine environment represent immense but infrastructure-heavy marine energy resources for the northeastern seaboard.'
+  },
+
+  // ── Central Asia ──
+  {
+    id:'centralasia', name:'Central Asian Hydro–Wind–Solar Triangle', region:'Kazakhstan · Kyrgyzstan · Tajikistan · Uzbekistan', type:'Mixed',
+    color:'#fb923c', lat:43, lon:75, scale:'Regional backbone', coverageAngle:38,
+    summary:'Mountain hydropower in the east, massive steppe wind, and high-insolation southern solar combine across the five Central Asian states into a potential green energy super-corridor. Wind potential alone is estimated at up to 354,000 MW, solar at over 3,700,000 MW — even a fraction, coordinated, redraws the post-Soviet grid.'
+  },
+  {
+    id:'hkh', name:'Hindu Kush–Himalaya Renewable Spine', region:'Afghanistan · Pakistan · India · Nepal · Bhutan · China · Myanmar', type:'Mixed',
+    color:'#fb923c', lat:28, lon:83, scale:'South Asia backbone', coverageAngle:40,
+    summary:'ICIMOD estimates ~635 GW of viable hydropower in HKH hills and mountains, with nearly 3,000 GW potential for solar and wind in the region alone — over 3.5 TW total. A ridge-line grid along the Third Pole could underwrite much of South Asia\'s decarbonisation if politics and hydrological risk were solved.'
+  },
+
+  // ── South / East Asia ──
+  {
+    id:'southasiasolar', name:'South Asia Solar–Offshore Wind Rim', region:'India · Pakistan · Bangladesh · Sri Lanka', type:'Solar',
+    color:'#f59e0b', lat:22, lon:78, scale:'1.8 billion people', coverageAngle:36,
+    summary:'Very high solar irradiance across India and Pakistan combined with strong offshore wind potential in the Arabian Sea and Bay of Bengal positions the monsoon rim as a dual solar–offshore-wind engine for the most populous energy market on earth.'
+  },
+  {
+    id:'eastasiawind', name:'East Asian Offshore Wind / Kuroshio Belt', region:'China · Japan · Korea · Taiwan', type:'Wind',
+    color:'#4ade80', lat:33, lon:125, scale:'Regional supergrid', coverageAngle:30,
+    summary:'The Yellow Sea, East China Sea, and seas off Japan host some of the world\'s strongest offshore wind resources. The Kuroshio Current adds a marine energy layer. Resource mapping suggests East Asian shelf seas can host hundreds of GW of offshore wind, anchoring a Northwest Pacific super-cluster.'
+  },
+
+  // ── Oceania ──
+  {
+    id:'australia', name:'Australian Interior Solar–Wind Plateau', region:'Australia', type:'Mixed',
+    color:'#fb923c', lat:-31, lon:145, scale:'Indo-Pacific exporter', coverageAngle:42,
+    summary:'World-class onshore wind and solar across Australia\'s interior and coasts — renewables already supply ~36–40% of Australian power. In "mega-grid" scenarios Australia exports green electricity and hydrogen to Asia via undersea HVDC and hydrogen tankers.'
+  },
+  {
+    id:'newzealand', name:'New Zealand Hydro–Wind Islands', region:'New Zealand', type:'Wind',
+    color:'#4ade80', lat:-39, lon:176, scale:'Regional lab', coverageAngle:20,
+    summary:'New Zealand already runs near 85–90% renewable electricity, largely hydro and wind. Its per-capita renewable base is enormous relative to population, making it a functioning real-world lab for high-renewables grid operation and a candidate export node for the Pacific.'
+  },
+
+  // ── Western North America ──
+  {
+    id:'cascadia', name:'Cascadia Hydro–Wind–Geothermal Corridor', region:'BC · Washington · Oregon · Northern California', type:'Mixed',
+    color:'#fb923c', lat:46, lon:-120, scale:'Western grid backbone', coverageAngle:32,
+    summary:'Legacy Columbia and Peace River hydropower, excellent Pacific coastal and onshore wind, and significant Cascade Range geothermal combine into a continuous corridor from Yukon to Northern California — often framed as the low-carbon backbone of the Western Interconnect.'
+  },
+  {
+    id:'greatbasin', name:'Great Basin–Rockies Geothermal & Desert Solar', region:'Nevada · Utah · Arizona · New Mexico', type:'Mixed',
+    color:'#fb923c', lat:39, lon:-115, scale:'Interior West anchor', coverageAngle:30,
+    summary:'Nevada and Utah hold some of the world\'s best geothermal resources; the desert Southwest has world-class solar insolation; plateau wind fills gaps. Interior West analyses increasingly cast this region as the firm-power complement to coastal renewables for all of Western North America.'
+  },
+  {
+    id:'alaska', name:'Gulf of Alaska / Aleutian Wind & Marine Frontier', region:'Alaska · North Pacific', type:'Tidal',
+    color:'#22d3ee', lat:55, lon:-145, scale:'Cold-ocean frontier', coverageAngle:28,
+    summary:'Sustained gale-force winds and strong wave energy across the Gulf of Alaska and Aleutian chain represent a massive but remote marine energy frontier, repeatedly flagged in resource assessments as a potential anchor for a future pan-Pacific offshore grid.'
   },
 ];
 
-const FILTERS = ['All','Hydropower','Solar','Geothermal','Wind','Tidal'];
+const FILTERS = ['All','Hydropower','Solar','Geothermal','Wind','Tidal','Mixed'];
 const state = { activeFilter:'All', selectedId:null, visibleIds:new Set(PROJECTS.map(p=>p.id)) };
 
 // ── UI ────────────────────────────────────────────────────────────────────────
@@ -222,154 +276,102 @@ const sun = new THREE.DirectionalLight(0xddeeff,1.6);
 sun.position.set(4,3,6); scene.add(sun);
 
 // Stars
-const sp = new Float32Array(1800*3);
+const sp=new Float32Array(1800*3);
 for(let i=0;i<1800;i++){const r=40+Math.random()*65,t=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);sp[i*3]=r*Math.sin(ph)*Math.cos(t);sp[i*3+1]=r*Math.cos(ph);sp[i*3+2]=r*Math.sin(ph)*Math.sin(t);}
 const sg=new THREE.BufferGeometry();sg.setAttribute('position',new THREE.BufferAttribute(sp,3));
 scene.add(new THREE.Points(sg,new THREE.PointsMaterial({color:'#cbd5e1',size:.14,transparent:true,opacity:.6})));
 
-const R = 2.2;
-const globeMat = new THREE.MeshStandardMaterial({color:0x1a4a8a,metalness:.05,roughness:.88,emissive:new THREE.Color('#040d1c'),emissiveIntensity:.5});
-const globe = new THREE.Mesh(new THREE.SphereGeometry(R,96,96),globeMat);
-const globeGrp = new THREE.Group();
+const R=2.2;
+const globeMat=new THREE.MeshStandardMaterial({color:0x1a4a8a,metalness:.05,roughness:.88,emissive:new THREE.Color('#040d1c'),emissiveIntensity:.5});
+const globe=new THREE.Mesh(new THREE.SphereGeometry(R,96,96),globeMat);
+const globeGrp=new THREE.Group();
 globeGrp.add(globe);
 globeGrp.add(new THREE.Mesh(new THREE.SphereGeometry(R*1.045,64,64),new THREE.MeshBasicMaterial({color:0x7dd3fc,transparent:true,opacity:.07,side:THREE.BackSide})));
 scene.add(globeGrp);
 
 function ll2v(lat,lon,r=R){
-  const phi=(90-lat)*Math.PI/180, t=(lon+180)*Math.PI/180;
+  const phi=(90-lat)*Math.PI/180,t=(lon+180)*Math.PI/180;
   return new THREE.Vector3(-(r*Math.sin(phi)*Math.cos(t)),r*Math.cos(phi),r*Math.sin(phi)*Math.sin(t));
 }
 
-// ── Coverage zone meshes ──────────────────────────────────────────────────────
-// Each zone is a spherical cap built as a fan of triangles sitting just above
-// the globe surface. The cap is centred on the source point and spans
-// coverageAngle degrees of arc in all directions.
-
-function makeSphericalCap(lat, lon, angleDeg, color) {
-  const angleRad = angleDeg * Math.PI / 180;
-  const r = R + 0.012; // just above globe surface
-  const segments = 64;  // angular subdivisions around the cap
-  const rings = 20;     // radial subdivisions from centre to edge
-
-  const positions = [];
-  const indices = [];
-
-  // Centre of the cap in world space
-  const centre = ll2v(lat, lon, r);
-
-  // Build two orthogonal tangent vectors at the source point
-  const normal = centre.clone().normalize();
-  const up = Math.abs(normal.y) < 0.99 ? new THREE.Vector3(0,1,0) : new THREE.Vector3(1,0,0);
-  const tangU = new THREE.Vector3().crossVectors(up, normal).normalize();
-  const tangV = new THREE.Vector3().crossVectors(normal, tangU).normalize();
-
-  // Generate vertices ring by ring from centre outward
-  for (let ri = 0; ri <= rings; ri++) {
-    const capAngle = (ri / rings) * angleRad; // angle from centre to this ring
-    const sinCap = Math.sin(capAngle);
-    const cosCap = Math.cos(capAngle);
-
-    for (let si = 0; si <= segments; si++) {
-      const phi = (si / segments) * Math.PI * 2;
-      // Point on a unit sphere offset from the centre by capAngle
-      const px = normal.x * cosCap + (tangU.x * Math.cos(phi) + tangV.x * Math.sin(phi)) * sinCap;
-      const py = normal.y * cosCap + (tangU.y * Math.cos(phi) + tangV.y * Math.sin(phi)) * sinCap;
-      const pz = normal.z * cosCap + (tangU.z * Math.cos(phi) + tangV.z * Math.sin(phi)) * sinCap;
-      const v = new THREE.Vector3(px, py, pz).normalize().multiplyScalar(r);
-      positions.push(v.x, v.y, v.z);
+// ── Spherical cap builder ─────────────────────────────────────────────────────
+function makeSphericalCap(lat,lon,angleDeg,color){
+  const angleRad=angleDeg*Math.PI/180;
+  const r=R+0.012;
+  const SEG=72, RINGS=24;
+  const positions=[], indices=[];
+  const centre=ll2v(lat,lon,r);
+  const normal=centre.clone().normalize();
+  const up=Math.abs(normal.y)<0.99?new THREE.Vector3(0,1,0):new THREE.Vector3(1,0,0);
+  const tU=new THREE.Vector3().crossVectors(up,normal).normalize();
+  const tV=new THREE.Vector3().crossVectors(normal,tU).normalize();
+  for(let ri=0;ri<=RINGS;ri++){
+    const ca=(ri/RINGS)*angleRad;
+    const sc=Math.sin(ca),cc=Math.cos(ca);
+    for(let si=0;si<=SEG;si++){
+      const phi=(si/SEG)*Math.PI*2;
+      const v=new THREE.Vector3(
+        normal.x*cc+(tU.x*Math.cos(phi)+tV.x*Math.sin(phi))*sc,
+        normal.y*cc+(tU.y*Math.cos(phi)+tV.y*Math.sin(phi))*sc,
+        normal.z*cc+(tU.z*Math.cos(phi)+tV.z*Math.sin(phi))*sc
+      ).normalize().multiplyScalar(r);
+      positions.push(v.x,v.y,v.z);
     }
   }
-
-  // Build triangle indices
-  for (let ri = 0; ri < rings; ri++) {
-    for (let si = 0; si < segments; si++) {
-      const a = ri * (segments+1) + si;
-      const b = a + 1;
-      const c = a + (segments+1);
-      const d = c + 1;
-      indices.push(a, c, b);
-      indices.push(b, c, d);
+  for(let ri=0;ri<RINGS;ri++){
+    for(let si=0;si<SEG;si++){
+      const a=ri*(SEG+1)+si,b=a+1,c=a+(SEG+1),d=c+1;
+      indices.push(a,c,b,b,c,d);
     }
   }
-
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(positions), 3));
+  const geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.BufferAttribute(new Float32Array(positions),3));
   geo.setIndex(indices);
   geo.computeVertexNormals();
-
-  const col = new THREE.Color(color);
-  const mat = new THREE.MeshBasicMaterial({
-    color: col,
-    transparent: true,
-    opacity: 0.22,
-    side: THREE.FrontSide,
-    depthWrite: false,   // allow overlapping without z-fighting
-  });
-
-  return new THREE.Mesh(geo, mat);
+  return new THREE.Mesh(geo,new THREE.MeshBasicMaterial({
+    color:new THREE.Color(color),transparent:true,opacity:0.20,side:THREE.FrontSide,depthWrite:false
+  }));
 }
 
-// ── Marker meshes ─────────────────────────────────────────────────────────────
-const mGrp = new THREE.Group();
-scene.add(mGrp);
-const capGrp = new THREE.Group();
-scene.add(capGrp);
+// ── Build markers + caps ──────────────────────────────────────────────────────
+const mGrp=new THREE.Group(), capGrp=new THREE.Group();
+scene.add(capGrp); scene.add(mGrp);
+const raycaster=new THREE.Raycaster(), ptr=new THREE.Vector2();
+const mMeshes=[];
+const ringGeo=new THREE.RingGeometry(.065,.095,32);
+const coreGeo=new THREE.SphereGeometry(.048,16,16);
 
-const raycaster = new THREE.Raycaster(), ptr = new THREE.Vector2();
-const mMeshes = [], capMeshes = [];
-const ringGeo = new THREE.RingGeometry(.075,.11,32);
-const coreGeo = new THREE.SphereGeometry(.055,18,18);
-
-PROJECTS.forEach(p => {
-  const pos = ll2v(p.lat, p.lon, R+.02);
-  const col = new THREE.Color(p.color);
-
-  // Marker dot
-  const core = new THREE.Mesh(coreGeo, new THREE.MeshBasicMaterial({color:col}));
-  core.position.copy(pos);
-  core.userData.pid = p.id;
-  mGrp.add(core);
-
-  // Marker ring
-  const ring = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({color:col,side:THREE.DoubleSide,transparent:true,opacity:.9}));
-  ring.position.copy(pos);
-  ring.lookAt(new THREE.Vector3(0,0,0));
-  ring.scale.setScalar(1.35);
-  ring.userData.pid = p.id;
-  mGrp.add(ring);
-
-  // Point light halo
-  const halo = new THREE.PointLight(p.color, .6, 2.0, 2.4);
+PROJECTS.forEach(p=>{
+  const pos=ll2v(p.lat,p.lon,R+.02),col=new THREE.Color(p.color);
+  const core=new THREE.Mesh(coreGeo,new THREE.MeshBasicMaterial({color:col}));
+  core.position.copy(pos); core.userData.pid=p.id;
+  const ring=new THREE.Mesh(ringGeo,new THREE.MeshBasicMaterial({color:col,side:THREE.DoubleSide,transparent:true,opacity:.85}));
+  ring.position.copy(pos); ring.lookAt(new THREE.Vector3(0,0,0)); ring.scale.setScalar(1.3);
+  ring.userData.pid=p.id;
+  const halo=new THREE.PointLight(p.color,.5,1.8,2.4);
   halo.position.copy(pos.clone().multiplyScalar(1.08));
   scene.add(halo);
-
-  // Coverage cap
-  const cap = makeSphericalCap(p.lat, p.lon, p.coverageAngle, p.color);
-  cap.userData.pid = p.id;
+  mGrp.add(core); mGrp.add(ring);
+  const cap=makeSphericalCap(p.lat,p.lon,p.coverageAngle,p.color);
+  cap.userData.pid=p.id;
   capGrp.add(cap);
-
-  mMeshes.push({p, core, ring, halo, cap});
-  capMeshes.push({id:p.id, cap});
+  mMeshes.push({p,core,ring,halo,cap});
 });
 
 function updateVis(){
   mMeshes.forEach(({p,core,ring,halo,cap})=>{
-    const vis = state.visibleIds.has(p.id);
-    const sel = state.selectedId === p.id;
-    core.visible = ring.visible = halo.visible = cap.visible = vis;
-    core.scale.setScalar(sel ? 1.7 : 1.15);
-    ring.scale.setScalar(sel ? 2.15 : 1.35);
-    ring.material.opacity = sel ? 1 : .88;
-    // Boost opacity when selected, dim when others are selected
-    cap.material.opacity = state.selectedId
-      ? (sel ? 0.38 : 0.10)
-      : 0.22;
+    const vis=state.visibleIds.has(p.id), sel=state.selectedId===p.id;
+    core.visible=ring.visible=halo.visible=cap.visible=vis;
+    core.scale.setScalar(sel?1.7:1.1);
+    ring.scale.setScalar(sel?2.0:1.3);
+    ring.material.opacity=sel?1:.85;
+    cap.material.opacity=state.selectedId?(sel?0.40:0.08):0.20;
   });
 }
 
 function focusOn(id){
-  const p = PROJECTS.find(q=>q.id===id);
-  if(p){ camera.position.copy(ll2v(p.lat,p.lon,6.2)); orbit.update(); }
+  const p=PROJECTS.find(q=>q.id===id);
+  if(p){camera.position.copy(ll2v(p.lat,p.lon,6.2));orbit.update();}
 }
 
 // ── Earth texture ─────────────────────────────────────────────────────────────
@@ -438,7 +440,7 @@ async function buildEarthTex(){
     ].forEach(pts=>{ctx.beginPath();pts.forEach(([lon,lat],i)=>{const[x,y]=proj(lon,lat);i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.closePath();ctx.fill();});
   }
 
-  ctx.strokeStyle='rgba(255,255,255,.035)';ctx.lineWidth=1;
+  ctx.strokeStyle='rgba(255,255,255,.03)';ctx.lineWidth=1;
   for(let lat=-80;lat<=80;lat+=20){const y=((90-lat)/180)*H;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
   for(let lon=-150;lon<=180;lon+=30){const x=((lon+180)/360)*W;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
 
@@ -447,7 +449,7 @@ async function buildEarthTex(){
   return tex;
 }
 
-// ── Pointer / click ───────────────────────────────────────────────────────────
+// ── Input ─────────────────────────────────────────────────────────────────────
 renderer.domElement.addEventListener('pointermove',e=>{
   const rc=renderer.domElement.getBoundingClientRect();
   ptr.x=((e.clientX-rc.left)/rc.width)*2-1;ptr.y=-((e.clientY-rc.top)/rc.height)*2+1;
@@ -479,13 +481,15 @@ $tt.addEventListener('click',()=>{theme=theme==='dark'?'light':'dark';document.d
 function animate(){
   requestAnimationFrame(animate);
   globe.rotation.y+=.0009;
-  // Keep caps locked to globe rotation
   capGrp.rotation.y=globe.rotation.y;
   mGrp.rotation.y=globe.rotation.y;
   raycaster.setFromCamera(ptr,camera);
   const hits=raycaster.intersectObjects(mGrp.children,false).filter(h=>h.object.userData.pid);
-  if(hits.length){const p=PROJECTS.find(q=>q.id===hits[0].object.userData.pid);$tip.innerHTML=`<strong>${p.name}</strong><span>${p.type} · ${p.region}</span><p>${p.summary}</p>`;$tip.classList.add('visible');}
-  else $tip.classList.remove('visible');
+  if(hits.length){
+    const p=PROJECTS.find(q=>q.id===hits[0].object.userData.pid);
+    $tip.innerHTML=`<strong>${p.name}</strong><span>${p.type} · ${p.region}</span><p>${p.summary}</p>`;
+    $tip.classList.add('visible');
+  } else $tip.classList.remove('visible');
   orbit.update();renderer.render(scene,camera);
 }
 
