@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sources — The Playbook, Part I — The Delusioneers</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+  :root, [data-theme="light"] {
+    --bg: #f5f0e8;
+    --ink: #1a1a1a;
+    --ink-light: #4a4a4a;
+    --ink-faded: #8a8a7a;
+    --red: #c41e1e;
+    --page-width: min(660px, 94vw);
+    --page-bg: #2a2825;
+  }
+  [data-theme="dark"] {
+    --bg: #2a2825;
+    --ink: #f5f0e8;
+    --ink-light: #c8c3b8;
+    --ink-faded: #7a7a6a;
+    --red: #e03030;
+    --page-width: min(660px, 94vw);
+    --page-bg: #1a1816;
+  }
+  body { background: var(--page-bg) !important; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #2a2825;
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    width: var(--page-width);
+    background: var(--bg);
+    margin: 48px 0 80px;
+    padding: 48px;
+    box-shadow: 2px 4px 24px rgba(0,0,0,0.13);
+    background-image: repeating-linear-gradient(
+      0deg, transparent, transparent 24px,
+      rgba(0,0,0,0.04) 24px, rgba(0,0,0,0.04) 25px
+    );
+  }
+
+  .page-header {
+    border-bottom: 2px dashed var(--ink-faded);
+    padding-bottom: 28px;
+    margin-bottom: 32px;
+    text-align: center;
+  }
+  .page-label {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    margin-bottom: 8px;
+  }
+  .page-title {
+    font-family: 'Special Elite', monospace;
+    font-size: 22px;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .page-sub {
+    font-size: 10px;
+    color: var(--ink-faded);
+    letter-spacing: 1px;
+    line-height: 1.8;
+    text-transform: uppercase;
+  }
+
+  .note {
+    font-size: 10.5px;
+    line-height: 1.8;
+    color: var(--ink-light);
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 1px dashed var(--ink-faded);
+  }
+
+  .source-group {
+    margin-bottom: 36px;
+  }
+  .group-label {
+    font-size: 8px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--red);
+    font-weight: 700;
+    margin-bottom: 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--red);
+  }
+
+  .source-entry {
+    margin-bottom: 18px;
+    padding-bottom: 18px;
+    border-bottom: 1px dotted rgba(0,0,0,0.12);
+  }
+  .source-entry:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .source-id {
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: var(--ink-faded);
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+  .source-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 4px;
+    line-height: 1.4;
+  }
+  .source-detail {
+    font-size: 10px;
+    color: var(--ink-light);
+    line-height: 1.6;
+    margin-bottom: 4px;
+  }
+  .source-sections {
+    font-size: 9.5px;
+    color: var(--ink-faded);
+    line-height: 1.6;
+    margin-bottom: 4px;
+  }
+  .source-url {
+    font-size: 9px;
+    color: var(--ink-faded);
+  }
+  .source-url a {
+    color: var(--ink-light);
+    text-decoration: none;
+    word-break: break-all;
+  }
+  .source-url a:hover { color: var(--red); }
+  .source-plays {
+    display: inline-block;
+    margin-top: 5px;
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--red);
+    border: 1px solid var(--red);
+    padding: 2px 6px;
+  }
+
+  .back-link {
+    display: block;
+    text-align: center;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px dashed var(--ink-faded);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+  }
+  .back-link a {
+    color: var(--ink-light);
+    text-decoration: none;
+  }
+  .back-link a:hover { color: var(--red); }
+
+  .footer {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 9px;
+    color: var(--ink-faded);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    line-height: 2.2;
+  }
+
+  @media (max-width: 560px) {
+    .page { padding: 24px 20px; }
+  }
+
+  /* ── Site header ── */
+  .site-header {
+    width: var(--page-width);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0 12px;
+    margin-bottom: 12px;
+  }
+  .site-header-left a {
+    font-family: 'Special Elite', monospace;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #f5f0e8;
+    text-decoration: none;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+  }
+  .site-header-left a:hover { opacity: 1; }
+  .site-header-right { display: flex; align-items: center; gap: 6px; }
+  .header-social { display: flex; align-items: center; gap: 4px; margin-right: 10px; }
+  .header-social-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.45);
+    text-decoration: none;
+    padding: 4px 8px;
+    border: 1px solid rgba(245,240,232,0.12);
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .header-social-link:hover { color: rgba(245,240,232,0.85); border-color: rgba(245,240,232,0.3); }
+  .header-social-icon { display: inline-flex; align-items: center; justify-content: center; gap: 4px; padding: 4px 8px; }
+  .header-social-icon svg { display: block; flex-shrink: 0; }
+  .header-social-icon .icon-label { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 1.5px; text-transform: uppercase; }
+  .header-social-divider { width: 1px; height: 12px; background: rgba(245,240,232,0.12); margin: 0 2px; }
+  .theme-toggle {
+    background: transparent;
+    border: 1px solid rgba(245,240,232,0.12);
+    color: rgba(245,240,232,0.45);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s;
+  }
+  .theme-toggle:hover { color: rgba(245,240,232,0.85); border-color: rgba(245,240,232,0.3); }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header-left">
+    <a href="https://thedelusioneers.ca">The Delusioneers</a>
+  </div>
+  <div class="site-header-right">
+    <nav class="header-social" aria-label="Social links">
+      <a class="header-social-link header-social-icon" href="https://www.threads.net/@jeremycyrilwrites" target="_blank" rel="noopener" aria-label="Threads J">
+        <svg width="11" height="12" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M141.537 88.988a66.667 66.667 0 0 0-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.036l13.779 9.452c5.73-8.695 14.724-10.548 21.348-10.548h.229c8.249.053 14.474 2.452 18.503 7.129 2.932 3.405 4.893 8.111 5.864 14.05-7.314-1.243-15.224-1.626-23.68-1.14-23.82 1.371-39.134 15.264-38.105 34.568.522 9.792 5.4 18.216 13.735 23.719 7.047 4.652 16.124 6.927 25.557 6.412 12.458-.683 22.231-5.436 29.049-14.127 5.178-6.6 8.452-15.153 9.898-25.93 5.937 3.583 10.337 8.298 12.767 13.966 4.132 9.635 4.373 25.468-8.546 38.376-11.319 11.308-24.925 16.2-45.488 16.351-22.809-.169-40.06-7.484-51.275-21.742C35.236 139.966 29.808 120.682 29.605 96c.203-24.682 5.63-43.966 16.133-57.317C56.954 24.425 74.204 17.11 97.013 16.941c22.975.17 40.526 7.52 52.171 21.847 5.71 7.026 10.015 15.86 12.853 26.162l16.147-4.308c-3.44-12.68-8.853-23.606-16.219-32.668C147.036 10.646 125.205 1.205 97.07 1 68.754 1.205 47.189 10.685 32.986 28.23 20.096 43.982 13.491 66.487 13.25 96v.027c.241 29.513 6.846 52.017 19.736 67.769C47.19 181.315 68.754 190.795 97.07 191c25.861-.182 44.084-6.953 59.271-22.123 20.537-20.515 19.984-46.6 13.2-62.525-4.643-10.82-13.585-19.531-28.004-25.364Z"/></svg>
+        <span class="icon-label">J</span>
+      </a>
+      <div class="header-social-divider"></div>
+      <a class="header-social-link header-social-icon" href="https://www.threads.net/@the_delusioneers" target="_blank" rel="noopener" aria-label="Threads D">
+        <svg width="11" height="12" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M141.537 88.988a66.667 66.667 0 0 0-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.036l13.779 9.452c5.73-8.695 14.724-10.548 21.348-10.548h.229c8.249.053 14.474 2.452 18.503 7.129 2.932 3.405 4.893 8.111 5.864 14.05-7.314-1.243-15.224-1.626-23.68-1.14-23.82 1.371-39.134 15.264-38.105 34.568.522 9.792 5.4 18.216 13.735 23.719 7.047 4.652 16.124 6.927 25.557 6.412 12.458-.683 22.231-5.436 29.049-14.127 5.178-6.6 8.452-15.153 9.898-25.93 5.937 3.583 10.337 8.298 12.767 13.966 4.132 9.635 4.373 25.468-8.546 38.376-11.319 11.308-24.925 16.2-45.488 16.351-22.809-.169-40.06-7.484-51.275-21.742C35.236 139.966 29.808 120.682 29.605 96c.203-24.682 5.63-43.966 16.133-57.317C56.954 24.425 74.204 17.11 97.013 16.941c22.975.17 40.526 7.52 52.171 21.847 5.71 7.026 10.015 15.86 12.853 26.162l16.147-4.308c-3.44-12.68-8.853-23.606-16.219-32.668C147.036 10.646 125.205 1.205 97.07 1 68.754 1.205 47.189 10.685 32.986 28.23 20.096 43.982 13.491 66.487 13.25 96v.027c.241 29.513 6.846 52.017 19.736 67.769C47.19 181.315 68.754 190.795 97.07 191c25.861-.182 44.084-6.953 59.271-22.123 20.537-20.515 19.984-46.6 13.2-62.525-4.643-10.82-13.585-19.531-28.004-25.364Z"/></svg>
+        <span class="icon-label">D</span>
+      </a>
+      <div class="header-social-divider"></div>
+      <a class="header-social-link header-social-icon" href="https://www.instagram.com/the_delusioneers" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg width="12" height="12" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <div class="header-social-divider"></div>
+      <a class="header-social-link header-social-icon" href="https://thedelusioneers.substack.com" target="_blank" rel="noopener" aria-label="Substack">
+        <svg width="12" height="12" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
+      </a>
+      <div class="header-social-divider"></div>
+      <a class="header-social-link header-social-icon" href="https://bsky.app/profile/thedelusioneers.bsky.social" target="_blank" rel="noopener" aria-label="Bluesky">
+        <svg width="12" height="11" viewBox="0 0 600 530" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="m135.72 44.03c66.496 49.921 138.02 151.14 164.28 205.46 26.262-54.316 97.782-155.54 164.28-205.46 47.98-36.021 125.72-63.892 125.72 24.795 0 17.712-10.155 148.79-16.111 170.07-20.703 73.984-96.144 92.854-163.25 81.433 117.3 19.964 147.14 86.092 82.697 152.22-122.39 125.59-175.91-31.511-189.63-71.766-2.514-7.3797-3.6904-10.832-3.7077-7.8964-0.0174-2.9357-1.1937 0.51669-3.7077 7.8964-13.714 40.255-67.233 197.36-189.63 71.766-64.444-66.128-34.605-132.26 82.697-152.22-67.108 11.421-142.55-7.4491-163.25-81.433-5.9562-21.282-16.111-152.36-16.111-170.07 0-88.687 77.742-60.816 125.72-24.795z"/></svg>
+      </a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+      <span id="toggleIcon">○</span>
+      <span id="toggleLabel">Light</span>
+    </button>
+  </div>
+</header>
+<div class="page">
+
+  <div class="page-header">
+    <div class="page-label">The Delusioneers — Source Index</div>
+    <div class="page-title">The Playbook, Part I</div>
+    <div class="page-sub">
+      Executive Carve-Out Architecture<br>
+      Ontario / United States Comparative Record<br>
+      All sources primary. All sections cited.
+    </div>
+  </div>
+
+  <div class="note">
+    Every instrument cited in The Playbook, Part I is listed below with its full title, jurisdiction, relevant sections, and primary source URL. Where a statute or executive order was accessed via an official government repository (Ontario e-Laws, GovInfo, Federal Register), that URL is provided. No secondary sources are cited as primary.
+  </div>
+
+  <!-- ONTARIO SOURCES -->
+  <div class="source-group">
+    <div class="group-label">Ontario — Primary Instruments</div>
+
+    <div class="source-entry">
+      <div class="source-id">ONT-01</div>
+      <div class="source-title">Protect Ontario by Unleashing our Economy Act, 2025</div>
+      <div class="source-detail">S.O. 2025, c. 4 — Bill 5 (omnibus, 9 schedules). Royal Assent: March 2025.</div>
+      <div class="source-sections">Sections cited: Schedule 9 (Special Economic Zones Act, 2025 — enacted in full); Schedule 8 (amendments to Rebuilding Ontario Place Act, 2023, EBR exemption); ESA-related schedules (endangered species carve-outs, discretionary exemption provisions).</div>
+      <div class="source-url">Primary: <a href="https://www.ontario.ca/laws/statute/25p04" target="_blank">ontario.ca/laws/statute/25p04</a></div>
+      <div><span class="source-plays">Plays 1, 2, 3, 4, 5</span></div>
+    </div>
+
+    <div class="source-entry">
+      <div class="source-id">ONT-02</div>
+      <div class="source-title">Special Economic Zones Act, 2025</div>
+      <div class="source-detail">Enacted as Schedule 9 to Bill 5 (ONT-01). Standalone Act as of Royal Assent.</div>
+      <div class="source-sections">Sections cited: s. 2 (designation of special economic zones by Lieutenant Governor in Council); s. 3 (designation of vetted projects and trusted proponents by Minister); ss. 6–7 (regulation-making powers: criteria for zones, vetted projects, trusted proponents; specification of which permits, approvals, bylaws modified or exempt within zones).</div>
+      <div class="source-url">Environmental Registry notice (ERO): <a href="https://ero.ontario.ca" target="_blank">ero.ontario.ca</a> — search "Special Economic Zones Act"</div>
+      <div><span class="source-plays">Plays 1, 2, 3</span></div>
+    </div>
+
+    <div class="source-entry">
+      <div class="source-id">ONT-03</div>
+      <div class="source-title">Bill 5, Schedule 8 — Amendments to Rebuilding Ontario Place Act, 2023</div>
+      <div class="source-detail">Amends S.O. 2023 to exempt Ontario Place redevelopment activities from Part II of the Environmental Bill of Rights, 1993.</div>
+      <div class="source-sections">Sections cited: Schedule 8 provisions exempting Ontario Place redevelopment from EBR Part II (public notice and comment requirements for environmentally significant decisions).</div>
+      <div class="source-url">Primary via Bill 5 consolidation: <a href="https://www.ontario.ca/laws/statute/25p04" target="_blank">ontario.ca/laws/statute/25p04</a></div>
+      <div><span class="source-plays">Play 4</span></div>
+    </div>
+
+    <div class="source-entry">
+      <div class="source-id">ONT-04</div>
+      <div class="source-title">Environmental Bill of Rights, 1993</div>
+      <div class="source-detail">S.O. 1993, c. 28. Part II (ss. 15–36): public participation rights on environmentally significant government decisions. Part II rights are what Schedule 8 of Bill 5 removes for Ontario Place.</div>
+      <div class="source-url">Primary: <a href="https://www.ontario.ca/laws/statute/93e28" target="_blank">ontario.ca/laws/statute/93e28</a></div>
+      <div><span class="source-plays">Play 4</span></div>
+    </div>
+
+  </div>
+
+  <!-- U.S. SOURCES -->
+  <div class="source-group">
+    <div class="group-label">United States — Primary Instruments</div>
+
+    <div class="source-entry">
+      <div class="source-id">USA-01</div>
+      <div class="source-title">Executive Order 13766 — Expediting Environmental Reviews and Approvals for High-Priority Infrastructure Projects</div>
+      <div class="source-detail">Signed January 24, 2017. Revoked by Executive Order 13990, January 20, 2021.</div>
+      <div class="source-sections">Sections cited: s. 1 (policy — expedite environmental reviews for infrastructure, especially high-priority projects); s. 2(a) (CEQ Chair authorized to designate infrastructure projects as "high priority" upon request from governor or agency head); s. 2(b) (30-day response requirement); s. 3 (agency heads must provide written explanation to CEQ Chair for any delay in review of designated projects).</div>
+      <div class="source-url">Primary (GovInfo): <a href="https://www.govinfo.gov/content/pkg/DCPD-201700071/pdf/DCPD-201700071.pdf" target="_blank">govinfo.gov — EO 13766</a></div>
+      <div><span class="source-plays">Plays 1, 2, 3</span></div>
+    </div>
+
+    <div class="source-entry">
+      <div class="source-id">USA-02</div>
+      <div class="source-title">Executive Order 13807 — Establishing Discipline and Accountability in the Environmental Review and Permitting Process for Infrastructure Projects</div>
+      <div class="source-detail">Signed August 15, 2017. Revoked by Executive Order 13990, January 20, 2021.</div>
+      <div class="source-sections">Sections cited: s. 2(d) (definition of "major infrastructure project" by reference to 42 U.S.C. 4370m(6) / FAST-41); s. 4 (OMB directed to develop performance accountability system for agencies' environmental review); s. 5(a) ("One Federal Decision" framework — agencies must produce project-specific permitting timetables with strict deadlines); s. 5(d) (projects subject to statutory streamlining regimes under 23 U.S.C. 139, 33 U.S.C. 2348, or 42 U.S.C. 4370m–4370m-12 automatically qualify as high-priority under EO 13766).</div>
+      <div class="source-url">Primary (GovInfo): <a href="https://www.govinfo.gov/content/pkg/FR-2017-08-24/pdf/2017-18134.pdf" target="_blank">govinfo.gov — EO 13807</a></div>
+      <div><span class="source-plays">Plays 1, 2, 3</span></div>
+    </div>
+
+    <div class="source-entry">
+      <div class="source-id">USA-03</div>
+      <div class="source-title">Executive Order 13927 — Accelerating the Nation's Economic Recovery From the COVID-19 Emergency by Expediting Infrastructure Investments and Other Activities</div>
+      <div class="source-detail">Signed June 4, 2020. Revoked by Executive Order 13990, January 20, 2021.</div>
+      <div class="source-sections">Sections cited: s. 1 (COVID-19 economic emergency as justification for expediting infrastructure); ss. 2–3 (agencies directed to use emergency and other authorities under NEPA, ESA, Clean Water Act, and other statutes to expedite environmental reviews and permitting — invoking statutory emergency or streamlining provisions where applicable).</div>
+      <div class="source-url">Primary (Federal Register): <a href="https://www.federalregister.gov/documents/2020/06/09/2020-12584/accelerating-the-nations-economic-recovery-from-the-covid-19-emergency-by-expediting-infrastructure" target="_blank">federalregister.gov — EO 13927</a></div>
+      <div><span class="source-plays">Play 4</span></div>
+    </div>
+
+    <div class="source-entry">
+      <div class="source-id">USA-04</div>
+      <div class="source-title">Tax Cuts and Jobs Act, 2017</div>
+      <div class="source-detail">Pub. L. 115-97. Signed December 22, 2017. Passed via budget reconciliation (simple Senate majority).</div>
+      <div class="source-sections">Sections cited: s. 11081 (ACA individual mandate penalty reduced to $0 — structural ACA modification embedded in tax legislation); corporate tax rate changes (s. 13001); pass-through provisions (ss. 11011–11012). Cited for the structural rhyme on omnibus framing (Play 5), not for substantive policy comparison.</div>
+      <div class="source-url">Primary (GovInfo): <a href="https://www.govinfo.gov/content/pkg/PLAW-115publ97/pdf/PLAW-115publ97.pdf" target="_blank">govinfo.gov — Pub. L. 115-97</a></div>
+      <div><span class="source-plays">Play 5</span></div>
+    </div>
+
+
+    <div class="source-entry">
+      <div class="source-id">USA-05</div>
+      <div class="source-title">Executive Order — Unleashing American Energy</div>
+      <div class="source-detail">Signed January 20, 2025 (second term). In force.</div>
+      <div class="source-sections">Sections cited: s. 5(b): directs the CEQ Chair to provide guidance on implementing NEPA and propose rescinding CEQ's NEPA regulations (40 CFR 1500 et seq.) within 30 days. s. 5(c): CEQ Chair to convene a working group to revise agency-level NEPA implementing regulations. s. 6: agencies shall adhere only to legislated requirements in environmental permitting — all considerations beyond statutory requirements eliminated. Cited as the second-term reinstatement and expansion of the EO 13766/13807 fast-track architecture.</div>
+      <div class="source-url">Primary (White House): <a href="https://www.whitehouse.gov/presidential-actions/2025/01/unleashing-american-energy/" target="_blank">whitehouse.gov — Unleashing American Energy</a></div>
+      <div><span class="source-plays">Plays 1, 2, 3, 4</span></div>
+    </div>
+
+  </div>
+
+  <!-- REVOCATION NOTE -->
+  <div class="source-group">
+    <div class="group-label">Revocation Record — U.S. Instruments</div>
+
+    <div class="source-entry">
+      <div class="source-id">USA-REV</div>
+      <div class="source-title">Executive Order 13990 — Protecting Public Health and the Environment and Restoring Science to Tackle the Climate Crisis</div>
+      <div class="source-detail">Signed January 20, 2021 (Biden). Revoked EO 13766, EO 13807, EO 13927, and related Trump-era infrastructure and environmental orders.</div>
+      <div class="source-sections">EO 13766, EO 13807, and EO 13927 were revoked January 20, 2021 (Biden, EO 13990). On January 20, 2025, the second term's "Unleashing American Energy" (USA-05) reinstated and expanded the same environmental review fast-track architecture, directing CEQ to propose rescinding NEPA regulations in full. The Ontario instruments (Bill 5 / SEZ Act) are currently in force as of April 2026.</div>
+      <div class="source-url">Primary (Federal Register): <a href="https://www.federalregister.gov/documents/2021/01/25/2021-01765/protecting-public-health-and-the-environment-and-restoring-science-to-tackle-the-climate-crisis" target="_blank">federalregister.gov — EO 13990</a></div>
+    </div>
+
+  </div>
+
+  <div class="back-link">
+    <a href="playbook1.html">← Return to The Playbook, Part I</a>
+  </div>
+
+  <div class="footer">
+    <p>The Delusioneers</p>
+    <p>thedelusioneers.substack.com · @the_delusioneers</p>
+    <p style="margin-top: 8px;">All items sourced from primary documents. No secondary sources cited as primary. U.S. instruments: 5 (EOs 13766, 13807, 13927, 13990, Unleashing American Energy 2025).</p>
+  </div>
+
+</div>
+
+<script>
+  // Theme toggle
+  const html = document.documentElement;
+  const toggle = document.getElementById('themeToggle');
+  const icon = document.getElementById('toggleIcon');
+  const label = document.getElementById('toggleLabel');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+  const saved = localStorage.getItem('delusioneers-theme');
+  const initialDark = saved ? saved === 'dark' : prefersDark.matches;
+  function setTheme(dark) {
+    html.setAttribute('data-theme', dark ? 'dark' : 'light');
+    icon.textContent = dark ? '●' : '○';
+    label.textContent = dark ? 'Dark' : 'Light';
+  }
+  setTheme(initialDark);
+  toggle.addEventListener('click', () => {
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    setTheme(!isDark);
+    localStorage.setItem('delusioneers-theme', !isDark ? 'dark' : 'light');
+  });
+  prefersDark.addEventListener('change', (e) => {
+    if (!localStorage.getItem('delusioneers-theme')) setTheme(e.matches);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Playbook, Part I — The Delusioneers</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+  :root, [data-theme="light"] {
+    --bg: #f5f0e8;
+    --bg-dark: #ede6d8;
+    --ink: #1a1a1a;
+    --ink-light: #4a4a4a;
+    --ink-faded: #8a8a7a;
+    --red: #c41e1e;
+    --red-dark: #8b1515;
+    --page-width: min(660px, 94vw);
+    --shadow: 2px 4px 24px rgba(0,0,0,0.13);
+    --page-bg: #2a2825;
+  }
+  [data-theme="dark"] {
+    --bg: #2a2825;
+    --bg-dark: #1e1c1a;
+    --ink: #f5f0e8;
+    --ink-light: #c8c3b8;
+    --ink-faded: #7a7a6a;
+    --red: #e03030;
+    --red-dark: #c41e1e;
+    --page-width: min(660px, 94vw);
+    --shadow: 2px 4px 24px rgba(0,0,0,0.3);
+    --page-bg: #1a1816;
+  }
+  body { background: var(--page-bg) !important; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: #2a2825;
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: var(--red);
+    z-index: 200;
+    transition: width 0.05s linear;
+    box-shadow: 0 0 8px rgba(196,30,30,0.5);
+  }
+
+  /* Scroll hint */
+  .scroll-hint {
+    position: fixed;
+    bottom: 24px; left: 50%;
+    transform: translateX(-50%);
+    color: #f5f0e870;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    z-index: 100;
+    transition: opacity 0.6s;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+  }
+  .scroll-hint .arrow { animation: bobDown 1.5s ease-in-out infinite; font-size: 14px; }
+  @keyframes bobDown { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+  .scroll-hint.hidden { opacity: 0; pointer-events: none; }
+
+  /* Page wrapper */
+  .page-wrapper {
+    width: var(--page-width);
+    margin: 48px 0 80px;
+    background: var(--bg);
+    box-shadow: var(--shadow);
+    position: relative;
+    background-image: repeating-linear-gradient(
+      0deg, transparent, transparent 24px,
+      rgba(0,0,0,0.04) 24px, rgba(0,0,0,0.04) 25px
+    );
+  }
+
+  /* Tear edges */
+  .tear-top, .tear-bottom {
+    width: 100%;
+    height: 20px;
+    background: var(--bg);
+  }
+  .tear-top {
+    mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 660 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,20 L0,10 Q8,0 16,10 Q24,20 32,10 Q40,0 48,10 Q56,20 64,10 Q72,0 80,10 Q88,20 96,10 Q104,0 112,10 Q120,20 128,10 Q136,0 144,10 Q152,20 160,10 Q168,0 176,10 Q184,20 192,10 Q200,0 208,10 Q216,20 224,10 Q232,0 240,10 Q248,20 256,10 Q264,0 272,10 Q280,20 288,10 Q296,0 304,10 Q312,20 320,10 Q328,0 336,10 Q344,20 352,10 Q360,0 368,10 Q376,20 384,10 Q392,0 400,10 Q408,20 416,10 Q424,0 432,10 Q440,20 448,10 Q456,0 464,10 Q472,20 480,10 Q488,0 496,10 Q504,20 512,10 Q520,0 528,10 Q536,20 544,10 Q552,0 560,10 Q568,20 576,10 Q584,0 592,10 Q600,20 608,10 Q616,0 624,10 Q632,20 640,10 Q648,0 656,10 L660,20 Z' fill='white'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 660 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,20 L0,10 Q8,0 16,10 Q24,20 32,10 Q40,0 48,10 Q56,20 64,10 Q72,0 80,10 Q88,20 96,10 Q104,0 112,10 Q120,20 128,10 Q136,0 144,10 Q152,20 160,10 Q168,0 176,10 Q184,20 192,10 Q200,0 208,10 Q216,20 224,10 Q232,0 240,10 Q248,20 256,10 Q264,0 272,10 Q280,20 288,10 Q296,0 304,10 Q312,20 320,10 Q328,0 336,10 Q344,20 352,10 Q360,0 368,10 Q376,20 384,10 Q392,0 400,10 Q408,20 416,10 Q424,0 432,10 Q440,20 448,10 Q456,0 464,10 Q472,20 480,10 Q488,0 496,10 Q504,20 512,10 Q520,0 528,10 Q536,20 544,10 Q552,0 560,10 Q568,20 576,10 Q584,0 592,10 Q600,20 608,10 Q616,0 624,10 Q632,20 640,10 Q648,0 656,10 L660,20 Z' fill='white'/%3E%3C/svg%3E");
+    mask-size: cover; -webkit-mask-size: cover;
+    margin-top: 40px;
+  }
+  .tear-bottom {
+    mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 660 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,0 L0,10 Q8,20 16,10 Q24,0 32,10 Q40,20 48,10 Q56,0 64,10 Q72,20 80,10 Q88,0 96,10 Q104,20 112,10 Q120,0 128,10 Q136,20 144,10 Q152,0 160,10 Q168,20 176,10 Q184,0 192,10 Q200,20 208,10 Q216,0 224,10 Q232,20 240,10 Q248,0 256,10 Q264,20 272,10 Q280,0 288,10 Q296,20 304,10 Q312,0 320,10 Q328,20 336,10 Q344,0 352,10 Q360,20 368,10 Q376,0 384,10 Q392,20 400,10 Q408,0 416,10 Q424,20 432,10 Q440,0 448,10 Q456,20 464,10 Q472,0 480,10 Q488,20 496,10 Q504,0 512,10 Q520,20 528,10 Q536,0 544,10 Q552,20 560,10 Q568,0 576,10 Q584,20 592,10 Q600,0 608,10 Q616,20 624,10 Q632,0 640,10 Q648,20 656,10 L660,0 Z' fill='white'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 660 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,0 L0,10 Q8,20 16,10 Q24,0 32,10 Q40,20 48,10 Q56,0 64,10 Q72,20 80,10 Q88,0 96,10 Q104,20 112,10 Q120,0 128,10 Q136,20 144,10 Q152,0 160,10 Q168,20 176,10 Q184,0 192,10 Q200,20 208,10 Q216,0 224,10 Q232,20 240,10 Q248,0 256,10 Q264,20 272,10 Q280,0 288,10 Q296,20 304,10 Q312,0 320,10 Q328,20 336,10 Q344,0 352,10 Q360,20 368,10 Q376,0 384,10 Q392,20 400,10 Q408,0 416,10 Q424,20 432,10 Q440,0 448,10 Q456,20 464,10 Q472,0 480,10 Q488,20 496,10 Q504,0 512,10 Q520,20 528,10 Q536,0 544,10 Q552,20 560,10 Q568,0 576,10 Q584,20 592,10 Q600,0 608,10 Q616,20 624,10 Q632,0 640,10 Q648,20 656,10 L660,0 Z' fill='white'/%3E%3C/svg%3E");
+    mask-size: cover; -webkit-mask-size: cover;
+  }
+
+  .content {
+    padding: 0 48px;
+  }
+
+  /* Header */
+  .doc-header {
+    padding: 40px 0 32px;
+    border-bottom: 2px dashed var(--ink-faded);
+    text-align: center;
+  }
+  .doc-label {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    margin-bottom: 8px;
+  }
+  .doc-title {
+    font-family: 'Special Elite', monospace;
+    font-size: 32px;
+    color: var(--ink);
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .doc-subtitle {
+    font-family: 'Special Elite', monospace;
+    font-size: 13px;
+    color: var(--ink-light);
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+  .doc-meta {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    color: var(--ink-faded);
+    text-transform: uppercase;
+    line-height: 2;
+  }
+
+  /* Preamble */
+  .preamble {
+    padding: 28px 0;
+    border-bottom: 1px dashed var(--ink-faded);
+  }
+  .preamble p {
+    font-size: 11px;
+    line-height: 1.9;
+    color: var(--ink-light);
+    margin-bottom: 10px;
+  }
+  .preamble p:last-child { margin-bottom: 0; }
+
+  /* Play entry */
+  .play {
+    padding: 32px 0;
+    border-bottom: 1px dotted rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .play.visible { opacity: 1; transform: translateY(0); }
+
+  .play-number {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    margin-bottom: 6px;
+  }
+  .play-name {
+    font-family: 'Special Elite', monospace;
+    font-size: 22px;
+    color: var(--ink);
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+
+  .play-section {
+    margin-bottom: 16px;
+  }
+  .play-section-label {
+    font-size: 8px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .play-section p {
+    font-size: 11px;
+    line-height: 1.8;
+    color: var(--ink-light);
+  }
+
+  /* The two-column instrument table */
+  .instrument-table {
+    width: 100%;
+    margin: 20px 0;
+    border-top: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+  }
+  .instrument-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--ink);
+    padding: 8px 12px;
+    gap: 12px;
+  }
+  .instrument-header span {
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--bg);
+    font-weight: 600;
+  }
+  .instrument-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 16px 12px;
+    border-bottom: 1px dotted rgba(0,0,0,0.15);
+  }
+  .instrument-row:last-child { border-bottom: none; }
+  .instrument-cell {}
+  .instrument-cell .cell-label {
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    margin-bottom: 4px;
+  }
+  .instrument-cell .cell-value {
+    font-size: 10.5px;
+    line-height: 1.6;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .instrument-cell .cell-section {
+    font-size: 9.5px;
+    color: var(--ink-light);
+    line-height: 1.5;
+    margin-top: 3px;
+  }
+  .instrument-cell .cell-status {
+    font-size: 8px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 6px;
+    font-weight: 700;
+  }
+  .status-force { color: var(--red); }
+  .status-revoked { color: var(--ink-faded); text-decoration: line-through; }
+  .status-active { color: #2a7a2a; }
+
+  /* Rhyme */
+  .structural-rhyme {
+    margin-top: 16px;
+    padding: 14px 16px;
+    border-left: 3px solid var(--red);
+    background: rgba(196,30,30,0.04);
+  }
+  .structural-rhyme .rhyme-label {
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .structural-rhyme p {
+    font-size: 11px;
+    line-height: 1.7;
+    color: var(--ink);
+    font-style: italic;
+  }
+
+  /* Section dividers */
+  .section-divider {
+    text-align: center;
+    padding: 20px 0;
+    margin: 8px 0;
+  }
+  .section-divider span {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+  }
+
+  /* Summary block */
+  .summary-block {
+    padding: 32px 0;
+    border-top: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    margin-top: 16px;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .summary-block.visible { opacity: 1; transform: translateY(0); }
+
+  .summary-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px dotted rgba(0,0,0,0.12);
+  }
+  .summary-line:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .summary-line .s-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+  }
+  .summary-line .s-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  /* Closing note */
+  .closing {
+    padding: 40px 0 32px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .closing.visible { opacity: 1; transform: translateY(0); }
+  .closing p {
+    font-size: 10px;
+    line-height: 2;
+    color: var(--ink-faded);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .closing a {
+    color: var(--ink-light);
+    text-decoration: none;
+  }
+  .closing .source-link {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 8px 20px;
+    border: 1px solid var(--ink-faded);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .closing .source-link:hover {
+    border-color: var(--red);
+    color: var(--red);
+  }
+
+  /* Barcode */
+  .barcode {
+    text-align: center;
+    padding: 24px 0 16px;
+  }
+  .barcode-lines {
+    display: flex;
+    justify-content: center;
+    gap: 1.5px;
+    margin-bottom: 8px;
+  }
+  .barcode-lines .bar { background: var(--ink); height: 36px; }
+  .barcode-text {
+    font-size: 8px;
+    letter-spacing: 4px;
+    color: var(--ink-faded);
+  }
+
+  /* Footer */
+  .doc-footer {
+    text-align: center;
+    padding: 16px 0 32px;
+    border-top: 1px dashed var(--ink-faded);
+  }
+  .doc-footer p {
+    font-size: 9px;
+    color: var(--ink-faded);
+    letter-spacing: 1px;
+    line-height: 2.2;
+    text-transform: uppercase;
+  }
+  .doc-footer a { color: var(--ink-light); text-decoration: none; }
+
+  /* End space */
+  .end-space { height: 60vh; }
+
+  @media (max-width: 560px) {
+    .content { padding: 0 20px; }
+    .doc-title { font-size: 24px; }
+    .play-name { font-size: 18px; }
+    .instrument-row { grid-template-columns: 1fr; }
+    .instrument-header { grid-template-columns: 1fr; }
+    .instrument-header span:last-child { display: none; }
+  }
+
+  /* ── Site header ── */
+  .site-header {
+    width: var(--page-width);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0 12px;
+    margin-bottom: 12px;
+  }
+  .site-header-left a {
+    font-family: 'Special Elite', monospace;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #f5f0e8;
+    text-decoration: none;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+  }
+  .site-header-left a:hover { opacity: 1; }
+  .site-header-right { display: flex; align-items: center; gap: 6px; }
+  .header-social { display: flex; align-items: center; gap: 4px; margin-right: 10px; }
+  .header-social-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.45);
+    text-decoration: none;
+    padding: 4px 8px;
+    border: 1px solid rgba(245,240,232,0.12);
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .header-social-link:hover { color: rgba(245,240,232,0.85); border-color: rgba(245,240,232,0.3); }
+  .header-social-icon { display: inline-flex; align-items: center; justify-content: center; gap: 4px; padding: 4px 8px; }
+  .header-social-icon svg { display: block; flex-shrink: 0; }
+  .header-social-icon .icon-label { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 1.5px; text-transform: uppercase; }
+  .header-social-divider { width: 1px; height: 12px; background: rgba(245,240,232,0.12); margin: 0 2px; }
+  .theme-toggle {
+    background: transparent;
+    border: 1px solid rgba(245,240,232,0.12);
+    color: rgba(245,240,232,0.45);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s;
+  }
+  .theme-toggle:hover { color: rgba(245,240,232,0.85); border-color: rgba(245,240,232,0.3); }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header-left">
+    <a href="https://thedelusioneers.ca">The Delusioneers</a>
+  </div>
+  <div class="site-header-right">
+    <nav class="header-social" aria-label="Social links">
+      <a class="header-social-link header-social-icon" href="https://www.threads.net/@jeremycyrilwrites" target="_blank" rel="noopener" aria-label="Threads J">
+        <svg width="11" height="12" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M141.537 88.988a66.667 66.667 0 0 0-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.036l13.779 9.452c5.73-8.695 14.724-10.548 21.348-10.548h.229c8.249.053 14.474 2.452 18.503 7.129 2.932 3.405 4.893 8.111 5.864 14.05-7.314-1.243-15.224-1.626-23.68-1.14-23.82 1.371-39.134 15.264-38.105 34.568.522 9.792 5.4 18.216 13.735 23.719 7.047 4.652 16.124 6.927 25.557 6.412 12.458-.683 22.231-5.436 29.049-14.127 5.178-6.6 8.452-15.153 9.898-25.93 5.937 3.583 10.337 8.298 12.767 13.966 4.132 9.635 4.373 25.468-8.546 38.376-11.319 11.308-24.925 16.2-45.488 16.351-22.809-.169-40.06-7.484-51.275-21.742C35.236 139.966 29.808 120.682 29.605 96c.203-24.682 5.63-43.966 16.133-57.317C56.954 24.425 74.204 17.11 97.013 16.941c22.975.17 40.526 7.52 52.171 21.847 5.71 7.026 10.015 15.86 12.853 26.162l16.147-4.308c-3.44-12.68-8.853-23.606-16.219-32.668C147.036 10.646 125.205 1.205 97.07 1 68.754 1.205 47.189 10.685 32.986 28.23 20.096 43.982 13.491 66.487 13.25 96v.027c.241 29.513 6.846 52.017 19.736 67.769C47.19 181.315 68.754 190.795 97.07 191c25.861-.182 44.084-6.953 59.271-22.123 20.537-20.515 19.984-46.6 13.2-62.525-4.643-10.82-13.585-19.531-28.004-25.364Z"/></svg>
+        <span class="icon-label">J</span>
+      </a>
+      <div class="header-social-divider"></div>
+      <a class="header-social-link header-social-icon" href="https://www.threads.net/@the_delusioneers" target="_blank" rel="noopener" aria-label="Threads D">
+        <svg width="11" height="12" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M141.537 88.988a66.667 66.667 0 0 0-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.036l13.779 9.452c5.73-8.695 14.724-10.548 21.348-10.548h.229c8.249.053 14.474 2.452 18.503 7.129 2.932 3.405 4.893 8.111 5.864 14.05-7.314-1.243-15.224-1.626-23.68-1.14-23.82 1.371-39.134 15.264-38.105 34.568.522 9.792 5.4 18.216 13.735 23.719 7.047 4.652 16.124 6.927 25.557 6.412 12.458-.683 22.231-5.436 29.049-14.127 5.178-6.6 8.452-15.153 9.898-25.93 5.937 3.583 10.337 8.298 12.767 13.966 4.132 9.635 4.373 25.468-8.546 38.376-11.319 11.308-24.925 16.2-45.488 16.351-22.809-.169-40.06-7.484-51.275-21.742C35.236 139.966 29.808 120.682 29.605 96c.203-24.682 5.63-43.966 16.133-57.317C56.954 24.425 74.204 17.11 97.013 16.941c22.975.17 40.526 7.52 52.171 21.847 5.71 7.026 10.015 15.86 12.853 26.162l16.147-4.308c-3.44-12.68-8.853-23.606-16.219-32.668C147.036 10.646 125.205 1.205 97.07 1 68.754 1.205 47.189 10.685 32.986 28.23 20.096 43.982 13.491 66.487 13.25 96v.027c.241 29.513 6.846 52.017 19.736 67.769C47.19 181.315 68.754 190.795 97.07 191c25.861-.182 44.084-6.953 59.271-22.123 20.537-20.515 19.984-46.6 13.2-62.525-4.643-10.82-13.585-19.531-28.004-25.364Z"/></svg>
+        <span class="icon-label">D</span>
+      </a>
+      <div class="header-social-divider"></div>
+      <a class="header-social-link header-social-icon" href="https://www.instagram.com/the_delusioneers" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg width="12" height="12" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <div class="header-social-divider"></div>
+      <a class="header-social-link header-social-icon" href="https://thedelusioneers.substack.com" target="_blank" rel="noopener" aria-label="Substack">
+        <svg width="12" height="12" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
+      </a>
+      <div class="header-social-divider"></div>
+      <a class="header-social-link header-social-icon" href="https://bsky.app/profile/thedelusioneers.bsky.social" target="_blank" rel="noopener" aria-label="Bluesky">
+        <svg width="12" height="11" viewBox="0 0 600 530" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="m135.72 44.03c66.496 49.921 138.02 151.14 164.28 205.46 26.262-54.316 97.782-155.54 164.28-205.46 47.98-36.021 125.72-63.892 125.72 24.795 0 17.712-10.155 148.79-16.111 170.07-20.703 73.984-96.144 92.854-163.25 81.433 117.3 19.964 147.14 86.092 82.697 152.22-122.39 125.59-175.91-31.511-189.63-71.766-2.514-7.3797-3.6904-10.832-3.7077-7.8964-0.0174-2.9357-1.1937 0.51669-3.7077 7.8964-13.714 40.255-67.233 197.36-189.63 71.766-64.444-66.128-34.605-132.26 82.697-152.22-67.108 11.421-142.55-7.4491-163.25-81.433-5.9562-21.282-16.111-152.36-16.111-170.07 0-88.687 77.742-60.816 125.72-24.795z"/></svg>
+      </a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+      <span id="toggleIcon">○</span>
+      <span id="toggleLabel">Light</span>
+    </button>
+  </div>
+</header>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="scroll-hint" id="scrollHint">
+  <span>Scroll</span>
+  <span class="arrow">↓</span>
+</div>
+
+<div class="tear-top"></div>
+<div class="page-wrapper" id="mainDoc">
+  <div class="content">
+
+    <!-- HEADER -->
+    <div class="doc-header" id="section-header">
+      <div class="doc-label">The Delusioneers — Comparative Accountability Series</div>
+      <div class="doc-title">The Playbook</div>
+      <div class="doc-subtitle">Part I: Executive Carve-Out Architecture<br>Ontario / United States Comparative Record</div>
+      <div class="doc-meta">
+        Five plays · Two jurisdictions · One mechanism<br>
+        Ontario instruments current as of April 2026<br>
+        U.S. instruments: Trump administration, 2017–2021<br>
+        Sources: <a href="sources.html" style="color:var(--ink-faded);">sources.html</a>
+      </div>
+    </div>
+
+    <!-- PREAMBLE -->
+    <div class="preamble" id="section-preamble">
+      <p>The following records five mechanisms by which an executive can reduce the effective scope of legislation without repealing it. In each case, the law remains on paper. The carve-out is what moves.</p>
+      <p>Instances are drawn from Ontario under Premier Doug Ford and the United States under President Donald Trump. The selection criterion is structural: the mechanism must be documentable to a specific instrument — statute, schedule, executive order, or section — in both jurisdictions.</p>
+      <p>No verdict is offered. The rhyme is the record.</p>
+    </div>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- PLAY 1: THE FAST LANE -->
+    <!-- ══════════════════════════════════════════ -->
+    <div class="play" data-play="1" id="section-play1">
+      <div class="play-number">Play 01 of 05</div>
+      <div class="play-name">The Fast Lane</div>
+
+      <div class="play-section">
+        <div class="play-section-label">Design Intent</div>
+        <p>Standard environmental and land-use review exists to assess impacts before construction begins. Multi-stage. Time-limited. Publicly participatory. Designed as a check on executive speed.</p>
+      </div>
+
+      <div class="play-section">
+        <div class="play-section-label">How It Runs</div>
+        <p>The executive designates a category of "priority" projects. Agencies are then required — not permitted, required — to compress or bypass standard review for anything in that category. The designation power sits with the executive. The statute stays intact. The lane is new.</p>
+      </div>
+
+      <div class="instrument-table">
+        <div class="instrument-header">
+          <span>Ontario — Instrument</span>
+          <span>United States — Instrument</span>
+        </div>
+        <div class="instrument-row">
+          <div class="instrument-cell">
+            <div class="cell-label">Statute</div>
+            <div class="cell-value">Protect Ontario by Unleashing our Economy Act, 2025</div>
+            <div class="cell-section">S.O. 2025, c. 4 — Bill 5</div>
+            <div class="cell-status status-force">In Force</div>
+          </div>
+          <div class="instrument-cell">
+            <div class="cell-label">Instrument</div>
+            <div class="cell-value">Executive Order 13766</div>
+            <div class="cell-section">Expediting Environmental Reviews and Approvals for High-Priority Infrastructure Projects — Jan. 24, 2017</div>
+            <div class="cell-status status-revoked">Revoked Jan. 2021 — reinstated and expanded Jan. 20, 2025</div>
+            <div class="cell-note">Second term: "Unleashing American Energy" (EO, Jan. 20, 2025) directed CEQ to propose rescinding NEPA regulations in full.</div>
+          </div>
+        </div>
+        <div class="instrument-row">
+          <div class="instrument-cell">
+            <div class="cell-label">Mechanism</div>
+            <div class="cell-section">Schedule 9, Special Economic Zones Act, 2025, ss. 2–3: authorizes Lieutenant Governor in Council to designate "special economic zones"; Minister to designate "vetted projects" and "trusted proponents" within those zones.</div>
+          </div>
+          <div class="instrument-cell">
+            <div class="cell-label">Mechanism</div>
+            <div class="cell-section">EO 13766, s. 2(a): authorizes CEQ Chair to designate any infrastructure project as "high priority" upon request from a governor or agency head. s. 3: agencies must provide written explanation for any delay in review of designated projects.</div>
+          </div>
+        </div>
+        <div class="instrument-row">
+          <div class="instrument-cell">
+            <div class="cell-label">Designation Power Held By</div>
+            <div class="cell-section">Lieutenant Governor in Council (Cabinet) / Minister</div>
+          </div>
+          <div class="instrument-cell">
+            <div class="cell-label">Designation Power Held By</div>
+            <div class="cell-section">Chair, Council on Environmental Quality (political appointee)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="structural-rhyme">
+        <div class="rhyme-label">Structural Rhyme</div>
+        <p>In both jurisdictions, the executive creates a named category — zone or priority — and anything placed in that category travels in a compressed review lane. The placement decision is not subject to the same review as the underlying project.</p>
+      </div>
+    </div>
+
+    <div class="section-divider"><span>· · ·</span></div>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- PLAY 2: THE ZONE -->
+    <!-- ══════════════════════════════════════════ -->
+    <div class="play" data-play="2" id="section-play2">
+      <div class="play-number">Play 02 of 05</div>
+      <div class="play-name">The Zone</div>
+
+      <div class="play-section">
+        <div class="play-section-label">Design Intent</div>
+        <p>Legislation applies uniformly. Rules are general. No actor is above the statutory baseline without a separate legislative act specifying the exception.</p>
+      </div>
+
+      <div class="play-section">
+        <div class="play-section-label">How It Runs</div>
+        <p>Cabinet designates a geographic area or project class as a special zone. Inside the zone, the normal rule-set does not fully apply. The executive decides what gets in. The executive decides which rules are suspended once inside. The statute creating the zone uses broad, regulation-making language — meaning the specific exemptions are set by Cabinet order, not by the legislature.</p>
+      </div>
+
+      <div class="instrument-table">
+        <div class="instrument-header">
+          <span>Ontario — Instrument</span>
+          <span>United States — Instrument</span>
+        </div>
+        <div class="instrument-row">
+          <div class="instrument-cell">
+            <div class="cell-label">Statute</div>
+            <div class="cell-value">Special Economic Zones Act, 2025</div>
+            <div class="cell-section">Schedule 9 to Bill 5, S.O. 2025, c. 4</div>
+            <div class="cell-status status-force">In Force</div>
+          </div>
+          <div class="instrument-cell">
+            <div class="cell-label">Instrument</div>
+            <div class="cell-value">Executive Order 13807</div>
+            <div class="cell-section">Establishing Discipline and Accountability in the Environmental Review and Permitting Process — Aug. 15, 2017</div>
+            <div class="cell-status status-revoked">Revoked Jan. 2021 — reinstated and expanded Jan. 20, 2025</div>
+            <div class="cell-note">Second term: "Unleashing American Energy" (EO, Jan. 20, 2025) directed CEQ to propose rescinding NEPA regulations in full.</div>
+          </div>
+        </div>
+        <div class="instrument-row">
+          <div class="instrument-cell">
+            <div class="cell-label">Mechanism</div>
+            <div class="cell-section">SEZ Act, ss. 6–7 (regulation-making): Cabinet may set criteria for zones, vetted projects, trusted proponents; specify which permits, processes, approvals, bylaws, or other instruments are modified, exempted, or continue to apply within a designated zone. Zones can vary from a small parcel to a large area.</div>
+          </div>
+          <div class="instrument-cell">
+            <div class="cell-label">Mechanism</div>
+            <div class="cell-section">EO 13807, s. 5(a): establishes "One Federal Decision" framework; agencies must produce project-specific permitting timetables with strict deadlines. s. 5(d): projects subject to statutory streamlining regimes automatically qualify as high-priority under EO 13766.</div>
+          </div>
+        </div>
+        <div class="instrument-row">
+          <div class="instrument-cell">
+            <div class="cell-label">Rules Suspended By</div>
+            <div class="cell-section">Cabinet regulation — no further legislative vote required</div>
+          </div>
+          <div class="instrument-cell">
+            <div class="cell-label">Rules Compressed By</div>
+            <div class="cell-section">Agency guidance and timetables issued under EO direction</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="structural-rhyme">
+        <div class="rhyme-label">Structural Rhyme</div>
+        <p>Both regimes create a legally defined space where the executive controls entry and controls which rules apply once inside. The secondary instrument — regulation or agency order — does the substantive work. The legislature set the frame; the executive fills it.</p>
+      </div>
+    </div>
+
+    <div class="section-divider"><span>· · ·</span></div>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- PLAY 3: THE TRUSTED PROPONENT -->
+    <!-- ══════════════════════════════════════════ -->
+    <div class="play" data-play="3" id="section-play3">
+      <div class="play-number">Play 03 of 05</div>
+      <div class="play-name">The Trusted Proponent</div>
+
+      <div class="play-section">
+        <div class="play-section-label">Design Intent</div>
+        <p>Regulatory processes apply to all applicants. The queue is the queue. No actor receives preferential access to approvals by virtue of political relationship or designation status.</p>
+      </div>
+
+      <div class="play-section">
+        <div class="play-section-label">How It Runs</div>
+        <p>The executive creates a designation — "trusted proponent," "high priority project" — that grants a specific company or project access to a separate approval track. Criteria for the designation are set by the same executive that grants it. The designation is an administrative act, not a legislative one. Once designated, the actor operates under a different rule-set than undesignated competitors in the same market.</p>
+      </div>
+
+      <div class="instrument-table">
+        <div class="instrument-header">
+          <span>Ontario — Instrument</span>
+          <span>United States — Instrument</span>
+        </div>
+        <div class="instrument-row">
+          <div class="instrument-cell">
+            <div class="cell-label">Statute</div>
+            <div class="cell-value">Special Economic Zones Act, 2025</div>
+            <div class="cell-section">Schedule 9 to Bill 5 — "Trusted Proponent" provisions</div>
+            <div class="cell-status status-force">In Force</div>
+          </div>
+          <div class="instrument-cell">
+            <div class="cell-label">Instrument</div>
+            <div class="cell-value">EO 13766 / EO 13807 — "High Priority" designation</div>
+            <div class="cell-section">Combined framework — Jan. 2017 / Aug. 2017</div>
+            <div class="cell-status status-revoked">Revoked Jan. 2021 — reinstated and expanded Jan. 20, 2025</div>
+            <div class="cell-note">Second term: "Unleashing American Energy" (EO, Jan. 20, 2025) directed CEQ to propose rescinding NEPA regulations in full.</div>
+          </div>
+        </div>
+        <div class="instrument-row">
+          <div class="instrument-cell">
+            <div class="cell-label">Mechanism</div>
+            <div class="cell-section">SEZ Act: Minister may designate a company as a "trusted proponent" for a vetted project within a zone. Criteria for trusted proponent status set by Cabinet regulation. Once designated, the proponent's project benefits from applicable exemptions — other proponents in the same sector do not.</div>
+          </div>
+          <div class="instrument-cell">
+            <div class="cell-label">Mechanism</div>
+            <div class="cell-section">EO 13766, s. 2(a): "high priority" designation requested by governor or agency head, granted by CEQ Chair. EO 13807, s. 5(d): certain project classes automatically qualify. Designated projects receive bespoke review timetables unavailable to undesignated projects.</div>
+          </div>
+        </div>
+        <div class="instrument-row">
+          <div class="instrument-cell">
+            <div class="cell-label">Criteria Set By</div>
+            <div class="cell-section">Cabinet — by regulation, not by the enabling statute itself</div>
+          </div>
+          <div class="instrument-cell">
+            <div class="cell-label">Criteria Set By</div>
+            <div class="cell-section">CEQ Chair and OMB — by executive order direction, not by statute</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="structural-rhyme">
+        <div class="rhyme-label">Structural Rhyme</div>
+        <p>Both systems create a two-track market: one track for designated actors operating under a compressed or modified rule-set, and one track for everyone else. The gatekeeping function — who gets designated — sits with the executive in both cases.</p>
+      </div>
+    </div>
+
+    <div class="section-divider"><span>· · ·</span></div>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- PLAY 4: THE CARVE-OUT -->
+    <!-- ══════════════════════════════════════════ -->
+    <div class="play" data-play="4" id="section-play4">
+      <div class="play-number">Play 04 of 05</div>
+      <div class="play-name">The Carve-Out</div>
+
+      <div class="play-section">
+        <div class="play-section-label">Design Intent</div>
+        <p>Environmental and species protections operate automatically. When a threshold condition is met — a listed species is present, an assessment is triggered — the protection applies. It is not discretionary.</p>
+      </div>
+
+      <div class="play-section">
+        <div class="play-section-label">How It Runs</div>
+        <p>The protection statute is not repealed. Instead, the omnibus bill inserts exemption provisions — by schedule, by site, by ministerial discretion — that allow the protection to be turned off for specified actors, locations, or project types. The law remains. The carve-out is what operates. The decision about whether the protection applies is transferred from an automatic trigger to a political one.</p>
+      </div>
+
+      <div class="instrument-table">
+        <div class="instrument-header">
+          <span>Ontario — Instrument</span>
+          <span>United States — Instrument</span>
+        </div>
+        <div class="instrument-row">
+          <div class="instrument-cell">
+            <div class="cell-label">Statute</div>
+            <div class="cell-value">Bill 5 — Endangered Species Act schedules; Ontario Place exemption</div>
+            <div class="cell-section">S.O. 2025, c. 4, Schedule 8 (Ontario Place) and ESA-related schedules</div>
+            <div class="cell-status status-force">In Force</div>
+          </div>
+          <div class="instrument-cell">
+            <div class="cell-label">Instrument</div>
+            <div class="cell-value">Executive Order 13927</div>
+            <div class="cell-section">Accelerating Economic Recovery by Expediting Infrastructure — June 4, 2020</div>
+            <div class="cell-status status-revoked">Revoked Jan. 2021 — reinstated and expanded Jan. 20, 2025</div>
+            <div class="cell-note">Second term: "Unleashing American Energy" (EO, Jan. 20, 2025) directed CEQ to propose rescinding NEPA regulations in full.</div>
+          </div>
+        </div>
+        <div class="instrument-row">
+          <div class="instrument-cell">
+            <div class="cell-label">Mechanism</div>
+            <div class="cell-section">Schedule 8 exempts Ontario Place redevelopment from Part II of the Environmental Bill of Rights, 1993 — the part guaranteeing public notice and comment on environmentally significant decisions. ESA schedules replace automatic, science-triggered protections with discretionary, cabinet-driven exemptions; transit, housing, and other "priorities" can justify suspension of species safeguards.</div>
+          </div>
+          <div class="instrument-cell">
+            <div class="cell-label">Mechanism</div>
+            <div class="cell-section">EO 13927, ss. 2–3: directs agencies to invoke emergency and streamlining authorities under NEPA, ESA, and Clean Water Act to bypass or compress environmental review for infrastructure projects, using COVID-19 economic recovery as the triggering justification.</div>
+          </div>
+        </div>
+        <div class="instrument-row">
+          <div class="instrument-cell">
+            <div class="cell-label">Trigger Converted From / To</div>
+            <div class="cell-section">Automatic (science-based) → Discretionary (Cabinet / Minister)</div>
+          </div>
+          <div class="instrument-cell">
+            <div class="cell-label">Trigger Converted From / To</div>
+            <div class="cell-section">Automatic (statutory threshold) → Discretionary (agency invocation of emergency authority)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="structural-rhyme">
+        <div class="rhyme-label">Structural Rhyme</div>
+        <p>Both instruments convert automatic statutory protections into political decisions. The protection law stays on the books. What changes is who decides whether it applies — and the answer, in both cases, is: the executive.</p>
+      </div>
+    </div>
+
+    <div class="section-divider"><span>· · ·</span></div>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- PLAY 5: THE WRAP -->
+    <!-- ══════════════════════════════════════════ -->
+    <div class="play" data-play="5" id="section-play5">
+      <div class="play-number">Play 05 of 05</div>
+      <div class="play-name">The Wrap</div>
+
+      <div class="play-section">
+        <div class="play-section-label">Design Intent</div>
+        <p>Legislative titles describe what legislation does. Omnibus bills consolidate related measures. Committee review exists to examine each clause on its merits.</p>
+      </div>
+
+      <div class="play-section">
+        <div class="play-section-label">How It Runs</div>
+        <p>Significant institutional changes — exemption powers, appointment criteria, oversight modifications — are embedded inside bills whose title and public communications emphasize popular economic themes: jobs, growth, recovery, safety. The title functions as a political shield. Opponents who contest specific clauses are characterized as opposing the popular theme. Time allocation and debate limits reduce the window for clause-level scrutiny.</p>
+      </div>
+
+      <div class="instrument-table">
+        <div class="instrument-header">
+          <span>Ontario — Instrument</span>
+          <span>United States — Instrument</span>
+        </div>
+        <div class="instrument-row">
+          <div class="instrument-cell">
+            <div class="cell-label">Statute</div>
+            <div class="cell-value">Protect Ontario by Unleashing our Economy Act, 2025</div>
+            <div class="cell-section">S.O. 2025, c. 4 — Bill 5 (omnibus, 9 schedules)</div>
+            <div class="cell-status status-force">In Force</div>
+          </div>
+          <div class="instrument-cell">
+            <div class="cell-label">Instrument</div>
+            <div class="cell-value">Tax Cuts and Jobs Act, 2017</div>
+            <div class="cell-section">Pub. L. 115-97 — omnibus tax and structural legislation</div>
+            <div class="cell-status status-active">In Force</div>
+          </div>
+        </div>
+        <div class="instrument-row">
+          <div class="instrument-cell">
+            <div class="cell-label">Contents vs. Title</div>
+            <div class="cell-section">Title: economic growth, critical minerals. Contents: Special Economic Zones Act (Schedule 9), targeted exemptions from environmental law, endangered species changes, Ontario Place EBR exemption, judicial appointment criteria changes — none of which are described in the bill's title.</div>
+          </div>
+          <div class="instrument-cell">
+            <div class="cell-label">Contents vs. Title</div>
+            <div class="cell-section">Title: middle-class tax relief and growth. Contents: structural changes to corporate taxation, pass-through rules, ACA individual mandate repeal (s. 11081), and long-term fiscal architecture — scope extending well beyond the stated tax-relief frame.</div>
+          </div>
+        </div>
+        <div class="instrument-row">
+          <div class="instrument-cell">
+            <div class="cell-label">Process Tool</div>
+            <div class="cell-section">Time allocation motions at Queen's Park limited committee review of individual schedules</div>
+          </div>
+          <div class="instrument-cell">
+            <div class="cell-label">Process Tool</div>
+            <div class="cell-section">Budget reconciliation process used to pass with simple majority, bypassing filibuster and extended Senate debate</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="structural-rhyme">
+        <div class="rhyme-label">Structural Rhyme</div>
+        <p>In both cases, the economic title provides political cover for clauses that reallocate institutional power. The procedural tool — time allocation or reconciliation — compresses the window in which those clauses can be examined on their own terms.</p>
+      </div>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="summary-block" id="summaryBlock">
+      <div class="summary-line">
+        <span class="s-label">Plays documented</span>
+        <span class="s-value">5</span>
+      </div>
+      <div class="summary-line">
+        <span class="s-label">Jurisdictions</span>
+        <span class="s-value">2</span>
+      </div>
+      <div class="summary-line">
+        <span class="s-label">Ontario instruments cited</span>
+        <span class="s-value">4</span>
+      </div>
+      <div class="summary-line">
+        <span class="s-label">U.S. instruments cited</span>
+        <span class="s-value">5</span>
+      </div>
+      <div class="summary-line">
+        <span class="s-label">Statutes repealed</span>
+        <span class="s-value">0</span>
+      </div>
+      <div class="summary-line">
+        <span class="s-label">Common mechanism</span>
+        <span class="s-value">Keep the law. Move the switch.</span>
+      </div>
+    </div>
+
+    <!-- CLOSING -->
+    <div class="closing" id="closingBlock">
+      <p>All instruments sourced from primary documents</p>
+      <p>Ontario e-Laws · Ontario Environmental Registry · GovInfo · Federal Register</p>
+      <p style="margin-top: 12px;">No verdict. The rhyme is the record.</p>
+      <a href="sources.html" class="source-link">Full Source Index →</a>
+    </div>
+
+    <!-- BARCODE -->
+    <div class="barcode">
+      <div class="barcode-lines" id="barcodeLines"></div>
+      <div class="barcode-text">PLAYBOOK-P1-ONT-USA-2025</div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="doc-footer">
+      <p>The Delusioneers</p>
+      <p>thedelusioneers.substack.com · @the_delusioneers</p>
+      <p style="margin-top: 8px;">We read the documents. Then we make you read them too.</p>
+    </div>
+
+  </div><!-- end .content -->
+</div><!-- end .page-wrapper -->
+<div class="tear-bottom" style="width:var(--page-width);"></div>
+
+<div class="end-space"></div>
+
+<script>
+  // Barcode
+  const bc = document.getElementById('barcodeLines');
+  const pat = [2,1,3,1,2,3,1,2,1,3,2,1,1,3,2,1,3,1,2,1,1,3,2,1,3,1,2,3,1,1,2,1,3,2,1,3,1,2,1,1,3,2];
+  pat.forEach(w => {
+    const b = document.createElement('div');
+    b.className = 'bar';
+    b.style.width = w + 'px';
+    bc.appendChild(b);
+  });
+
+  // Scroll logic
+  const plays = document.querySelectorAll('.play');
+  const summary = document.getElementById('summaryBlock');
+  const closing = document.getElementById('closingBlock');
+  const scrollHint = document.getElementById('scrollHint');
+  const progressBar = document.getElementById('progressBar');
+
+  function onScroll() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    progressBar.style.width = (scrollTop / docHeight * 100) + '%';
+    if (scrollTop > 200) scrollHint.classList.add('hidden');
+    else scrollHint.classList.remove('hidden');
+
+    plays.forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight * 0.85)
+        el.classList.add('visible');
+    });
+    if (summary.getBoundingClientRect().top < window.innerHeight * 0.85)
+      summary.classList.add('visible');
+    if (closing.getBoundingClientRect().top < window.innerHeight * 0.85)
+      closing.classList.add('visible');
+  }
+
+
+  // Theme toggle
+  const html = document.documentElement;
+  const toggle = document.getElementById('themeToggle');
+  const icon = document.getElementById('toggleIcon');
+  const label = document.getElementById('toggleLabel');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+  const saved = localStorage.getItem('delusioneers-theme');
+  const initialDark = saved ? saved === 'dark' : prefersDark.matches;
+  function setTheme(dark) {
+    html.setAttribute('data-theme', dark ? 'dark' : 'light');
+    icon.textContent = dark ? '●' : '○';
+    label.textContent = dark ? 'Dark' : 'Light';
+  }
+  setTheme(initialDark);
+  toggle.addEventListener('click', () => {
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    setTheme(!isDark);
+    localStorage.setItem('delusioneers-theme', !isDark ? 'dark' : 'light');
+  });
+  prefersDark.addEventListener('change', (e) => {
+    if (!localStorage.getItem('delusioneers-theme')) setTheme(e.matches);
+  });
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('load', onScroll);
+</script>
+
+</body>
+</html>
