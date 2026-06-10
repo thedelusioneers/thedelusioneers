@@ -325,7 +325,7 @@
             const ph=((t*0.0011)+k*0.5)%1;
             const px=ax+(bx-ax)*ph, py=ay+(by-ay)*ph;
             ctx.fillStyle='rgba(255,242,208,'+(0.85*(1-Math.abs(ph-0.5)*1.3))+')';
-            ctx.beginPath();ctx.arc(px,py,arm*0.62,0,7);ctx.fill();
+            ctx.beginPath();ctx.arc(px,py,arm*0.62,0,Math.PI*2);ctx.fill();
           }
         }
       }
@@ -338,13 +338,13 @@
       if(c.isRoot){
         const pr=1+0.18*Math.sin(t*0.005);
         ctx.fillStyle='rgba(122,240,192,0.95)';ctx.shadowBlur=cell*0.3;ctx.shadowColor='rgba(122,240,192,0.8)';
-        ctx.beginPath();ctx.arc(cx,cy,cell*0.16*pr,0,7);ctx.fill();ctx.shadowBlur=0;
+        ctx.beginPath();ctx.arc(cx,cy,cell*0.16*pr,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
       } else if(c.isReceptor){
         if(c.powered)c.bloom+=(1-c.bloom)*0.12; else c.bloom+=(0-c.bloom)*0.12;
         const lit=c.powered;
         ctx.fillStyle=lit?'rgba(255,242,208,0.95)':'rgba(38,224,200,0.5)';
         if(lit){ctx.shadowBlur=cell*0.22;ctx.shadowColor='rgba(255,194,75,0.7)';}
-        ctx.beginPath();ctx.arc(cx,cy,cell*(0.07+0.07*c.bloom),0,7);ctx.fill();ctx.shadowBlur=0;
+        ctx.beginPath();ctx.arc(cx,cy,cell*(0.07+0.07*c.bloom),0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
         // bloom petals when fed
         if(c.bloom>0.4){
           ctx.strokeStyle='rgba(255,194,75,'+(c.bloom*0.6)+')';ctx.lineWidth=1.4;
@@ -354,7 +354,7 @@
         }
       } else {
         ctx.fillStyle=c.powered?'rgba(255,194,75,0.85)':'rgba(38,224,200,0.4)';
-        ctx.beginPath();ctx.arc(cx,cy,arm*0.7,0,7);ctx.fill();
+        ctx.beginPath();ctx.arc(cx,cy,arm*0.7,0,Math.PI*2);ctx.fill();
       }
     }
 
@@ -363,7 +363,7 @@
       const cx=ox+(root%C)*cell+half, cy=oy+((root/C)|0)*cell+half;
       const rad=winT*0.9;
       ctx.strokeStyle='rgba(255,242,208,'+(1-winT/1100)+')';ctx.lineWidth=2;
-      ctx.beginPath();ctx.arc(cx,cy,rad,0,7);ctx.stroke();
+      ctx.beginPath();ctx.arc(cx,cy,rad,0,Math.PI*2);ctx.stroke();
     }
 
     ctx.globalCompositeOperation='source-over';
