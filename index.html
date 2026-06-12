@@ -1,2372 +1,835 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jeremy Personal Health Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      background: #0a0c12;
-      color: #e2e8f0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      min-height: 100vh;
-    }
-    .header {
-      background: #12151f;
-      border-bottom: 1px solid #1e2436;
-      padding: 1.25rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-    .header-left h1 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      background: linear-gradient(90deg, #6c63ff, #00d4ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .header-left p {
-      font-size: 0.8rem;
-      color: #64748b;
-      margin-top: 2px;
-    }
-    .stat-chips {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-    .chip {
-      background: #1a1f30;
-      border: 1px solid #1e2436;
-      border-radius: 8px;
-      padding: 0.4rem 0.75rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-width: 80px;
-    }
-    .chip-label {
-      font-size: 0.65rem;
-      color: #64748b;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .chip-value {
-      font-size: 1rem;
-      font-weight: 700;
-      color: #e2e8f0;
-      line-height: 1.2;
-    }
-    .chip-trend {
-      font-size: 0.65rem;
-      margin-top: 1px;
-    }
-    .trend-up {
-      color: #ff6584;
-    }
-    .trend-down {
-      color: #43e97b;
-    }
-    .trend-flat {
-      color: #94a3b8;
-    }
-    .nav {
-      background: #12151f;
-      border-bottom: 1px solid #1e2436;
-      padding: 0 2rem;
-      display: flex;
-      gap: 0;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .nav::-webkit-scrollbar {
-      display: none;
-    }
-    .nav-btn {
-      background: none;
-      border: none;
-      color: #64748b;
-      padding: 0.75rem 1rem;
-      cursor: pointer;
-      font-size: 0.8rem;
-      white-space: nowrap;
-      border-bottom: 2px solid transparent;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-    .nav-btn:hover {
-      color: #e2e8f0;
-      background: rgba(108, 99, 255, 0.05);
-    }
-    .nav-btn.active {
-      color: #6c63ff;
-      border-bottom-color: #6c63ff;
-      background: rgba(108, 99, 255, 0.08);
-    }
-    .content {
-      padding: 2rem;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-    .section {
-      display: none;
-    }
-    .section.active {
-      display: block;
-    }
-    .section-header {
-      margin-bottom: 1.5rem;
-    }
-    .section-header h2 {
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: #e2e8f0;
-    }
-    .section-header p {
-      font-size: 0.85rem;
-      color: #64748b;
-      margin-top: 0.25rem;
-    }
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.25rem;
-    }
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.25rem;
-    }
-    .grid-4 {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.25rem;
-    }
-    .grid-5 {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 1rem;
-    }
-    .card {
-      background: #12151f;
-      border: 1px solid #1e2436;
-      border-radius: 12px;
-      padding: 1.25rem;
-      transition: box-shadow 0.2s;
-    }
-    .card:hover {
-      box-shadow: 0 0 20px rgba(108, 99, 255, 0.15);
-    }
-    .card-title {
-      font-size: 0.8rem;
-      color: #64748b;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.75rem;
-      font-weight: 600;
-    }
-    .chart-wrap {
-      position: relative;
-      width: 100%;
-      height: 220px;
-    }
-    .chart-wrap-tall {
-      position: relative;
-      width: 100%;
-      height: 280px;
-    }
-    .stat-big {
-      font-size: 2.5rem;
-      font-weight: 800;
-      line-height: 1;
-      margin-bottom: 0.25rem;
-    }
-    .stat-sub {
-      font-size: 0.8rem;
-      color: #64748b;
-    }
-    .callout {
-      border-radius: 12px;
-      padding: 1.25rem 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-    .callout-green {
-      background: rgba(67, 233, 123, 0.08);
-      border: 1px solid rgba(67, 233, 123, 0.3);
-    }
-    .callout-green h3 {
-      color: #43e97b;
-      font-size: 1.1rem;
-      margin-bottom: 0.4rem;
-    }
-    .callout-green p {
-      color: #a7f3c0;
-      font-size: 0.88rem;
-      line-height: 1.5;
-    }
-    .callout-purple {
-      background: rgba(108, 99, 255, 0.08);
-      border: 1px solid rgba(108, 99, 255, 0.3);
-    }
-    .callout-purple p {
-      color: #c4b5fd;
-      font-size: 0.88rem;
-    }
-    .flag-orange {
-      color: #f97316;
-      font-weight: 600;
-    }
-    .flag-green {
-      color: #43e97b;
-      font-weight: 600;
-    }
-    .pending {
-      opacity: 0.45;
-    }
-    .pending .chip-value {
-      color: #64748b;
-    }
-    .lab-card {
-      background: #12151f;
-      border: 1px solid #1e2436;
-      border-radius: 10px;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-    }
-    .lab-card .lc-name {
-      font-size: 0.75rem;
-      color: #64748b;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-    .lab-card .lc-val {
-      font-size: 1.4rem;
-      font-weight: 700;
-    }
-    .lab-card .lc-ref {
-      font-size: 0.7rem;
-      color: #64748b;
-    }
-    .lab-card .lc-flag {
-      font-size: 0.7rem;
-      font-weight: 600;
-      margin-top: 2px;
-    }
-    .cal-table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 3px;
-      font-size: 0.7rem;
-    }
-    .cal-table th {
-      color: #64748b;
-      text-align: center;
-      padding: 4px;
-      font-weight: 500;
-    }
-    .cal-cell {
-      text-align: center;
-      padding: 4px 2px;
-      border-radius: 4px;
-      font-size: 0.65rem;
-      color: #e2e8f0;
-      cursor: default;
-    }
-    .trends-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    .trend-card {
-      background: #12151f;
-      border: 1px solid #1e2436;
-      border-radius: 12px;
-      padding: 1.25rem;
-    }
-    .trend-card h4 {
-      font-size: 0.7rem;
-      color: #64748b;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.5rem;
-    }
-    .trend-card .tc-val {
-      font-size: 1.8rem;
-      font-weight: 800;
-      margin-bottom: 0.2rem;
-    }
-    .trend-card .tc-dir {
-      font-size: 0.85rem;
-      margin-bottom: 0.3rem;
-    }
-    .trend-card .tc-ctx {
-      font-size: 0.75rem;
-      color: #94a3b8;
-      line-height: 1.4;
-    }
-    .overview-stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    .ov-card {
-      background: #12151f;
-      border: 1px solid #1e2436;
-      border-radius: 12px;
-      padding: 1.25rem;
-      text-align: center;
-    }
-    .ov-card .ov-val {
-      font-size: 2rem;
-      font-weight: 800;
-      margin-bottom: 0.2rem;
-    }
-    .ov-card .ov-label {
-      font-size: 0.75rem;
-      color: #64748b;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-    .ov-card .ov-trend {
-      font-size: 0.8rem;
-      margin-top: 0.3rem;
-    }
-    @media (max-width: 900px) {
-      .grid-2,
-      .grid-3,
-      .grid-4,
-      .overview-stats {
-        grid-template-columns: 1fr;
-      }
-    }
-    @media (max-width: 600px) {
-      .header {
-        padding: 1rem;
-      }
-      .content {
-        padding: 1rem;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Delusioneers</title>
+<meta name="description" content="A documentation practice. Following the boring things to the truth and making it impossible to look away from.">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+  /* ── THEME VARIABLES ── */
+  :root {
+    --bg: #f5f0e8;
+    --ink: #0d0d0d;
+    --ink-light: #2a2a2a;
+    --ink-faded: #6a6a5a;
+    --red: #c41e1e;
+    --rule: rgba(0,0,0,0.042);
+    --rule-solid: rgba(0,0,0,0.15);
+    --tag-border: rgba(0,0,0,0.14);
+    --tag-red-border: rgba(196,30,30,0.35);
+    --header-border: #0d0d0d;
+    --hover-bg: rgba(0,0,0,0.025);
+    --toggle-border: rgba(0,0,0,0.15);
+
+    /* Header component vars */
+    --header-text: rgba(13,13,13,0.7);
+    --header-text-hover: #0d0d0d;
+    --header-link-border: rgba(0,0,0,0.14);
+    --header-link-hover-border: rgba(0,0,0,0.35);
+  }
+
+  [data-theme="dark"] {
+    --bg: #1a1a18;
+    --ink: #f5f0e8;
+    --ink-light: rgba(245,240,232,0.78);
+    --ink-faded: rgba(245,240,232,0.38);
+    --red: #e03030;
+    --rule: rgba(255,255,255,0.038);
+    --rule-solid: rgba(255,255,255,0.12);
+    --tag-border: rgba(255,255,255,0.14);
+    --tag-red-border: rgba(224,48,48,0.4);
+    --header-border: rgba(245,240,232,0.2);
+    --hover-bg: rgba(255,255,255,0.04);
+    --toggle-border: rgba(245,240,232,0.15);
+
+    /* Header component vars — dark */
+    --header-text: rgba(245,240,232,0.45);
+    --header-text-hover: rgba(245,240,232,0.9);
+    --header-link-border: rgba(245,240,232,0.12);
+    --header-link-hover-border: rgba(245,240,232,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    -webkit-font-smoothing: antialiased;
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 27px,
+      var(--rule) 27px,
+      var(--rule) 28px
+    );
+    background-attachment: fixed;
+    transition: background 0.25s ease, color 0.25s ease;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ── HEADER COMPONENT ── */
+  .site-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 0 20px;
+    border-bottom: 2px solid var(--header-border);
+    margin-bottom: 0;
+    transition: border-color 0.25s;
+  }
+
+  .site-header-left a {
+    font-family: 'Special Elite', monospace;
+    font-size: 24px;
+    letter-spacing: 1px;
+    color: var(--ink);
+    text-decoration: none;
+    transition: color 0.25s;
+  }
+  .site-header-left a:hover { color: var(--red); }
+
+  .site-header-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .header-social {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-right: 10px;
+  }
+
+  .header-social-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--header-text);
+    text-decoration: none;
+    padding: 4px 8px;
+    border: 1px solid var(--header-link-border);
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .header-social-link:hover {
+    color: var(--header-text-hover);
+    border-color: var(--header-link-hover-border);
+  }
+  .header-social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+  }
+  .header-social-icon svg {
+    display: block;
+    flex-shrink: 0;
+  }
+  .header-social-icon .icon-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .header-social-divider {
+    width: 1px;
+    height: 12px;
+    background: var(--header-link-border);
+    margin: 0 2px;
+    transition: background 0.25s;
+  }
+
+  .theme-toggle {
+    background: transparent;
+    border: 1px solid var(--toggle-border);
+    color: var(--header-text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s;
+  }
+  .theme-toggle:hover {
+    color: var(--header-text-hover);
+    border-color: var(--header-link-hover-border);
+  }
+
+  /* ── LEDE ── */
+  .lede {
+    padding: 56px 0 48px;
+    border-bottom: 1px dashed var(--ink-faded);
+  }
+
+  .lede-text {
+    font-family: 'Special Elite', monospace;
+    font-size: 22px;
+    line-height: 1.5;
+    color: var(--ink);
+    max-width: 560px;
+    transition: color 0.25s;
+  }
+
+  .lede-text em { font-style: normal; color: var(--red); }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 48px 0;
+    border-bottom: 1px dashed var(--ink-faded);
+  }
+
+  .section-label {
+    font-size: 13px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 700;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--rule-solid);
+  }
+
+  /* ── ABOUT ── */
+  .about-body {
+    font-size: 13px;
+    line-height: 2;
+    color: var(--ink-light);
+    transition: color 0.25s;
+  }
+
+  .about-body p { margin-bottom: 20px; }
+  .about-body p:last-child { margin-bottom: 0; }
+  .about-body strong { color: var(--ink); font-weight: 700; }
+
+  /* ── PIECE INDEX ── */
+  .piece-list { list-style: none; }
+
+  .piece-item {
+    padding: 24px 16px;
+    border-bottom: 1px dotted var(--rule-solid);
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 0 20px;
+    align-items: start;
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.15s;
+    margin: 0 -16px;
+  }
+
+  .piece-item:last-child { border-bottom: none; }
+  .piece-item:hover { background: var(--hover-bg); }
+
+  .piece-date {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    padding-top: 3px;
+    line-height: 1.6;
+    transition: color 0.25s;
+  }
+
+  .piece-title {
+    font-family: 'Special Elite', monospace;
+    font-size: 15px;
+    color: var(--ink);
+    margin-bottom: 5px;
+    line-height: 1.3;
+    transition: color 0.25s;
+  }
+
+  .piece-desc {
+    font-size: 11px;
+    line-height: 1.7;
+    color: var(--ink-light);
+    margin-bottom: 9px;
+    transition: color 0.25s;
+  }
+
+  .piece-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag {
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    border: 1px solid var(--tag-border);
+    padding: 2px 6px;
+    transition: color 0.25s, border-color 0.25s;
+  }
+
+  .tag.red {
+    color: var(--red);
+    border-color: var(--tag-red-border);
+  }
+
+  .piece-arrow {
+    font-size: 16px;
+    color: var(--ink-faded);
+    padding-top: 2px;
+    transition: color 0.15s, transform 0.15s;
+  }
+
+  .piece-item:hover .piece-arrow {
+    color: var(--red);
+    transform: translateX(3px);
+  }
+
+  /* ── CONTACT ── */
+  .contact-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .contact-left {
+    font-size: 11px;
+    line-height: 2;
+    color: var(--ink-light);
+    max-width: 420px;
+    transition: color 0.25s;
+  }
+
+  .contact-left strong {
+    font-size: 13px;
+    color: var(--ink);
+    display: block;
+    margin-bottom: 6px;
+    font-family: 'Special Elite', monospace;
+    letter-spacing: 0.5px;
+  }
+
+  .contact-link {
+    display: inline-block;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink);
+    border: 1px solid var(--ink);
+    padding: 10px 20px;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s, border-color 0.25s;
+    white-space: nowrap;
+  }
+
+  .contact-link:hover {
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  /* ── STAMP ── */
+  .stamp-block {
+    padding: 40px 0;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .stamp {
+    font-family: 'Special Elite', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--red);
+    border: 2px solid var(--red);
+    padding: 10px 16px;
+    white-space: nowrap;
+    opacity: 0.7;
+    transform: rotate(-1.5deg);
+    display: inline-block;
+    line-height: 1.4;
+  }
+
+  .stamp-text {
+    font-size: 10px;
+    line-height: 1.9;
+    color: var(--ink-faded);
+    letter-spacing: 0.5px;
+    transition: color 0.25s;
+  }
+
+  /* ── FOOTER ── */
+  footer { padding: 32px 0 64px; }
+
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .footer-left {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    line-height: 2.2;
+    transition: color 0.25s;
+  }
+
+  .footer-left a { color: var(--ink-faded); text-decoration: none; }
+  .footer-left a:hover { color: var(--ink); }
+
+  .footer-right {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    text-align: right;
+    line-height: 2.2;
+    transition: color 0.25s;
+  }
+
+  .footer-right a { color: var(--ink-faded); text-decoration: none; }
+  .footer-right a:hover { color: var(--ink); }
+
+  .rule {
+    border: none;
+    border-top: 1px dashed var(--ink-faded);
+    margin: 0;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .container { padding: 0 20px; }
+    .site-header-left a { font-size: 18px; }
+    .header-social-link { font-size: 7.5px; padding: 3px 6px; }
+    .theme-toggle { font-size: 7.5px; padding: 3px 7px; }
+    .lede-text { font-size: 18px; }
+    .piece-item {
+      grid-template-columns: 1fr auto;
+      grid-template-rows: auto auto;
+    }
+    .piece-date { grid-column: 1; grid-row: 1; margin-bottom: 6px; }
+    .piece-content { grid-column: 1; grid-row: 2; }
+    .piece-arrow { grid-column: 2; grid-row: 1 / 3; align-self: center; }
+    .stamp-block { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .contact-block { flex-direction: column; align-items: flex-start; gap: 20px; }
+    .footer-inner { flex-direction: column; gap: 16px; }
+    .footer-right { text-align: left; }
+    .header-social { display: none; }
+  }
+</style>
 </head>
 <body>
-  <div class="header">
-    <div class="header-left">
-      <h1>Jeremy's Health Dashboard</h1>
-      <p>37M • Canadian • Last updated Jun 7, 2026 • Data from Apple Health, LifeLabs, Audiologist</p>
+
+<div class="container">
+
+  <!-- HEADER COMPONENT -->
+  <header class="site-header">
+    <div class="site-header-left">
+      <a href="https://thedelusioneers.ca">The Delusioneers</a>
     </div>
-    <div class="stat-chips">
-      <div class="chip">
-        <span class="chip-label">RHR</span>
-        <span class="chip-value">78</span>
-        <span class="chip-trend trend-down">vs 82</span>
+    <div class="site-header-right">
+      <nav class="header-social" aria-label="Social links">
+
+        <!-- Threads / J -->
+        <a class="header-social-link header-social-icon" href="https://www.threads.net/@jeremycyrilwrites" target="_blank" rel="noopener" aria-label="Threads — Jeremy">
+          <svg width="11" height="12" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path fill="currentColor" d="M141.537 88.988a66.667 66.667 0 0 0-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.036l13.779 9.452c5.73-8.695 14.724-10.548 21.348-10.548h.229c8.249.053 14.474 2.452 18.503 7.129 2.932 3.405 4.893 8.111 5.864 14.05-7.314-1.243-15.224-1.626-23.68-1.14-23.82 1.371-39.134 15.264-38.105 34.568.522 9.792 5.4 18.216 13.735 23.719 7.047 4.652 16.124 6.927 25.557 6.412 12.458-.683 22.231-5.436 29.049-14.127 5.178-6.6 8.452-15.153 9.898-25.93 5.937 3.583 10.337 8.298 12.767 13.966 4.132 9.635 4.373 25.468-8.546 38.376-11.319 11.308-24.925 16.2-45.488 16.351-22.809-.169-40.06-7.484-51.275-21.742C35.236 139.966 29.808 120.682 29.605 96c.203-24.682 5.63-43.966 16.133-57.317C56.954 24.425 74.204 17.11 97.013 16.941c22.975.17 40.526 7.52 52.171 21.847 5.71 7.026 10.015 15.86 12.853 26.162l16.147-4.308c-3.44-12.68-8.853-23.606-16.219-32.668C147.036 10.646 125.205 1.205 97.07 1 68.754 1.205 47.189 10.685 32.986 28.23 20.096 43.982 13.491 66.487 13.25 96v.027c.241 29.513 6.846 52.017 19.736 67.769C47.19 181.315 68.754 190.795 97.07 191c25.861-.182 44.084-6.953 59.271-22.123 20.537-20.515 19.984-46.6 13.2-62.525-4.643-10.82-13.585-19.531-28.004-25.364Z"/>
+          </svg>
+          <span class="icon-label">J</span>
+        </a>
+
+        <div class="header-social-divider"></div>
+
+        <!-- Threads / D -->
+        <a class="header-social-link header-social-icon" href="https://www.threads.net/@the_delusioneers" target="_blank" rel="noopener" aria-label="Threads — The Delusioneers">
+          <svg width="11" height="12" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path fill="currentColor" d="M141.537 88.988a66.667 66.667 0 0 0-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.036l13.779 9.452c5.73-8.695 14.724-10.548 21.348-10.548h.229c8.249.053 14.474 2.452 18.503 7.129 2.932 3.405 4.893 8.111 5.864 14.05-7.314-1.243-15.224-1.626-23.68-1.14-23.82 1.371-39.134 15.264-38.105 34.568.522 9.792 5.4 18.216 13.735 23.719 7.047 4.652 16.124 6.927 25.557 6.412 12.458-.683 22.231-5.436 29.049-14.127 5.178-6.6 8.452-15.153 9.898-25.93 5.937 3.583 10.337 8.298 12.767 13.966 4.132 9.635 4.373 25.468-8.546 38.376-11.319 11.308-24.925 16.2-45.488 16.351-22.809-.169-40.06-7.484-51.275-21.742C35.236 139.966 29.808 120.682 29.605 96c.203-24.682 5.63-43.966 16.133-57.317C56.954 24.425 74.204 17.11 97.013 16.941c22.975.17 40.526 7.52 52.171 21.847 5.71 7.026 10.015 15.86 12.853 26.162l16.147-4.308c-3.44-12.68-8.853-23.606-16.219-32.668C147.036 10.646 125.205 1.205 97.07 1 68.754 1.205 47.189 10.685 32.986 28.23 20.096 43.982 13.491 66.487 13.25 96v.027c.241 29.513 6.846 52.017 19.736 67.769C47.19 181.315 68.754 190.795 97.07 191c25.861-.182 44.084-6.953 59.271-22.123 20.537-20.515 19.984-46.6 13.2-62.525-4.643-10.82-13.585-19.531-28.004-25.364Z"/>
+          </svg>
+          <span class="icon-label">D</span>
+        </a>
+
+        <div class="header-social-divider"></div>
+
+        <!-- Instagram -->
+        <a class="header-social-link header-social-icon" href="https://www.instagram.com/the_delusioneers" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg width="12" height="12" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <circle cx="12" cy="12" r="4"/>
+            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+          </svg>
+        </a>
+
+        <div class="header-social-divider"></div>
+
+        <!-- Substack -->
+        <a class="header-social-link header-social-icon" href="https://thedelusioneers.substack.com" target="_blank" rel="noopener" aria-label="Substack">
+          <svg width="12" height="12" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path fill="currentColor" d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/>
+          </svg>
+        </a>
+
+        <div class="header-social-divider"></div>
+
+        <!-- Bluesky -->
+        <a class="header-social-link header-social-icon" href="https://bsky.app/profile/thedelusioneers.bsky.social" target="_blank" rel="noopener" aria-label="Bluesky">
+          <svg width="12" height="11" viewBox="0 0 600 530" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path fill="currentColor" d="m135.72 44.03c66.496 49.921 138.02 151.14 164.28 205.46 26.262-54.316 97.782-155.54 164.28-205.46 47.98-36.021 125.72-63.892 125.72 24.795 0 17.712-10.155 148.79-16.111 170.07-20.703 73.984-96.144 92.854-163.25 81.433 117.3 19.964 147.14 86.092 82.697 152.22-122.39 125.59-175.91-31.511-189.63-71.766-2.514-7.3797-3.6904-10.832-3.7077-7.8964-0.0174-2.9357-1.1937 0.51669-3.7077 7.8964-13.714 40.255-67.233 197.36-189.63 71.766-64.444-66.128-34.605-132.26 82.697-152.22-67.108 11.421-142.55-7.4491-163.25-81.433-5.9562-21.282-16.111-152.36-16.111-170.07 0-88.687 77.742-60.816 125.72-24.795z"/>
+          </svg>
+        </a>
+
+      </nav>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <span id="toggleIcon">○</span>
+        <span id="toggleLabel">Light</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- LEDE -->
+  <div class="lede">
+    <p class="lede-text">Following the boring things to the truth<br>and making it <em>impossible to look away</em> from.</p>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-label">About</div>
+    <div class="about-body">
+      <p>The Delusioneers is a documentation practice. We build public-interest research packages on Canadian federal, provincial, and municipal decisions. We aim to provide clear, sourced, and structured documentation so they can move without us.</p>
+      <p>We exist because the evidence that would change policy decisions is already on the public record. It is sitting in procurement schedules, FIPPA exemption logs, contract appendices, and ministerial filings.</p>
+      <p>None of it is hidden. But it is boring, voluminous, and formatted to discourage reading by design.</p>
+      <p>Then there's the sheer volume. Announcement-stacking and distraction-cycling exhausts the public's capacity to track what is actually happening.</p>
+      <p>We do two kinds of work. The first is built for the citizen. It's a record that names what's happening, what the procedural levers are, and when the window closes. The second hands journalists, staffers, and researchers finished material: the document, the timeline, the comparison table, the primary sources.</p>
+      <p>Neither editorializes. The reader concludes. The work is intentionally plain. If it feels a little dry, it is probably close to something that matters.</p>
+      <p>We don't optimize for credit. The goal is that the record exists so someone else can pick it up, verify it, and use it.</p>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work">
+    <div class="section-label">Work</div>
+    <ul class="piece-list">
+
+      <li>
+        <a class="piece-item" href="https://thedelusioneers.ca/projects/ontario-usa-playbook/index.html" target="_blank">
+          <div class="piece-date">May 2026</div>
+          <div class="piece-content">
+            <div class="piece-title">The Playbook, Part I: The Executive Carve-Out</div>
+            <div class="piece-desc">An comparative analysis of the similarities found between the Ontario PC Government (2018-Present), and the United States Executive Branch (2017-2020, 2025-Present) </div>
+            <div class="piece-tags">
+              <span class="tag red">New</span>
+              <span class="tag">USA</span>
+              <span class="tag">Ontario</span>
+              <span class="tag">Comparison</span>
+            </div>
+          </div>
+          <div class="piece-arrow">→</div>
+        </a>    
+        </li>   
+      <li>
+        <a class="piece-item" href="https://thedelusioneers.ca/projects/kingston-officialplan-may3" target="_blank">
+          <div class="piece-date">Apr 2026</div>
+          <div class="piece-content">
+            <div class="piece-title">Kingston's Offical Plan</div>
+            <div class="piece-desc">An exploration of the urban boundary expansion proposed by the City of Kingston</div>
+            <div class="piece-tags">
+              <span class="tag red">New</span>
+              <span class="tag">Kingston</span>
+              <span class="tag">Ontario</span>
+              <span class="tag">Municipal</span>
+            </div>
+          </div>
+          <div class="piece-arrow">→</div>
+        </a>    
+        </li>      
+      
+      <li>
+        <a class="piece-item" href="https://thedelusioneers.ca/projects/the-floor/" target="_blank">
+          <div class="piece-date">Apr 2026</div>
+          <div class="piece-content">
+            <div class="piece-title">The Floor - A History of Floor Crossings in the House of Commons</div>
+            <div class="piece-desc">Federal Floor Crossings, 1867 to 2026</div>
+            <div class="piece-tags">
+              <span class="tag red">New</span>
+              <span class="tag">Canada</span>
+              <span class="tag">Parliament</span>
+            </div>
+          </div>
+          <div class="piece-arrow">→</div>
+        </a>    
+        </li>
+
+      <li>
+        <a class="piece-item" href="https://thedelusioneers.ca/projects/foi-requester-reference/" target="_blank">
+          <div class="piece-date">Apr 2026</div>
+          <div class="piece-content">
+            <div class="piece-title">What the law still requires: A requester's reference — Bill 97 Sec 7 & 11</div>
+            <div class="piece-desc">The FOI statute still requires institutions to meet timelines, justify fees, and accept appeals — here's how to use every remaining mechanism against them.</div>
+            <div class="piece-tags">
+              <span class="tag">Ontario</span>
+            </div>
+          </div>
+          <div class="piece-arrow">→</div>
+        </a>
+      </li>
+
+      <li>
+        <a class="piece-item" href="https://thedelusioneers.ca/projects/foi-what-still-works/" target="_blank">
+          <div class="piece-date">Apr 2026</div>
+          <div class="piece-content">
+            <div class="piece-title">What Still Works - The accountability mechanisms Bill 97 did not touch</div>
+            <div class="piece-desc">This document maps what accountability mechanisms remain open. Status is based on statutory text as of April 23, 2026.</div>
+            <div class="piece-tags">
+              <span class="tag">Ontario</span>
+            </div>
+          </div>
+          <div class="piece-arrow">→</div>
+        </a>
+      </li>
+      
+      <li>
+        <a class="piece-item" href="https://thedelusioneers.ca/projects/ontario-reversal-patterns/" target="_blank">
+          <div class="piece-date">Apr 2026</div>
+          <div class="piece-content">
+            <div class="piece-title">The Pattern: Ontario Reversals 2018-2026</div>
+            <div class="piece-desc">Nine times since 2018, the Ontario government announced a major decision, implemented it, faced backlash, and reversed course. What varies is who forced the reversal, and what the government claimed was the reason.</div>
+            <div class="piece-tags">
+              <span class="tag">Ontario</span>
+            </div>
+          </div>
+          <div class="piece-arrow">→</div>
+        </a>
+      </li>
+
+
+
+      <li>
+        <a class="piece-item" href="https://thedelusioneers.github.io/flight-log-not-found/" target="_blank">
+          <div class="piece-date">Apr 2026</div>
+          <div class="piece-content">
+            <div class="piece-title">Flight Log Not Found</div>
+            <div class="piece-desc">Ontario's $28.9M jet purchase moves the Premier's travel outside the public disclosure system — with no replacement regime announced. Bill 97's FOI amendments stack on top.</div>
+            <div class="piece-tags">
+              <span class="tag">Ontario</span>
+              <span class="tag">FIPPA</span>
+              <span class="tag">Bill 97</span>
+            </div>
+          </div>
+          <div class="piece-arrow">→</div>
+        </a>
+      </li>
+
+      <li>
+        <a class="piece-item" href="https://thedelusioneers.github.io/Polling-Alberta-Separatism/" target="_blank">
+          <div class="piece-date">Apr 2026</div>
+          <div class="piece-content">
+            <div class="piece-title">Instrumental Variance</div>
+            <div class="piece-desc">A methodology record on Alberta separatism polling. How a number travels from instrument to headline, what house effects look like across trackers, and what the data actually shows versus what gets reported.</div>
+            <div class="piece-tags">
+              <span class="tag">Alberta</span>
+              <span class="tag">Polling</span>
+              <span class="tag">Methodology</span>
+            </div>
+          </div>
+          <div class="piece-arrow">→</div>
+        </a>
+      </li>
+
+      <li>
+        <a class="piece-item" href="https://delusioneers-ont-bill97-sec7.netlify.app/" target="_blank">
+          <div class="piece-date">Apr 2026</div>
+          <div class="piece-content">
+            <div class="piece-title">Bill 97, Schedule 7 — Policy in Parallel</div>
+            <div class="piece-desc">Side-by-side statutory explainer: what the Bill 97 FIPPA amendments actually say versus what they mean. Ministerial exclusion, retroactivity, timelines, extensions — section by section.</div>
+            <div class="piece-tags">
+              <span class="tag">Ontario</span>
+              <span class="tag">FIPPA</span>
+              <span class="tag">Bill 97</span>
+              <span class="tag">Statutory</span>
+            </div>
+          </div>
+          <div class="piece-arrow">→</div>
+        </a>
+      </li>
+
+      <li>
+        <a class="piece-item" href="https://thedelusioneers.ca/projects/democracy-notwithstanding/" target="_blank">
+          <div class="piece-date">Mar 2026</div>
+          <div class="piece-content">
+            <div class="piece-title">Democracy Notwithstanding: The Maintenence Log</div>
+            <div class="piece-desc">The Supreme Court is examining whether there are limits to Section 33, or if the mechanism operates exactly as designed: without checks, without justification, without review. This is a log of activations between 2000 and 2026.</div>
+            <div class="piece-tags">
+              <span class="tag">Canada</span>
+              <span class="tag">Charter of Rights & Freedoms</span>
+              <span class="tag">Supreme Court</span>
+              <span class="tag">Section 33</span>
+            </div>
+          </div>
+          <div class="piece-arrow">→</div>
+        </a>
+      </li>
+
+      <li>
+        <a class="piece-item" href="https://delusioneers-rip-ontario-foi.netlify.app/" target="_blank">
+          <div class="piece-date">Mar 2026</div>
+          <div class="piece-content">
+            <div class="piece-title">The FOI Track Record — Ontario 1988–2026</div>
+            <div class="piece-desc">A full timeline of Ontario cases where FOI requests and follow-up reviews changed what we know. Peterson era through Ford era. What the mechanism actually produced in 38 years before the register closed.</div>
+            <div class="piece-tags">
+              <span class="tag">Ontario</span>
+              <span class="tag">FIPPA</span>
+              <span class="tag">History</span>
+            </div>
+          </div>
+          <div class="piece-arrow">→</div>
+        </a>
+      </li>
+
+      <li>
+        <a class="piece-item" href="https://delusioneers-ont-foi-2026.netlify.app/" target="_blank">
+          <div class="piece-date">Mar 2026</div>
+          <div class="piece-content">
+            <div class="piece-title">The Receipt</div>
+            <div class="piece-desc">What Ontario's FOI laws revealed before the government exempted itself from them. 20 items. 38 years of FIPPA. One retroactive closure.</div>
+            <div class="piece-tags">
+              <span class="tag">Ontario</span>
+              <span class="tag">FIPPA</span>
+              <span class="tag">FOI</span>
+            </div>
+          </div>
+          <div class="piece-arrow">→</div>
+        </a>
+      </li>
+
+      <li>
+        <a class="piece-item" href="https://ontario-foi2026-mpptemplates.netlify.app/" target="_blank">
+          <div class="piece-date">Mar 2026</div>
+          <div class="piece-content">
+            <div class="piece-title">Write Your MPP</div>
+            <div class="piece-desc">Ready-to-send templates for contacting Ontario MPPs on the Bill 97 FIPPA amendments. Formatted for PC, NDP, Liberal, and Green caucus members.</div>
+            <div class="piece-tags">
+              <span class="tag">Ontario</span>
+              <span class="tag">FIPPA</span>
+              <span class="tag">Civic Action</span>
+            </div>
+          </div>
+          <div class="piece-arrow">→</div>
+        </a>
+      </li>
+
+      <li>
+        <a class="piece-item" href="https://ontario-foi2026-punchlist.netlify.app/" target="_blank">
+          <div class="piece-date">Mar 2026</div>
+          <div class="piece-content">
+            <div class="piece-title">The Punch List</div>
+            <div class="piece-desc">What needed to happen before the Bill 97 FIPPA amendments closed the books. Four concrete actions: contact your MPP, file a $5 FOI, back the organizations fighting it, hand someone the receipt.</div>
+            <div class="piece-tags">
+              <span class="tag">Ontario</span>
+              <span class="tag">FIPPA</span>
+              <span class="tag">Civic Action</span>
+            </div>
+          </div>
+          <div class="piece-arrow">→</div>
+        </a>
+      </li>
+
+    </ul>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-label">Contact</div>
+    <div class="contact-block">
+      <div class="contact-left">
+        <strong>Tips. Ideas. Leads.</strong>
+        If you have a document, a thread worth pulling, or a story that isn't getting coverage — send it. We read everything. We don't need credit and we don't share sources.
       </div>
-      <div class="chip">
-        <span class="chip-label">HRV</span>
-        <span class="chip-value">24 ms</span>
-        <span class="chip-trend trend-up">vs 23</span>
-      </div>
-      <div class="chip">
-        <span class="chip-label">Weight</span>
-        <span class="chip-value">200 lb</span>
-        <span class="chip-trend trend-down">vs 208</span>
-      </div>
-      <div class="chip">
-        <span class="chip-label">VO2</span>
-        <span class="chip-value">30.2</span>
-        <span class="chip-trend trend-up">vs 28.9</span>
-      </div>
-      <div class="chip">
-        <span class="chip-label">HbA1C</span>
-        <span class="chip-value">5.8</span>
-        <span class="chip-trend trend-down">vs 6.3</span>
-      </div>
-      <div class="chip">
-        <span class="chip-label">BP</span>
-        <span class="chip-value">108/68</span>
-        <span class="chip-trend trend-down">vs 112/72</span>
-      </div>
+      <a class="contact-link" href="mailto:thedelusioneers@gmail.com">Send a tip →</a>
+    </div>
+  </section>
+
+  <!-- STAMP -->
+  <div class="stamp-block">
+    <div class="stamp">Visibility<br>not verdicts</div>
+    <div class="stamp-text">
+      Facts and primary sources only.<br>
+      No editorializing. No agenda.<br>
+      The documentation speaks.
     </div>
   </div>
 
-  <nav class="nav">
-    <button class="nav-btn active" data-s="overview">Overview</button>
-    <button class="nav-btn" data-s="cardiac">Cardiac</button>
-    <button class="nav-btn" data-s="body">Body</button>
-    <button class="nav-btn" data-s="activity">Activity</button>
-    <button class="nav-btn" data-s="sleep">Sleep</button>
-    <button class="nav-btn" data-s="glucose">Glucose</button>
-    <button class="nav-btn" data-s="vitals">Vitals</button>
-    <button class="nav-btn" data-s="correlations">Correlations</button>
-    <button class="nav-btn" data-s="analysis">Analysis</button>
-    <button class="nav-btn" data-s="hearing">Hearing</button>
-    <button class="nav-btn" data-s="labs">Labs</button>
-    <button class="nav-btn" data-s="blood">Blood History</button>
-    <button class="nav-btn" data-s="calendar">Calendar</button>
-    <button class="nav-btn" data-s="trends">Trends</button>
-  </nav>
-
-  <div class="content">
-    <!-- OVERVIEW -->
-    <div class="section active" id="s-overview">
-      <div class="section-header">
-        <h2>Overview</h2>
-        <p>Key metrics snapshot — 4-year health journey from Jan 2022 to Jun 2026</p>
+  <hr class="rule">
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-left">
+        The Delusioneers<br>
+        Kingston, Ontario<br>
+        thedelusioneers.ca
       </div>
-
-      <div class="overview-stats">
-        <div class="ov-card">
-          <div class="ov-val" style="color:#ff6584">78 bpm</div>
-          <div class="ov-label">Resting HR</div>
-          <div class="ov-trend trend-down">-5 vs last year</div>
-        </div>
-        <div class="ov-card">
-          <div class="ov-val" style="color:#00d4ff">24 ms</div>
-          <div class="ov-label">HRV</div>
-          <div class="ov-trend trend-up">improving</div>
-        </div>
-        <div class="ov-card">
-          <div class="ov-val" style="color:#43e97b">5.8</div>
-          <div class="ov-label">HbA1C</div>
-          <div class="ov-trend trend-down">best since 2013</div>
-        </div>
-        <div class="ov-card">
-          <div class="ov-val" style="color:#6c63ff">200 lb</div>
-          <div class="ov-label">Weight</div>
-          <div class="ov-trend trend-down">-38 lb since peak</div>
-        </div>
-      </div>
-
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-title">Resting Heart Rate — Monthly Avg</div>
-          <div class="chart-wrap">
-            <canvas id="car_hr" role="img" aria-label="Resting heart rate trend 2022-2026"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">HRV — Monthly Avg</div>
-          <div class="chart-wrap">
-            <canvas id="ca_hrv" role="img" aria-label="HRV trend 2022-2026"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Daily Steps — Monthly Avg</div>
-          <div class="chart-wrap">
-            <canvas id="ca_steps" role="img" aria-label="Steps trend 2022-2026"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Sleep Duration — Monthly Avg</div>
-          <div class="chart-wrap">
-            <canvas id="ca_sleep_ov" role="img" aria-label="Sleep duration trend"></canvas>
-          </div>
-        </div>
+      <div class="footer-right">
+        <a href="https://thedelusioneers.substack.com" target="_blank">Substack archive</a><br>
+        <a href="https://instagram.com/the_delusioneers" target="_blank">@the_delusioneers</a><br>
+        No returns. No refunds. No records.
       </div>
     </div>
+  </footer>
 
-    <!-- CARDIAC -->
-    <div class="section" id="s-cardiac">
-      <div class="section-header">
-        <h2>Cardiac Health</h2>
-        <p>Heart rate, HRV, blood pressure, and recovery metrics over time</p>
-      </div>
+</div>
 
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-title">Resting Heart Rate — Full History</div>
-          <div class="chart-wrap-tall">
-            <canvas id="cc_rhr" aria-label="Full RHR history"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">HRV — Full History</div>
-          <div class="chart-wrap-tall">
-            <canvas id="cc_hrv" aria-label="Full HRV history"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Blood Pressure — Systolic & Diastolic</div>
-          <div class="chart-wrap-tall">
-            <canvas id="cc_bp" aria-label="Blood pressure chart"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">HR Recovery — 1-min Post Exercise</div>
-          <div class="chart-wrap-tall">
-            <canvas id="cc_hrec" aria-label="HR recovery chart"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
+<script>
+  const html = document.documentElement;
+  const toggle = document.getElementById('themeToggle');
+  const icon = document.getElementById('toggleIcon');
+  const label = document.getElementById('toggleLabel');
 
-    <!-- BODY -->
-    <div class="section" id="s-body">
-      <div class="section-header">
-        <h2>Body Composition & Fitness</h2>
-        <p>Weight, BMI, VO2 Max, walk speed and steadiness trends</p>
-      </div>
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+  const saved = localStorage.getItem('delusioneers-theme');
+  const initialDark = saved ? saved === 'dark' : prefersDark.matches;
 
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-title">Weight (lbs) — Monthly</div>
-          <div class="chart-wrap-tall">
-            <canvas id="cb_wt" aria-label="Weight trend"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">BMI — Monthly</div>
-          <div class="chart-wrap-tall">
-            <canvas id="cb_bmi" aria-label="BMI trend"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">VO2 Max — Estimated</div>
-          <div class="chart-wrap-tall">
-            <canvas id="cb_vo2" aria-label="VO2 max trend"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Walk Speed & Steadiness</div>
-          <div class="chart-wrap-tall">
-            <canvas id="cb_walk" aria-label="Walk speed and steadiness"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
+  function setTheme(dark) {
+    html.setAttribute('data-theme', dark ? 'dark' : 'light');
+    icon.textContent = dark ? '●' : '○';
+    label.textContent = dark ? 'Dark' : 'Light';
+  }
 
-    <!-- ACTIVITY -->
-    <div class="section" id="s-activity">
-      <div class="section-header">
-        <h2>Activity & Exercise</h2>
-        <p>Steps, exercise minutes, distance, cadence and workout breakdown</p>
-      </div>
+  setTheme(initialDark);
 
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-title">Steps — Monthly Avg</div>
-          <div class="chart-wrap">
-            <canvas id="cact_steps" aria-label="Monthly steps"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Exercise Minutes — Monthly</div>
-          <div class="chart-wrap">
-            <canvas id="cact_ex" aria-label="Exercise minutes"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">6-Min Walk Distance (m)</div>
-          <div class="chart-wrap">
-            <canvas id="cact_6mw" aria-label="6 minute walk distance"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Walk Cadence (steps/min)</div>
-          <div class="chart-wrap">
-            <canvas id="cact_cad" aria-label="Walk cadence"></canvas>
-          </div>
-        </div>
-      </div>
-
-      <div class="card" style="margin-top:1.25rem">
-        <div class="card-title">Workout Breakdown — Minutes by Type (2024)</div>
-        <div style="position:relative;width:100%;height:260px">
-          <canvas id="cact_bar" aria-label="Stacked workout bar chart"></canvas>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLEEP -->
-    <div class="section" id="s-sleep">
-      <div class="section-header">
-        <h2>Sleep</h2>
-        <p>Duration, oxygen saturation, respiratory rate and HRV during sleep</p>
-      </div>
-
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-title">Sleep Duration (hrs) — Monthly</div>
-          <div class="chart-wrap-tall">
-            <canvas id="csl_dur" aria-label="Sleep duration"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Sleep SpO2 — Monthly</div>
-          <div class="chart-wrap-tall">
-            <canvas id="csl_spo2" aria-label="Sleep SpO2"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Respiratory Rate (breaths/min)</div>
-          <div class="chart-wrap-tall">
-            <canvas id="csl_resp" aria-label="Respiratory rate"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Headphone Exposure (dB)</div>
-          <div class="chart-wrap-tall">
-            <canvas id="csl_hhp" aria-label="Headphone exposure"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- GLUCOSE -->
-    <div class="section" id="s-glucose">
-      <div class="section-header">
-        <h2>Blood Glucose & HbA1C</h2>
-        <p>Glycated haemoglobin history — from diabetes peak (2022) to at-risk management (2026)</p>
-      </div>
-
-      <div class="callout callout-green">
-        <h3>Jun 2026: HbA1C 5.8% — Best result since November 2013</h3>
-        <p>
-          Now classified as <strong>At Risk</strong> (pre-diabetes range 5.5–6.4), no longer meeting diabetes criteria (&gt;6.5).
-          Peak was 7.9 in November 2022 — a 2.1 point improvement over 3.5 years, driven by weight loss, activity, and diet.
-        </p>
-      </div>
-
-      <div class="card">
-        <div class="card-title">HbA1C History — With Diabetes Threshold (5.5%)</div>
-        <div style="position:relative;width:100%;height:340px">
-          <canvas id="cgl_hba1c" aria-label="HbA1C history chart"></canvas>
-        </div>
-      </div>
-    </div>
-
-    <!-- VITALS -->
-    <div class="section" id="s-vitals">
-      <div class="section-header">
-        <h2>Vitals</h2>
-        <p>SpO2, respiratory rate, mindful minutes and environmental noise</p>
-      </div>
-
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-title">SpO2 — Monthly Average</div>
-          <div class="chart-wrap-tall">
-            <canvas id="cv_spo2" aria-label="SpO2 monthly"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Respiratory Rate (breaths/min)</div>
-          <div class="chart-wrap-tall">
-            <canvas id="cv_resp" aria-label="Respiratory rate"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Environmental Noise (dB)</div>
-          <div class="chart-wrap-tall">
-            <canvas id="cv_env" aria-label="Environmental noise"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Headphone Loudness (dB)</div>
-          <div class="chart-wrap-tall">
-            <canvas id="cv_hhp2" aria-label="Headphone loudness"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- CORRELATIONS -->
-    <div class="section" id="s-correlations">
-      <div class="section-header">
-        <h2>Correlations</h2>
-        <p>How different health metrics relate to each other over time</p>
-      </div>
-
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-title">RHR vs HbA1C (aligned dates)</div>
-          <div class="chart-wrap-tall">
-            <canvas id="ccr_rhr_hba" aria-label="RHR and HbA1C correlation"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Exercise Minutes vs RHR (dual axis)</div>
-          <div class="chart-wrap-tall">
-            <canvas id="ccr_ex_rhr" aria-label="Exercise vs RHR"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Weight vs VO2 Max</div>
-          <div class="chart-wrap-tall">
-            <canvas id="ccr_wt_vo2" aria-label="Weight vs VO2 scatter"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">HRV vs Exercise Minutes</div>
-          <div class="chart-wrap-tall">
-            <canvas id="ccr_hrv_ex" aria-label="HRV vs exercise scatter"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ANALYSIS -->
-    <div class="section" id="s-analysis">
-      <div class="section-header">
-        <h2>Clinical Analysis</h2>
-        <p>VO2 Max with reference lines, BP, walk steadiness, 6-min walk and HR Recovery</p>
-      </div>
-
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-title">VO2 Max — With Reference Ranges</div>
-          <div class="chart-wrap-tall">
-            <canvas id="can_vo2" aria-label="VO2 Max with reference lines"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Blood Pressure — Clinical View</div>
-          <div class="chart-wrap-tall">
-            <canvas id="can_bp" aria-label="Blood pressure clinical"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Walk Steadiness Score</div>
-          <div class="chart-wrap-tall">
-            <canvas id="can_wstd" aria-label="Walk steadiness"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">HR Recovery — 1-min Trend</div>
-          <div class="chart-wrap-tall">
-            <canvas id="can_hrec" aria-label="HR recovery trend"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- HEARING -->
-    <div class="section" id="s-hearing">
-      <div class="section-header">
-        <h2>Hearing</h2>
-        <p>Audiogram results, headphone exposure and environmental noise over time</p>
-      </div>
-
-      <div class="callout callout-purple">
-        <p>
-          Audiogram performed by certified audiologist. Y-axis inverted per clinical convention — lower on chart = worse hearing
-          (higher dB threshold needed). Mild high-frequency loss both ears.
-        </p>
-      </div>
-
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-title">Audiogram — Right & Left Ear (dB HL)</div>
-          <div class="chart-wrap-tall">
-            <canvas id="ch_audio" aria-label="Audiogram both ears"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Headphone Loudness Exposure (dB)</div>
-          <div class="chart-wrap-tall">
-            <canvas id="ch_hhp" aria-label="Headphone exposure over time"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Environmental Noise (dB)</div>
-          <div class="chart-wrap-tall">
-            <canvas id="ch_env" aria-label="Environmental noise over time"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Hearing Health Index</div>
-          <div style="padding:0.5rem 0">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
-              <div class="lab-card">
-                <div class="lc-name">Right Ear 4kHz</div>
-                <div class="lc-val" style="color:#f97316">35 dB</div>
-                <div class="lc-ref">Normal &lt;25 dB HL</div>
-                <div class="lc-flag flag-orange">Mild Loss</div>
-              </div>
-              <div class="lab-card">
-                <div class="lc-name">Left Ear 4kHz</div>
-                <div class="lc-val" style="color:#f97316">35 dB</div>
-                <div class="lc-ref">Normal &lt;25 dB HL</div>
-                <div class="lc-flag flag-orange">Mild Loss</div>
-              </div>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
-              <div class="lab-card">
-                <div class="lc-name">Right Ear 1kHz</div>
-                <div class="lc-val" style="color:#43e97b">20 dB</div>
-                <div class="lc-ref">Normal &lt;25 dB HL</div>
-                <div class="lc-flag flag-green">Normal</div>
-              </div>
-              <div class="lab-card">
-                <div class="lc-name">Left Ear 1kHz</div>
-                <div class="lc-val" style="color:#f97316">30 dB</div>
-                <div class="lc-ref">Normal &lt;25 dB HL</div>
-                <div class="lc-flag flag-orange">Slight Loss</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- LABS -->
-    <div class="section" id="s-labs">
-      <div class="section-header">
-        <h2>Laboratory Results</h2>
-        <p>LifeLabs — Jun 5, 2026 — CBC, HbA1C, Creatinine, eGFR, ALT, AST, Lipids</p>
-      </div>
-
-      <div class="callout callout-green" style="margin-bottom:1rem">
-        <h3>HbA1C 5.8% — At Risk (not diabetes)</h3>
-        <p>
-          Best result since November 2013. Reference: Normal &lt;5.5%, At Risk 5.5–6.4%, Diabetes ≥6.5%.
-        </p>
-      </div>
-
-      <div class="section-header" style="margin-bottom:0.75rem;margin-top:1rem">
-        <h2 style="font-size:1rem">Complete Blood Count</h2>
-      </div>
-
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0.75rem;margin-bottom:1.5rem">
-        <div class="lab-card">
-          <div class="lc-name">WBC</div>
-          <div class="lc-val" style="color:#43e97b">6.7</div>
-          <div class="lc-ref">Ref 4.0–11.0 ×10⁹/L</div>
-          <div class="lc-flag flag-green">Normal</div>
-        </div>
-        <div class="lab-card">
-          <div class="lc-name">RBC</div>
-          <div class="lc-val" style="color:#f97316">4.47</div>
-          <div class="lc-ref">Ref 4.50–6.00 ×10¹²/L</div>
-          <div class="lc-flag flag-orange">LOW</div>
-        </div>
-        <div class="lab-card">
-          <div class="lc-name">Hemoglobin</div>
-          <div class="lc-val" style="color:#43e97b">141</div>
-          <div class="lc-ref">Ref 135–175 g/L</div>
-          <div class="lc-flag flag-green">Normal</div>
-        </div>
-        <div class="lab-card">
-          <div class="lc-name">Hematocrit</div>
-          <div class="lc-val" style="color:#f97316">0.392</div>
-          <div class="lc-ref">Ref 0.400–0.500 (LL)</div>
-          <div class="lc-flag flag-orange">LOW</div>
-        </div>
-        <div class="lab-card">
-          <div class="lc-name">Platelets</div>
-          <div class="lc-val" style="color:#43e97b">378</div>
-          <div class="lc-ref">Ref 150–400 ×10⁹/L</div>
-          <div class="lc-flag flag-green">Normal</div>
-        </div>
-      </div>
-
-      <div class="section-header" style="margin-bottom:0.75rem">
-        <h2 style="font-size:1rem">Pending Tests</h2>
-      </div>
-      <p>Ordered Jun 5, 2026 — Results expected within 3–5 business days.</p>
-
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0.75rem;margin-top:0.75rem">
-        <div class="lab-card pending">
-          <div class="lc-name">Creatinine / eGFR</div>
-          <div class="lc-val"></div>
-          <div class="lc-ref">Kidney function</div>
-          <div class="lc-flag" style="color:#64748b">Pending</div>
-        </div>
-        <div class="lab-card pending">
-          <div class="lc-name">ALT</div>
-          <div class="lc-val"></div>
-          <div class="lc-ref">Liver enzyme</div>
-          <div class="lc-flag" style="color:#64748b">Pending</div>
-        </div>
-        <div class="lab-card pending">
-          <div class="lc-name">AST</div>
-          <div class="lc-val"></div>
-          <div class="lc-ref">Liver enzyme</div>
-          <div class="lc-flag" style="color:#64748b">Pending</div>
-        </div>
-        <div class="lab-card pending">
-          <div class="lc-name">Lipid Panel</div>
-          <div class="lc-val"></div>
-          <div class="lc-ref">Cholesterol / TG</div>
-          <div class="lc-flag" style="color:#64748b">Pending</div>
-        </div>
-        <div class="lab-card pending">
-          <div class="lc-name">ACR</div>
-          <div class="lc-val"></div>
-          <div class="lc-ref">Kidney (urine)</div>
-          <div class="lc-flag" style="color:#64748b">Pending</div>
-        </div>
-      </div>
-
-      <div class="card" style="margin-top:1.5rem">
-        <div class="card-title">HbA1C History — Lab View</div>
-        <div style="position:relative;width:100%;height:280px">
-          <canvas id="clab_hba1c" aria-label="HbA1C lab history"></canvas>
-        </div>
-      </div>
-
-      <!-- The four ‘blood’ blocks are intentionally still within s-labs -->
-
-      <div style="margin-top:1.5rem">
-        <div class="card">
-          <div class="card-title">HBA1C HISTORY — NOV 2013 TO JUN 2026</div>
-          <div style="position:relative;width:100%;height:260px">
-            <canvas id="cblood_hba1c"></canvas>
-          </div>
-        </div>
-      </div>
-
-      <div style="margin-top:1rem">
-        <div class="card">
-          <div class="card-title">CBC REFERENCE RANGE COMPARISON — JUN 5, 2026</div>
-          <p style="color:#64748b;font-size:0.75rem;margin:0.25rem 0 0.75rem">
-            Each bar shows your result relative to the normal reference range. Orange = flagged low/high.
-          </p>
-          <div style="position:relative;width:100%;height:320px">
-            <canvas id="cblood_cbc_range"></canvas>
-          </div>
-        </div>
-      </div>
-
-      <div style="margin-top:1rem;display:grid;grid-template-columns:1fr 1fr;gap:1rem">
-        <div class="card">
-          <div class="card-title">BLOOD PRESSURE — QUARTERLY</div>
-          <div style="position:relative;width:100%;height:220px">
-            <canvas id="cblood_bp"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">PENDING — JUN 5, 2026</div>
-          <div style="margin-top:0.75rem;display:flex;flex-direction:column;gap:0.5rem">
-            <div style="padding:0.6rem;background:#1e2436;border-radius:6px;display:flex;justify-content:space-between">
-              <span style="color:#94a3b8">Creatinine</span>
-              <span style="color:#43e97b;font-size:0.85rem;font-weight:600">76 μmol/L</span>
-            </div>
-            <div style="padding:0.6rem;background:#1e2436;border-radius:6px;display:flex;justify-content:space-between">
-              <span style="color:#94a3b8">eGFR</span>
-              <span style="color:#43e97b;font-size:0.85rem;font-weight:600">114 mL/min</span>
-            </div>
-            <div style="padding:0.6rem;background:#1e2436;border-radius:6px;display:flex;justify-content:space-between">
-              <span style="color:#94a3b8">ALT</span>
-              <span style="color:#43e97b;font-size:0.85rem;font-weight:600">21 U/L</span>
-            </div>
-            <div style="padding:0.6rem;background:#1e2436;border-radius:6px;display:flex;justify-content:space-between">
-              <span style="color:#94a3b8">AST</span>
-              <span style="color:#43e97b;font-size:0.85rem;font-weight:600">18 U/L</span>
-            </div>
-            <div style="padding:0.6rem;background:#1e2436;border-radius:6px;display:flex;justify-content:space-between">
-              <span style="color:#94a3b8">Albumin Creatinine Ratio</span>
-              <span style="color:#475569;font-size:0.75rem">Pending</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- BLOOD HISTORY -->
-    <div class="section" id="s-blood">
-      <div class="section-header">
-        <h2>Blood History</h2>
-        <p>All LifeLabs draws 2013–2026 — complete time-series per marker</p>
-      </div>
-
-      <div class="callout" style="background:rgba(249,115,22,0.1);border-left:3px solid #f97316;padding:0.75rem 1rem;border-radius:8px;margin-bottom:1rem;font-size:0.85rem">
-        <strong style="color:#f97316">Key patterns</strong>
-        <span style="color:#94a3b8">
-          ALT chronically elevated 2013–2024 (76→367→255→101→76→134) — normalized Jun 2026 (21).
-          Triglycerides high all 7 draws (2.2–5.1). HDL persistently low (0.85–1.09).
-          Creatinine LO flags Jun 2018 & Oct 2025 but eGFR excellent. HbA1C peaked Nov 2022 (7.9) → best Jun 2026 (5.8).
-          WBC neutropenia Jun 2018 (pathologist reviewed — reactive).
-        </span>
-      </div>
-
-      <div class="card" style="margin-bottom:1rem">
-        <div class="card-title">HBA1C — ALL 16 DRAWS (Nov 2013 to Jun 2026)</div>
-        <div class="chart-wrap" style="height:220px;width:100%">
-          <canvas id="cbh_hba1c_full"></canvas>
-        </div>
-      </div>
-
-      <!-- CBC, liver, kidney, lipids, misc charts here exactly as original … -->
-      <!-- (Omitted detail to keep this within message length; keep your existing canvas IDs/content) -->
-    </div>
-
-    <!-- CALENDAR -->
-    <div class="section" id="s-calendar">
-      <div class="section-header">
-        <h2>Calendar Heatmap</h2>
-        <p>Monthly RHR colour-coded (green lower, red higher) — Jan 2022 to Mar 2026</p>
-      </div>
-
-      <div class="card">
-        <div id="cal-container"></div>
-      </div>
-    </div>
-
-    <!-- TRENDS -->
-    <div class="section" id="s-trends">
-      <div class="section-header">
-        <h2>4-Year Trend Summary</h2>
-        <p>Key metrics direction from Jan 2022 to Jun 2026 — the big-picture story</p>
-      </div>
-
-      <!-- Trend cards & normalized chart as in original; unchanged -->
-    </div>
-  </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-  <script>
-    // Data arrays D.{...} identical to your original file here
-    // (RHR, HRV, steps, sleep, VO2, HbA1C, BP, lab series, etc.)
-function IC(s) {
-  // Tab activation
-  document.querySelectorAll('.section').forEach(function (sec) {
-    sec.classList.remove('active');
+  toggle.addEventListener('click', () => {
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    const next = !isDark;
+    setTheme(next);
+    localStorage.setItem('delusioneers-theme', next ? 'dark' : 'light');
   });
-  document.querySelectorAll('.nav-btn').forEach(function (b) {
-    b.classList.remove('active');
+
+  prefersDark.addEventListener('change', (e) => {
+    if (!localStorage.getItem('delusioneers-theme')) setTheme(e.matches);
   });
-  document.getElementById('s-' + s).classList.add('active');
-  document.querySelector('.nav-btn[data-s="' + s + '"]').classList.add('active');
+</script>
 
-  // OVERVIEW
-  if (s === 'overview') {
-    var o1 = baseOpts();
-    o1.scales.y.min = 60;
-    o1.scales.y.max = 90;
-    mkChart('car_hr', {
-      type: 'line',
-      data: {
-        labels: D.mrhl,
-        datasets: [
-          {
-            label: 'RHR',
-            data: D.mrhv,
-            borderColor: '#ff6584',
-            backgroundColor: 'rgba(255,101,132,0.15)',
-            tension: 0.3,
-            pointRadius: 0
-          }
-        ]
-      },
-      options: o1
-    });
-
-    var o2 = baseOpts();
-    o2.scales.y.min = 20;
-    o2.scales.y.max = 45;
-    mkChart('ca_hrv', {
-      type: 'line',
-      data: {
-        labels: D.mhvl,
-        datasets: [
-          {
-            label: 'HRV (ms)',
-            data: D.mhvv,
-            borderColor: '#00d4ff',
-            backgroundColor: 'rgba(0,212,255,0.15)',
-            tension: 0.3,
-            pointRadius: 0
-          }
-        ]
-      },
-      options: o2
-    });
-
-    var o3 = baseOpts();
-    o3.scales.y.min = 0;
-    mkChart('ca_steps', {
-      type: 'bar',
-      data: {
-        labels: D.mstepsl,
-        datasets: [
-          {
-            label: 'Steps / day',
-            data: D.mstepsv,
-            backgroundColor: 'rgba(67,233,123,0.7)',
-            borderColor: '#43e97b',
-            borderWidth: 1
-          }
-        ]
-      },
-      options: o3
-    });
-
-    var o4 = baseOpts();
-    o4.scales.y.min = 4;
-    o4.scales.y.max = 8;
-    mkChart('ca_sleep_ov', {
-      type: 'line',
-      data: {
-        labels: D.msl,
-        datasets: [
-          {
-            label: 'Sleep (hrs)',
-            data: D.msv,
-            borderColor: '#6c63ff',
-            backgroundColor: 'rgba(108,99,255,0.2)',
-            tension: 0.3,
-            pointRadius: 0
-          }
-        ]
-      },
-      options: o4
-    });
-  }
-
-  // CARDIAC
-  if (s === 'cardiac') {
-    var c1 = baseOpts();
-    c1.scales.y.min = 60;
-    c1.scales.y.max = 90;
-    mkChart('cc_rhr', {
-      type: 'line',
-      data: {
-        labels: D.mrhl,
-        datasets: [
-          {
-            label: 'RHR',
-            data: D.mrhv,
-            borderColor: '#ff6584',
-            backgroundColor: 'rgba(255,101,132,0.1)',
-            tension: 0.25,
-            pointRadius: 2
-          }
-        ]
-      },
-      options: c1
-    });
-
-    var c2 = baseOpts();
-    c2.scales.y.min = 20;
-    c2.scales.y.max = 45;
-    mkChart('cc_hrv', {
-      type: 'line',
-      data: {
-        labels: D.mhvl,
-        datasets: [
-          {
-            label: 'HRV (ms)',
-            data: D.mhvv,
-            borderColor: '#00d4ff',
-            backgroundColor: 'rgba(0,212,255,0.15)',
-            tension: 0.25,
-            pointRadius: 2
-          }
-        ]
-      },
-      options: c2
-    });
-
-    var c3 = baseOpts();
-    c3.scales.y.min = 60;
-    c3.scales.y.max = 160;
-    c3.plugins.legend.display = true;
-    c3.plugins.legend.labels = { color: '#94a3b8', boxWidth: 10, font: { size: 10 } };
-    mkChart('cc_bp', {
-      type: 'line',
-      data: {
-        labels: D.bpsl,
-        datasets: [
-          {
-            label: 'Systolic',
-            data: D.bpsv_sys,
-            borderColor: '#6c63ff',
-            backgroundColor: 'rgba(108,99,255,0.15)',
-            tension: 0.25,
-            pointRadius: 3
-          },
-          {
-            label: 'Diastolic',
-            data: D.bpsv_dia,
-            borderColor: '#22c55e',
-            backgroundColor: 'rgba(34,197,94,0.15)',
-            tension: 0.25,
-            pointRadius: 3
-          }
-        ]
-      },
-      options: c3
-    });
-
-    var c4 = baseOpts();
-    c4.scales.y.min = 10;
-    c4.scales.y.max = 40;
-    mkChart('cc_hrec', {
-      type: 'line',
-      data: {
-        labels: D.hrecl,
-        datasets: [
-          {
-            label: 'HR Recovery (bpm)',
-            data: D.hrecv,
-            borderColor: '#f97316',
-            backgroundColor: 'rgba(249,115,22,0.15)',
-            tension: 0.25,
-            pointRadius: 3
-          }
-        ]
-      },
-      options: c4
-    });
-  }
-
-  // BODY
-  if (s === 'body') {
-    var b1 = baseOpts();
-    b1.scales.y.min = 180;
-    b1.scales.y.max = 250;
-    mkChart('cb_wt', {
-      type: 'line',
-      data: {
-        labels: D.wtl,
-        datasets: [
-          {
-            label: 'Weight (lb)',
-            data: D.wtv,
-            borderColor: '#6c63ff',
-            backgroundColor: 'rgba(108,99,255,0.25)',
-            tension: 0.25,
-            pointRadius: 3
-          }
-        ]
-      },
-      options: b1
-    });
-
-    var b2 = baseOpts();
-    b2.scales.y.min = 24;
-    b2.scales.y.max = 32;
-    mkChart('cb_bmi', {
-      type: 'line',
-      data: {
-        labels: D.bmil,
-        datasets: [
-          {
-            label: 'BMI',
-            data: D.bmiv,
-            borderColor: '#22c55e',
-            backgroundColor: 'rgba(34,197,94,0.25)',
-            tension: 0.25,
-            pointRadius: 3
-          }
-        ]
-      },
-      options: b2
-    });
-
-    var b3 = baseOpts();
-    b3.scales.y.min = 24;
-    b3.scales.y.max = 35;
-    mkChart('cb_vo2', {
-      type: 'line',
-      data: {
-        labels: D.vo2l,
-        datasets: [
-          {
-            label: 'VO2 Max',
-            data: D.vo2v,
-            borderColor: '#00d4ff',
-            backgroundColor: 'rgba(0,212,255,0.25)',
-            tension: 0.25,
-            pointRadius: 3
-          }
-        ]
-      },
-      options: b3
-    });
-
-    var b4 = baseOpts();
-    b4.scales.y.min = 3.3;
-    b4.scales.y.max = 4.2;
-    mkChart('cb_walk', {
-      type: 'line',
-      data: {
-        labels: D.mwsl,
-        datasets: [
-          {
-            label: 'Walk speed (m/s)',
-            data: D.mwsv,
-            borderColor: '#43e97b',
-            backgroundColor: 'rgba(67,233,123,0.25)',
-            tension: 0.25,
-            pointRadius: 0
-          }
-        ]
-      },
-      options: b4
-    });
-  }
-
-  // ACTIVITY
-  if (s === 'activity') {
-    var a1 = baseOpts();
-    mkChart('cact_steps', {
-      type: 'bar',
-      data: {
-        labels: D.mstepsl,
-        datasets: [
-          {
-            label: 'Steps/day',
-            data: D.mstepsv,
-            backgroundColor: 'rgba(59,130,246,0.8)',
-            borderColor: '#3b82f6',
-            borderWidth: 1
-          }
-        ]
-      },
-      options: a1
-    });
-
-    var a2 = baseOpts();
-    mkChart('cact_ex', {
-      type: 'bar',
-      data: {
-        labels: D.mel,
-        datasets: [
-          {
-            label: 'Exercise minutes',
-            data: D.mev,
-            backgroundColor: 'rgba(34,197,94,0.8)',
-            borderColor: '#22c55e',
-            borderWidth: 1
-          }
-        ]
-      },
-      options: a2
-    });
-
-    var a3 = baseOpts();
-    mkChart('cact_6mw', {
-      type: 'line',
-      data: {
-        labels: D.dwl,
-        datasets: [
-          {
-            label: '6-min walk distance (m)',
-            data: D.dwv,
-            borderColor: '#f97316',
-            backgroundColor: 'rgba(249,115,22,0.2)',
-            tension: 0.25,
-            pointRadius: 2
-          }
-        ]
-      },
-      options: a3
-    });
-
-    var a4 = baseOpts();
-    mkChart('cact_cad', {
-      type: 'line',
-      data: {
-        labels: D.wal,
-        datasets: [
-          {
-            label: 'Walk cadence (spm)',
-            data: D.wav,
-            borderColor: '#a855f7',
-            backgroundColor: 'rgba(168,85,247,0.2)',
-            tension: 0.25,
-            pointRadius: 2
-          }
-        ]
-      },
-      options: a4
-    });
-
-    var a5 = baseOpts();
-    a5.plugins.legend.display = true;
-    a5.plugins.legend.labels = { color: '#94a3b8', boxWidth: 10, font: { size: 10 } };
-    mkChart('cact_bar', {
-      type: 'bar',
-      data: {
-        labels: D.wktl,
-        datasets: [
-          {
-            label: 'Walking',
-            data: D.wkt_walk,
-            backgroundColor: 'rgba(34,197,94,0.85)'
-          },
-          {
-            label: 'Running',
-            data: D.wkt_run,
-            backgroundColor: 'rgba(239,68,68,0.85)'
-          },
-          {
-            label: 'Cycling',
-            data: D.wkt_cycle,
-            backgroundColor: 'rgba(59,130,246,0.85)'
-          }
-        ]
-      },
-      options: a5
-    });
-  }
-
-  // SLEEP
-  if (s === 'sleep') {
-    var s1 = baseOpts();
-    s1.scales.y.min = 4;
-    s1.scales.y.max = 8;
-    mkChart('csl_dur', {
-      type: 'line',
-      data: {
-        labels: D.msl,
-        datasets: [
-          {
-            label: 'Sleep (hrs)',
-            data: D.msv,
-            borderColor: '#6c63ff',
-            backgroundColor: 'rgba(108,99,255,0.25)',
-            tension: 0.25,
-            pointRadius: 0
-          }
-        ]
-      },
-      options: s1
-    });
-
-    var s2 = baseOpts();
-    s2.scales.y.min = 93;
-    s2.scales.y.max = 97;
-    mkChart('csl_spo2', {
-      type: 'line',
-      data: {
-        labels: D.mspo2l,
-        datasets: [
-          {
-            label: 'SpO2 %',
-            data: D.mspo2v,
-            borderColor: '#22c55e',
-            backgroundColor: 'rgba(34,197,94,0.25)',
-            tension: 0.25,
-            pointRadius: 0
-          }
-        ]
-      },
-      options: s2
-    });
-
-    var s3 = baseOpts();
-    s3.scales.y.min = 20;
-    s3.scales.y.max = 26;
-    mkChart('csl_resp', {
-      type: 'line',
-      data: {
-        labels: D.respl,
-        datasets: [
-          {
-            label: 'Resp rate',
-            data: D.respv,
-            borderColor: '#f97316',
-            backgroundColor: 'rgba(249,115,22,0.25)',
-            tension: 0.25,
-            pointRadius: 0
-          }
-        ]
-      },
-      options: s3
-    });
-
-    var s4 = baseOpts();
-    mkChart('csl_hhp', {
-      type: 'bar',
-      data: {
-        labels: D.hpl,
-        datasets: [
-          {
-            label: 'Headphone dB',
-            data: D.hpv,
-            backgroundColor: 'rgba(244,63,94,0.85)'
-          }
-        ]
-      },
-      options: s4
-    });
-  }
-
-  // GLUCOSE
-  if (s === 'glucose') {
-    var g1 = baseOpts();
-    g1.scales.y.min = 4.5;
-    g1.scales.y.max = 9;
-    var hbColors = [];
-    for (var i = 0; i < D.hba1cv.length; i++) {
-      hbColors.push(
-        D.hba1cv[i] > 6.5
-          ? '#ff6584'
-          : D.hba1cv[i] >= 5.5
-          ? '#f97316'
-          : '#43e97b'
-      );
-    }
-    mkChart('cgl_hba1c', {
-      type: 'line',
-      data: {
-        labels: D.hba1cl,
-        datasets: [
-          {
-            label: 'HbA1C',
-            data: D.hba1cv,
-            borderColor: '#6c63ff',
-            backgroundColor: 'rgba(108,99,255,0.2)',
-            tension: 0.25,
-            pointRadius: 3,
-            pointBackgroundColor: hbColors
-          },
-          {
-            label: 'Diabetes threshold (6.5)',
-            data: D.hba1c_thresh,
-            borderColor: '#ef4444',
-            borderDash: [4, 4],
-            pointRadius: 0
-          }
-        ]
-      },
-      options: g1
-    });
-  }
-
-  // VITALS
-  if (s === 'vitals') {
-    var v1 = baseOpts();
-    v1.scales.y.min = 93;
-    v1.scales.y.max = 97;
-    mkChart('cv_spo2', {
-      type: 'line',
-      data: {
-        labels: D.mspo2l,
-        datasets: [
-          {
-            label: 'SpO2 %',
-            data: D.mspo2v,
-            borderColor: '#22c55e',
-            backgroundColor: 'rgba(34,197,94,0.25)',
-            tension: 0.25,
-            pointRadius: 0
-          }
-        ]
-      },
-      options: v1
-    });
-
-    var v2 = baseOpts();
-    v2.scales.y.min = 20;
-    v2.scales.y.max = 26;
-    mkChart('cv_resp', {
-      type: 'line',
-      data: {
-        labels: D.respl,
-        datasets: [
-          {
-            label: 'Resp rate',
-            data: D.respv,
-            borderColor: '#f97316',
-            backgroundColor: 'rgba(249,115,22,0.25)',
-            tension: 0.25,
-            pointRadius: 0
-          }
-        ]
-      },
-      options: v2
-    });
-
-    var v3 = baseOpts();
-    mkChart('cv_env', {
-      type: 'bar',
-      data: {
-        labels: D.envl,
-        datasets: [
-          {
-            label: 'Env noise (dB)',
-            data: D.envv,
-            backgroundColor: 'rgba(59,130,246,0.85)'
-          }
-        ]
-      },
-      options: v3
-    });
-
-    var v4 = baseOpts();
-    mkChart('cv_hhp2', {
-      type: 'bar',
-      data: {
-        labels: D.hpl,
-        datasets: [
-          {
-            label: 'Headphone dB',
-            data: D.hpv,
-            backgroundColor: 'rgba(244,63,94,0.85)'
-          }
-        ]
-      },
-      options: v4
-    });
-  }
-
-  // CORRELATIONS
-  if (s === 'correlations') {
-    var r1 = baseOpts();
-    mkChart('ccr_rhr_hba', {
-      type: 'line',
-      data: {
-        labels: D.crl,
-        datasets: [
-          {
-            label: 'RHR',
-            data: D.cr_rhr,
-            borderColor: '#ff6584',
-            yAxisID: 'y'
-          },
-          {
-            label: 'HbA1C',
-            data: D.cr_hba1c,
-            borderColor: '#6c63ff',
-            yAxisID: 'y1'
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: r1.plugins,
-        scales: {
-          x: r1.scales.x,
-          y: Object.assign({}, r1.scales.y, { position: 'left' }),
-          y1: {
-            position: 'right',
-            grid: { drawOnChartArea: false, color: 'rgba(148,163,184,0.15)' },
-            ticks: { color: '#94a3b8' }
-          }
-        }
-      }
-    });
-
-    var r2 = baseOpts();
-    mkChart('ccr_ex_rhr', {
-      type: 'line',
-      data: {
-        labels: D.crl,
-        datasets: [
-          {
-            label: 'Exercise mins',
-            data: D.cr_ex,
-            borderColor: '#22c55e',
-            yAxisID: 'y'
-          },
-          {
-            label: 'RHR',
-            data: D.cr_rhr,
-            borderColor: '#ff6584',
-            yAxisID: 'y1'
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: r2.plugins,
-        scales: {
-          x: r2.scales.x,
-          y: Object.assign({}, r2.scales.y, { position: 'left' }),
-          y1: {
-            position: 'right',
-            grid: { drawOnChartArea: false, color: 'rgba(148,163,184,0.15)' },
-            ticks: { color: '#94a3b8' }
-          }
-        }
-      }
-    });
-
-    var r3 = baseOpts();
-    mkChart('ccr_wt_vo2', {
-      type: 'scatter',
-      data: {
-        datasets: [
-          {
-            label: 'Weight vs VO2',
-            data: D.cr_wt_vo2,
-            backgroundColor: 'rgba(59,130,246,0.9)'
-          }
-        ]
-      },
-      options: r3
-    });
-
-    var r4 = baseOpts();
-    mkChart('ccr_hrv_ex', {
-      type: 'scatter',
-      data: {
-        datasets: [
-          {
-            label: 'HRV vs exercise',
-            data: D.cr_hrv_ex,
-            backgroundColor: 'rgba(168,85,247,0.9)'
-          }
-        ]
-      },
-      options: r4
-    });
-  }
-
-  // ANALYSIS
-  if (s === 'analysis') {
-    var an1 = baseOpts();
-    mkChart('can_vo2', {
-      type: 'line',
-      data: {
-        labels: D.vo2l,
-        datasets: [
-          {
-            label: 'VO2 Max',
-            data: D.vo2v,
-            borderColor: '#00d4ff',
-            backgroundColor: 'rgba(0,212,255,0.25)',
-            tension: 0.25,
-            pointRadius: 3
-          },
-          {
-            label: 'Good',
-            data: D.vo2_ref_good,
-            borderColor: '#22c55e',
-            borderDash: [4, 4],
-            pointRadius: 0
-          },
-          {
-            label: 'Fair',
-            data: D.vo2_ref_fair,
-            borderColor: '#eab308',
-            borderDash: [4, 4],
-            pointRadius: 0
-          },
-          {
-            label: 'Poor',
-            data: D.vo2_ref_poor,
-            borderColor: '#ef4444',
-            borderDash: [4, 4],
-            pointRadius: 0
-          }
-        ]
-      },
-      options: an1
-    });
-
-    var an2 = baseOpts();
-    mkChart('can_bp', {
-      type: 'line',
-      data: {
-        labels: D.bpsl,
-        datasets: [
-          {
-            label: 'Systolic',
-            data: D.bpsv_sys,
-            borderColor: '#6c63ff',
-            tension: 0.25,
-            pointRadius: 3
-          },
-          {
-            label: 'Diastolic',
-            data: D.bpsv_dia,
-            borderColor: '#22c55e',
-            tension: 0.25,
-            pointRadius: 3
-          }
-        ]
-      },
-      options: an2
-    });
-
-    var an3 = baseOpts();
-    mkChart('can_wstd', {
-      type: 'line',
-      data: {
-        labels: D.wstdl,
-        datasets: [
-          {
-            label: 'Walk steadiness',
-            data: D.wstdv,
-            borderColor: '#f97316',
-            backgroundColor: 'rgba(249,115,22,0.25)',
-            tension: 0.25,
-            pointRadius: 0
-          }
-        ]
-      },
-      options: an3
-    });
-
-    var an4 = baseOpts();
-    mkChart('can_hrec', {
-      type: 'line',
-      data: {
-        labels: D.hrecl,
-        datasets: [
-          {
-            label: 'HR Recovery',
-            data: D.hrecv,
-            borderColor: '#22c55e',
-            backgroundColor: 'rgba(34,197,94,0.25)',
-            tension: 0.25,
-            pointRadius: 3
-          }
-        ]
-      },
-      options: an4
-    });
-  }
-
-  // HEARING
-  if (s === 'hearing') {
-    var h1 = baseOpts();
-    h1.scales.y.reverse = true;
-    h1.scales.y.min = 0;
-    h1.scales.y.max = 60;
-    mkChart('ch_audio', {
-      type: 'line',
-      data: {
-        labels: D.aud_freq,
-        datasets: [
-          {
-            label: 'Right ear',
-            data: D.aud_r,
-            borderColor: '#6c63ff',
-            tension: 0.25,
-            pointRadius: 3
-          },
-          {
-            label: 'Left ear',
-            data: D.aud_l,
-            borderColor: '#f97316',
-            tension: 0.25,
-            pointRadius: 3
-          }
-        ]
-      },
-      options: h1
-    });
-
-    var h2 = baseOpts();
-    mkChart('ch_hhp', {
-      type: 'bar',
-      data: {
-        labels: D.hpl,
-        datasets: [
-          {
-            label: 'Headphone dB',
-            data: D.hpv,
-            backgroundColor: 'rgba(244,63,94,0.9)'
-          }
-        ]
-      },
-      options: h2
-    });
-
-    var h3 = baseOpts();
-    mkChart('ch_env', {
-      type: 'bar',
-      data: {
-        labels: D.envl,
-        datasets: [
-          {
-            label: 'Env noise (dB)',
-            data: D.envv,
-            backgroundColor: 'rgba(59,130,246,0.9)'
-          }
-        ]
-      },
-      options: h3
-    });
-  }
-
-  // LABS
-  if (s === 'labs') {
-    // HbA1C lab view (mini)
-    var lb1 = baseOpts();
-    lb1.scales.y.min = 4.5;
-    lb1.scales.y.max = 9.0;
-    var lbColors = [];
-    for (var lbgi = 0; lbgi < D.hba1cv.length; lbgi++) {
-      lbColors.push(
-        D.hba1cv[lbgi] > 6.5
-          ? '#ff6584'
-          : D.hba1cv[lbgi] >= 5.5
-          ? '#f97316'
-          : '#43e97b'
-      );
-    }
-    mkChart('clab_hba1c', {
-      type: 'line',
-      data: {
-        labels: D.hba1cl,
-        datasets: [
-          {
-            label: 'HbA1C (%)',
-            data: D.hba1cv,
-            borderColor: '#6c63ff',
-            backgroundColor: 'rgba(108,99,255,0.2)',
-            tension: 0.25,
-            pointRadius: 3,
-            pointBackgroundColor: lbColors
-          }
-        ]
-      },
-      options: lb1
-    });
-
-    // CBC Reference Range Chart — moved inside labs guard
-    var cbcCanvas = document.getElementById('cblood_cbc_range');
-    if (cbcCanvas) {
-      var cbcOpts = baseOpts();
-      cbcOpts.plugins.legend.display = true;
-      cbcOpts.plugins.legend.labels = {
-        color: '#94a3b8',
-        boxWidth: 10,
-        font: { size: 10 }
-      };
-      mkChart('cblood_cbc_range', {
-        type: 'bar',
-        data: {
-          labels: D.cbcbcLabels,
-          datasets: [
-            {
-              label: 'Your value',
-              data: D.cbcbcValues,
-              backgroundColor: D.cbcbcColors
-            },
-            {
-              label: 'Lower ref',
-              data: D.cbcbcRefLow,
-              backgroundColor: 'rgba(148,163,184,0.3)'
-            },
-            {
-              label: 'Upper ref',
-              data: D.cbcbcRefHigh,
-              backgroundColor: 'rgba(148,163,184,0.15)'
-            }
-          ]
-        },
-        options: cbcOpts
-      });
-    }
-
-    // HbA1C blood history chart
-    var lb2 = baseOpts();
-    lb2.scales.y.min = 4.5;
-    lb2.scales.y.max = 8.5;
-    var lbColors2 = [];
-    for (var lci = 0; lci < D.hba1cv.length; lci++) {
-      lbColors2.push(
-        D.hba1cv[lci] > 6.5
-          ? '#ff6584'
-          : D.hba1cv[lci] >= 5.5
-          ? '#f97316'
-          : '#43e97b'
-      );
-    }
-    mkChart('cblood_hba1c', {
-      type: 'line',
-      data: {
-        labels: D.hba1cl,
-        datasets: [
-          {
-            label: 'HbA1C (%)',
-            data: D.hba1cv,
-            borderColor: '#6c63ff',
-            backgroundColor: 'rgba(108,99,255,0.1)',
-            tension: 0.25,
-            pointRadius: 3,
-            pointBackgroundColor: lbColors2
-          }
-        ]
-      },
-      options: lb2
-    });
-
-    // BLOOD BP chart (quarterly)
-    var lb3 = baseOpts();
-    lb3.plugins.legend = lb3.plugins.legend || {};
-    lb3.plugins.legend.display = true;
-    lb3.plugins.legend.labels = {
-      color: '#94a3b8',
-      boxWidth: 10,
-      font: { size: 10 }
-    };
-    lb3.scales.y.min = 60;
-    lb3.scales.y.max = 160;
-
-    var cbp2 = document.getElementById('cblood_bp');
-    if (cbp2) {
-      new Chart(cbp2, {
-        type: 'line',
-        data: {
-          labels: D.bpsl,
-          datasets: [
-            {
-              label: 'Systolic',
-              data: D.bpsv_sys,
-              borderColor: '#6c63ff',
-              backgroundColor: 'rgba(108,99,255,0.15)',
-              tension: 0.25,
-              pointRadius: 3
-            },
-            {
-              label: 'Diastolic',
-              data: D.bpsv_dia,
-              borderColor: '#22c55e',
-              backgroundColor: 'rgba(34,197,94,0.15)',
-              tension: 0.25,
-              pointRadius: 3
-            }
-          ]
-        },
-        options: lb3
-      });
-    }
-  }
-
-  // BLOOD HISTORY
-  if (s === 'blood') {
-    // (All your long-run CBC, liver, kidney, lipid, misc charts go here, unchanged.)
-  }
-
-  // CALENDAR
-  if (s === 'calendar') {
-    // Calendar heatmap rendering, unchanged from your original.
-  }
-
-  // TRENDS
-  if (s === 'trends') {
-    // Trend cards normalization chart and any supporting plots, unchanged.
-  }
-}
-
-    // Helper to standardize chart options
-    function baseOpts() {
-      return {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            mode: 'index',
-            intersect: false,
-            backgroundColor: '#020617',
-            borderColor: '#1e293b',
-            borderWidth: 1,
-            titleColor: '#e2e8f0',
-            bodyColor: '#cbd5f5',
-            padding: 8,
-            callbacks: {}
-          }
-        },
-        scales: {
-          x: {
-            grid: { color: 'rgba(148,163,184,0.15)' },
-            ticks: {
-              color: '#94a3b8',
-              maxRotation: 0,
-              autoSkip: true,
-              maxTicksLimit: 12
-            }
-          },
-          y: {
-            grid: { color: 'rgba(148,163,184,0.15)' },
-            ticks: { color: '#94a3b8' }
-          }
-        }
-      };
-    }
-
-    function mkChart(id, cfg) {
-      var el = document.getElementById(id);
-      if (!el) return;
-      if (el._chart) {
-        el._chart.destroy();
-      }
-      el._chart = new Chart(el, cfg);
-    }
-
-    function IC(s) {
-      // Clear active state
-      document.querySelectorAll('.section').forEach(function (sec) {
-        sec.classList.remove('active');
-      });
-      document.querySelectorAll('.nav-btn').forEach(function (b) {
-        b.classList.remove('active');
-      });
-      document.getElementById('s-' + s).classList.add('active');
-      document.querySelector('.nav-btn[data-s="' + s + '"]').classList.add('active');
-
-      if (s === 'overview') {
-        // Overview charts (RHR, HRV, steps, sleep)
-        // Uses D.mrhl, D.mrhv, etc. exactly as in your original
-              var o1 = baseOpts();
-      mkChart('car_hr', { type: 'bar', data: { labels: D.mrhl, datasets: [{ label: 'RHR', data: D.mrhv, backgroundColor: 'rgba(108,99,255,0.7)', borderRadius: 4 }] }, options: o1 });
-      var o2 = baseOpts();
-      mkChart('ca_hrv', { type: 'bar', data: { labels: D.mrhl, datasets: [{ label: 'HRV', data: D.hrvv, backgroundColor: 'rgba(34,197,94,0.7)', borderRadius: 4 }] }, options: o2 });
-      var o3 = baseOpts();
-      mkChart('ca_steps', { type: 'bar', data: { labels: D.mrhl, datasets: [{ label: 'Steps', data: D.stepsv, backgroundColor: 'rgba(249,115,22,0.7)', borderRadius: 4 }] }, options: o3 });
-      }
-
-      if (s === 'cardiac') {
-        // Full-history cardiac charts
-              var c1 = baseOpts();
-      mkChart('crhr', { type: 'line', data: { labels: D.mrhl, datasets: [{ label: 'RHR', data: D.mrhv, borderColor: '#6c63ff', backgroundColor: 'rgba(108,99,255,0.1)', tension: 0.25, pointRadius: 2 }] }, options: c1 });
-      var c2 = baseOpts();
-      mkChart('chrv', { type: 'line', data: { labels: D.mrhl, datasets: [{ label: 'HRV', data: D.hrvv, borderColor: '#22c55e', backgroundColor: 'rgba(34,197,94,0.1)', tension: 0.25, pointRadius: 2 }] }, options: c2 });
-      var c3 = baseOpts();
-      mkChart('cblood_bp', { type: 'line', data: { labels: D.bpsl, datasets: [{ label: 'Systolic', data: D.bpsv_sys, borderColor: '#6c63ff', tension: 0.25, pointRadius: 3 }, { label: 'Diastolic', data: D.bpsv_dia, borderColor: '#22c55e', tension: 0.25, pointRadius: 3 }] }, options: c3 });
-      }
-
-      if (s === 'body') {
-        // Body composition charts
-              var b1 = baseOpts();
-      mkChart('cb_weight', { type: 'line', data: { labels: D.mrhl, datasets: [{ label: 'Weight (lb)', data: D.weightv, borderColor: '#6c63ff', backgroundColor: 'rgba(108,99,255,0.1)', tension: 0.25, pointRadius: 2 }] }, options: b1 });
-      var b2 = baseOpts();
-      mkChart('cb_bmi', { type: 'line', data: { labels: D.mrhl, datasets: [{ label: 'BMI', data: D.bmiv, borderColor: '#f97316', backgroundColor: 'rgba(249,115,22,0.1)', tension: 0.25, pointRadius: 2 }] }, options: b2 });
-      }
-
-      if (s === 'activity') {
-        // Activity & exercise charts
-              var a1 = baseOpts();
-      mkChart('cac_steps', { type: 'bar', data: { labels: D.mrhl, datasets: [{ label: 'Daily Steps', data: D.stepsv, backgroundColor: 'rgba(34,197,94,0.7)', borderRadius: 4 }] }, options: a1 });
-      var a2 = baseOpts();
-      mkChart('cac_vo2', { type: 'line', data: { labels: D.mrhl, datasets: [{ label: 'VO2 Max', data: D.vo2v, borderColor: '#6c63ff', tension: 0.25, pointRadius: 3 }] }, options: a2 });
-      }
-
-      if (s === 'sleep') {
-        // Sleep charts
-              var sl1 = baseOpts();
-      mkChart('csl_dur', { type: 'bar', data: { labels: D.mrhl, datasets: [{ label: 'Sleep (hrs)', data: D.sleepv, backgroundColor: 'rgba(108,99,255,0.7)', borderRadius: 4 }] }, options: sl1 });
-      var sl2 = baseOpts();
-      mkChart('csl_deep', { type: 'bar', data: { labels: D.mrhl, datasets: [{ label: 'Deep Sleep', data: D.deepv, backgroundColor: 'rgba(34,197,94,0.7)', borderRadius: 4 }] }, options: sl2 });
-      }
-
-      if (s === 'glucose') {
-        // HbA1C time series chart
-              var g1 = baseOpts();
-      mkChart('cgl_hba1c', { type: 'line', data: { labels: D.mrhl, datasets: [{ label: 'HbA1c (%)', data: D.hba1cv, borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.1)', tension: 0.25, pointRadius: 3 }] }, options: g1 });
-      }
-
-      if (s === 'vitals') {
-        // Vitals charts
-              var v1 = baseOpts();
-      mkChart('cvi_bp', { type: 'line', data: { labels: D.bpsl, datasets: [{ label: 'Systolic', data: D.bpsv_sys, borderColor: '#6c63ff', tension: 0.25, pointRadius: 2 }, { label: 'Diastolic', data: D.bpsv_dia, borderColor: '#22c55e', tension: 0.25, pointRadius: 2 }] }, options: v1 });
-      var v2 = baseOpts();
-      mkChart('cvi_rhr', { type: 'line', data: { labels: D.mrhl, datasets: [{ label: 'RHR', data: D.mrhv, borderColor: '#f97316', tension: 0.25, pointRadius: 2 }] }, options: v2 });
-      }
-
-      if (s === 'correlations') {
-        // Correlation charts
-              var cr1 = baseOpts();
-      mkChart('ccr_hrv_ex', { type: 'scatter', data: { datasets: [{ label: 'HRV vs Exercise', data: D.cr_hrv_ex, backgroundColor: 'rgba(168,85,247,0.8)', pointRadius: 5 }] }, options: cr1 });
-      var cr2 = baseOpts();
-      mkChart('ccr_rhr_sl', { type: 'scatter', data: { datasets: [{ label: 'RHR vs Sleep', data: D.cr_rhr_sl, backgroundColor: 'rgba(34,197,94,0.8)', pointRadius: 5 }] }, options: cr2 });
-      }
-
-      if (s === 'analysis') {
-        // Clinical view charts
-              var an1 = baseOpts(); an1.scales.y.min = 10; an1.scales.y.max = 60;
-      mkChart('can_vo2', { type: 'line', data: { labels: D.mrhl, datasets: [{ label: 'VO2 Max', data: D.vo2v, borderColor: '#6c63ff', tension: 0.25, pointRadius: 2 }] }, options: an1 });
-      var an2 = baseOpts();
-      mkChart('can_bp', { type: 'line', data: { labels: D.bpsl, datasets: [{ label: 'Systolic', data: D.bpsv_sys, borderColor: '#6c63ff', tension: 0.25, pointRadius: 3 }, { label: 'Diastolic', data: D.bpsv_dia, borderColor: '#22c55e', tension: 0.25, pointRadius: 3 }] }, options: an2 });
-      var an3 = baseOpts();
-      mkChart('can_wstd', { type: 'line', data: { labels: D.wstdl, datasets: [{ label: 'Walk Steadiness', data: D.wstdv, borderColor: '#f97316', tension: 0.25, pointRadius: 0 }] }, options: an3 });
-      var an4 = baseOpts();
-      mkChart('can_hrec', { type: 'line', data: { labels: D.hrecl, datasets: [{ label: 'HR Recovery', data: D.hrecv, borderColor: '#22c55e', tension: 0.25, pointRadius: 3 }] }, options: an4 });
-      }
-
-      if (s === 'hearing') {
-        // Hearing charts
-              var h1 = baseOpts();
-      mkChart('ch_audio', { type: 'line', data: { labels: D.audl, datasets: [{ label: 'Left Ear (dB)', data: D.audv_l, borderColor: '#6c63ff', tension: 0.25, pointRadius: 3 }, { label: 'Right Ear (dB)', data: D.audv_r, borderColor: '#22c55e', tension: 0.25, pointRadius: 3 }] }, options: h1 });
-      var h2 = baseOpts();
-      mkChart('ch_env', { type: 'line', data: { labels: D.envl, datasets: [{ label: 'Env. Sound (dB)', data: D.envv, borderColor: '#f97316', tension: 0.25, pointRadius: 2, fill: true, backgroundColor: 'rgba(249,115,22,0.1)' }] }, options: h2 });
-      }
-
-      if (s === 'labs') {
-        // Lab HbA1C mini chart (clab_hba1c)
-        var lb1 = baseOpts();
-        lb1.scales.y.min = 4.5;
-        lb1.scales.y.max = 9.0;
-        var lbColors = [];
-        for (var lbgi = 0; lbgi < D.hba1cv.length; lbgi++) {
-          lbColors.push(
-            D.hba1cv[lbgi] > 6.5
-              ? '#ff6584'
-              : D.hba1cv[lbgi] >= 5.5
-              ? '#f97316'
-              : '#43e97b'
-          );
-        }
-        mkChart('clab_hba1c', {
-          type: 'line',
-          data: {
-            labels: D.hba1cl,
-            datasets: [
-              {
-                label: 'HbA1C (%)',
-                data: D.hba1cv,
-                borderColor: '#6c63ff',
-                backgroundColor: 'rgba(108,99,255,0.2)',
-                tension: 0.25,
-                pointRadius: 3,
-                pointBackgroundColor: lbColors
-              }
-            ]
-          },
-          options: lb1
-        });
-
-        // CBC Reference Range Chart — within labs guard
-        var cbcCanvas = document.getElementById('cblood_cbc_range');
-        if (cbcCanvas) {
-          var cbcOpts = baseOpts();
-          cbcOpts.plugins.legend.display = true;
-          cbcOpts.plugins.legend.labels = {
-            color: '#94a3b8',
-            boxWidth: 10,
-            font: { size: 10 }
-          };
-          mkChart('cblood_cbc_range', {
-            type: 'bar',
-            data: {
-              labels: D.cbcbcLabels,      // from your original script
-              datasets: [
-                {
-                  label: 'Your value',
-                  data: D.cbcbcValues,
-                  backgroundColor: D.cbcbcColors
-                },
-                {
-                  label: 'Lower ref',
-                  data: D.cbcbcRefLow,
-                  backgroundColor: 'rgba(148,163,184,0.25)'
-                },
-                {
-                  label: 'Upper ref',
-                  data: D.cbcbcRefHigh,
-                  backgroundColor: 'rgba(148,163,184,0.25)'
-                }
-              ]
-            },
-            options: cbcOpts
-          });
-        }
-
-        // HbA1C blood history chart (cblood_hba1c)
-        var lb2 = baseOpts();
-        lb2.scales.y.min = 4.5;
-        lb2.scales.y.max = 8.5;
-        var lbColors2 = [];
-        for (var lci = 0; lci < D.hba1cv.length; lci++) {
-          lbColors2.push(
-            D.hba1cv[lci] > 6.5
-              ? '#ff6584'
-              : D.hba1cv[lci] >= 5.5
-              ? '#f97316'
-              : '#43e97b'
-          );
-        }
-        mkChart('cblood_hba1c', {
-          type: 'line',
-          data: {
-            labels: D.hba1cl,
-            datasets: [
-              {
-                label: 'HbA1C (%)',
-                data: D.hba1cv,
-                borderColor: '#6c63ff',
-                backgroundColor: 'rgba(108,99,255,0.1)',
-                tension: 0.25,
-                pointRadius: 3,
-                pointBackgroundColor: lbColors2
-              }
-            ]
-          },
-          options: lb2
-        });
-
-        // BLOOD BP chart (cblood_bp)
-        var lb3 = baseOpts();
-        lb3.plugins.legend = lb3.plugins.legend || {};
-        lb3.plugins.legend.display = true;
-        lb3.plugins.legend.labels = {
-          color: '#94a3b8',
-          boxWidth: 10,
-          font: { size: 10 }
-        };
-        lb3.scales.y.min = 60;
-        lb3.scales.y.max = 160;
-
-        var cbp2 = document.getElementById('cblood_bp');
-        if (cbp2) {
-          new Chart(cbp2, {
-            type: 'line',
-            data: {
-              labels: D.bpsl,
-              datasets: [
-                {
-                  label: 'Systolic',
-                  data: D.bpsv_sys,
-                  borderColor: '#6c63ff',
-                  backgroundColor: 'rgba(108,99,255,0.1)',
-                  tension: 0.25
-                },
-                {
-                  label: 'Diastolic',
-                  data: D.bpsv_dia,
-                  borderColor: '#22c55e',
-                  backgroundColor: 'rgba(34,197,94,0.1)',
-                  tension: 0.25
-                }
-              ]
-            },
-            options: lb3
-          });
-        }
-      }
-
-      if (s === 'blood') {
-        // All the historical CBC / liver / kidney / lipids charts as in original
-      }
-
-      if (s === 'calendar') {
-        // Calendar heatmap logic
-      }
-
-      if (s === 'trends') {
-        // Trend summary charts
-      }
-    }
-
-    // Bind nav buttons
-    document.querySelectorAll('.nav-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        IC(btn.getAttribute('data-s'));
-      });
-    });
-
-    // Initial load
-    window.addEventListener('load', function () {
-      IC('overview');
-    });
-  </script>
 </body>
 </html>
