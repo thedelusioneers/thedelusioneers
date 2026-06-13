@@ -1,0 +1,95 @@
+# THREAD COPY — bell-canada
+# Platform: Threads (primary), Bluesky (secondary)
+# Hard limit: 300 characters per post. Character counts noted per post.
+
+---
+
+POST 1 — Hook (no image)
+
+Bell raised internet rates $6/month in Ontario. The notice was on page 3 of the bill. The Internet Code required written notice. It said nothing about where.
+
+[Character count: 162]
+
+---
+
+POST 2 — Frame
+
+This is a receipt. One charge, one rule, one call, one remedy. All figures from BCE filings and CRTC instruments. Sources linked at the end.
+
+[Character count: 148]
+
+---
+
+POST 3 — The math
+
+Bell: 4,455,460 retail internet subscribers in Canada (Q4 2025).
+
+$6/month × 4,455,460 = $26.7M/month.
+
+Annualized: $320.8M in additional revenue from the increase.
+
+[Character count: 166]
+
+---
+
+POST 4 — The rule
+
+CRTC Internet Code (Telecom Regulatory Policy 2019-269): providers must give advance written notice of a price change.
+
+Where in the bill that notice must appear: the Code does not say.
+
+[Character count: 192]
+
+---
+
+POST 5 — The distinction
+
+Bell gave notice. It was on page 3.
+
+"Notice was given" and "notice was findable" are not the same thing. The Internet Code resolves the first question. It does not address the second.
+
+[Character count: 193]
+
+---
+
+POST 6 — The retention call
+
+A Bell customer in Kingston called about the increase. A retention rep described a rate reduction as permanent.
+
+The record does not show written confirmation of that rate. None was provided.
+
+[Character count: 193]
+
+---
+
+POST 7 — The remedy
+
+CCTS complaints are free to file. The provider must respond within a fixed window. Compensation up to a stated maximum is available.
+
+The per-complaint administrative cost to Bell: not published.
+
+[Character count: 188]
+
+---
+
+POST 8 — The directional claim
+
+What the record does not confirm: whether Bell's cost of processing a CCTS complaint exceeds $6/month.
+
+What the record does confirm: the figure is not published at a per-complaint dollar amount.
+
+[Character count: 203]
+
+---
+
+POST 9 — Ledger line
+
+$6/month. Page 3. ~$320M/year. No placement rule. No written confirmation. No published per-complaint cost.
+
+The receipt is at [link]. Sources at [link].
+
+#Canada #Telecom #Accountability #CRTC
+
+[Character count: 213]
+
+---
