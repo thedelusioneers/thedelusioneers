@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=JetBrains+Mono:wght@300;400;500;700&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 1080px; height: 1080px; overflow: hidden; }
+
+    body {
+      background: #f5f0e8;
+      display: flex;
+      flex-direction: column;
+      font-family: 'JetBrains Mono', monospace;
+      /* Ruled paper texture */
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.042) 0px,
+        rgba(0,0,0,0.042) 1px,
+        transparent 1px,
+        transparent 28px
+      );
+    }
+
+    /* Top accent bar */
+    .accent-top {
+      height: 6px;
+      background: #c41e1e;
+      flex-shrink: 0;
+    }
+
+    /* Brand strip */
+    .brand-strip {
+      background: #0d0d0d;
+      padding: 20px 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-family: 'Special Elite', monospace;
+      font-size: 16px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #f5f0e8;
+    }
+
+    .brand-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.4);
+    }
+
+    /* Main content */
+    .stub-content {
+      flex: 1;
+      padding: 56px 64px 48px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stub-variant-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.3);
+      margin-bottom: 28px;
+    }
+
+    .stub-body {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 19px;
+      line-height: 1.75;
+      color: #0d0d0d;
+      flex: 1;
+    }
+
+    .stub-source-block {
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(0,0,0,0.15);
+    }
+
+    .stub-source-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.35);
+      margin-bottom: 8px;
+    }
+
+    .stub-source-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #2a2825;
+      margin-bottom: 6px;
+    }
+
+    .stub-source-url {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: #c41e1e;
+    }
+
+    .stub-link {
+      margin-top: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: rgba(0,0,0,0.4);
+      letter-spacing: 0.5px;
+    }
+
+    /* Bottom bar */
+    .bottom-bar {
+      background: #0d0d0d;
+      height: 6px;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="accent-top"></div>
+  <div class="brand-strip">
+    <span class="brand-name">The Delusioneers</span>
+    <span class="brand-label">Civic Accountability Documentation</span>
+  </div>
+
+  <div class="stub-content">
+    <div class="stub-variant-label">Document &mdash; bell-canada</div>
+
+    <div class="stub-body">
+      Bell applied a $6/month increase to Ontario internet accounts.
+      The notice appeared on page 3 of the billing statement. The CRTC
+      Internet Code (Telecom Regulatory Policy 2019-269) requires advance
+      written notice of a price change. It does not specify where in a
+      bill that notice must appear. Applied across Bell's 4,455,460 retail
+      internet subscribers in Canada, the increase projects to roughly
+      $320 million in additional annual revenue. The Internet Code created
+      the notice requirement. Placement of that notice is outside the
+      rule's scope.
+    </div>
+
+    <div class="stub-source-block">
+      <div class="stub-source-label">Primary Source</div>
+      <div class="stub-source-text">CRTC Telecom Regulatory Policy 2019-269 (Internet Code)</div>
+      <div class="stub-source-url">crtc.gc.ca</div>
+      <div class="stub-link">Full receipt at thedelusioneers.ca</div>
+    </div>
+  </div>
+
+  <div class="bottom-bar"></div>
+</body>
+</html>

@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sources — The Receipt, Bell Edition | The Delusioneers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       DESIGN TOKENS
+       ============================================================ */
+    :root {
+      --bg: #f5f0e8;
+      --ink: #0d0d0d;
+      --ink-light: #4a4540;
+      --ink-faded: #8a8278;
+      --red: #c41e1e;
+      --surround: #2a2825;
+      --border: rgba(0,0,0,0.14);
+      --border-faint: rgba(0,0,0,0.07);
+      --rule-line: rgba(0,0,0,0.042);
+      --doc-width: min(680px, 92vw);
+    }
+
+    [data-theme="dark"] {
+      --bg: #1e1c1a;
+      --ink: #e8e3d8;
+      --ink-light: #b0a898;
+      --ink-faded: #6a6458;
+      --red: #e03535;
+      --surround: #111010;
+      --border: rgba(232,227,216,0.15);
+      --border-faint: rgba(232,227,216,0.07);
+      --rule-line: rgba(232,227,216,0.042);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      background: var(--surround);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    body {
+      background: var(--surround);
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 0 60px;
+    }
+
+    /* ============================================================
+       HEADER COMPONENT STYLES
+       ============================================================ */
+    .site-header {
+      width: var(--doc-width);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0 12px;
+      margin-bottom: 12px;
+    }
+
+    .site-header-left a {
+      font-family: 'Special Elite', monospace;
+      font-size: 13px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #f5f0e8;
+      text-decoration: none;
+      opacity: 0.85;
+      transition: opacity 0.2s;
+    }
+    .site-header-left a:hover { opacity: 1; }
+
+    .site-header-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .header-social {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-right: 10px;
+    }
+
+    .header-social-link {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8.5px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.45);
+      text-decoration: none;
+      padding: 4px 8px;
+      border: 1px solid rgba(245,240,232,0.12);
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .header-social-link:hover {
+      color: rgba(245,240,232,0.85);
+      border-color: rgba(245,240,232,0.3);
+    }
+
+    .header-social-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 4px 8px;
+    }
+    .header-social-icon svg { display: block; flex-shrink: 0; }
+    .header-social-icon .icon-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8.5px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .header-social-divider {
+      width: 1px;
+      height: 12px;
+      background: rgba(245,240,232,0.12);
+      margin: 0 2px;
+    }
+
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid rgba(245,240,232,0.12);
+      color: rgba(245,240,232,0.45);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8.5px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }
+    .theme-toggle:hover {
+      color: rgba(245,240,232,0.85);
+      border-color: rgba(245,240,232,0.3);
+    }
+
+    @media (max-width: 480px) {
+      .site-header-left a { font-size: 11px; letter-spacing: 2px; }
+      .header-social-link { font-size: 7.5px; padding: 3px 6px; }
+      .header-social-icon .icon-label { font-size: 7.5px; }
+      .theme-toggle { font-size: 7.5px; padding: 3px 7px; }
+    }
+
+    /* ============================================================
+       PAGE WRAPPER
+       ============================================================ */
+    .page {
+      width: var(--doc-width);
+      background: var(--bg);
+      background-image: repeating-linear-gradient(
+        to bottom,
+        var(--rule-line) 0px,
+        var(--rule-line) 1px,
+        transparent 1px,
+        transparent 28px
+      );
+      background-attachment: local;
+      padding: 40px 48px 48px;
+    }
+
+    @media (max-width: 600px) {
+      .page { padding: 28px 24px 36px; }
+    }
+
+    /* ============================================================
+       SOURCES PAGE STYLES
+       ============================================================ */
+    .page-meta {
+      border-bottom: 2px solid var(--ink);
+      padding-bottom: 20px;
+      margin-bottom: 32px;
+    }
+
+    .page-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-faded);
+      margin-bottom: 10px;
+    }
+
+    .page-title {
+      font-family: 'Special Elite', monospace;
+      font-size: 24px;
+      line-height: 1.2;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+
+    .back-link {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--red);
+      text-decoration: none;
+    }
+    .back-link:hover { text-decoration: underline; }
+
+    /* Jurisdiction group */
+    .jurisdiction-group {
+      margin-bottom: 40px;
+    }
+
+    .jurisdiction-heading {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-faded);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+      margin-bottom: 24px;
+    }
+
+    /* Individual source entry */
+    .source-entry {
+      margin-bottom: 30px;
+      padding-bottom: 30px;
+      border-bottom: 1px dashed var(--border-faint);
+    }
+
+    .source-entry:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+
+    .source-id {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 6px;
+    }
+
+    .source-title {
+      font-family: 'Special Elite', monospace;
+      font-size: 14px;
+      color: var(--ink);
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .source-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      line-height: 1.8;
+      color: var(--ink-light);
+    }
+
+    .source-meta strong {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .source-meta a {
+      color: var(--red);
+      text-decoration: none;
+      word-break: break-all;
+    }
+    .source-meta a:hover { text-decoration: underline; }
+
+    .source-meta dl {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 2px 16px;
+      margin-top: 6px;
+    }
+
+    .source-meta dt {
+      color: var(--ink-faded);
+      white-space: nowrap;
+      font-size: 9.5px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding-top: 2px;
+    }
+
+    .source-meta dd {
+      margin: 0;
+    }
+
+    .status-note {
+      margin-top: 10px;
+      padding: 10px 14px;
+      border-left: 3px solid var(--ink-faded);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      line-height: 1.7;
+      color: var(--ink-faded);
+    }
+
+    /* Footer */
+    .page-footer {
+      margin-top: 40px;
+      border-top: 1px solid var(--border-faint);
+      padding-top: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9.5px;
+      color: var(--ink-faded);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .page-footer a {
+      color: var(--red);
+      text-decoration: none;
+    }
+    .page-footer a:hover { text-decoration: underline; }
+
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       SITE HEADER (unmodified from reference/header-component.html)
+       ============================================================ -->
+  <header class="site-header">
+    <div class="site-header-left">
+      <a href="https://thedelusioneers.ca">The Delusioneers</a>
+    </div>
+    <div class="site-header-right">
+      <nav class="header-social" aria-label="Social links">
+
+        <a class="header-social-link header-social-icon" href="https://www.threads.net/@jeremycyrilwrites" target="_blank" rel="noopener" aria-label="Threads — Jeremy">
+          <svg width="11" height="12" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path fill="currentColor" d="M141.537 88.988a66.667 66.667 0 0 0-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.036l13.779 9.452c5.73-8.695 14.724-10.548 21.348-10.548h.229c8.249.053 14.474 2.452 18.503 7.129 2.932 3.405 4.893 8.111 5.864 14.05-7.314-1.243-15.224-1.626-23.68-1.14-23.82 1.371-39.134 15.264-38.105 34.568.522 9.792 5.4 18.216 13.735 23.719 7.047 4.652 16.124 6.927 25.557 6.412 12.458-.683 22.231-5.436 29.049-14.127 5.178-6.6 8.452-15.153 9.898-25.93 5.937 3.583 10.337 8.298 12.767 13.966 4.132 9.635 4.373 25.468-8.546 38.376-11.319 11.308-24.925 16.2-45.488 16.351-22.809-.169-40.06-7.484-51.275-21.742C35.236 139.966 29.808 120.682 29.605 96c.203-24.682 5.63-43.966 16.133-57.317C56.954 24.425 74.204 17.11 97.013 16.941c22.975.17 40.526 7.52 52.171 21.847 5.71 7.026 10.015 15.86 12.853 26.162l16.147-4.308c-3.44-12.68-8.853-23.606-16.219-32.668C147.036 10.646 125.205 1.205 97.07 1 68.754 1.205 47.189 10.685 32.986 28.23 20.096 43.982 13.491 66.487 13.25 96v.027c.241 29.513 6.846 52.017 19.736 67.769C47.19 181.315 68.754 190.795 97.07 191c25.861-.182 44.084-6.953 59.271-22.123 20.537-20.515 19.984-46.6 13.2-62.525-4.643-10.82-13.585-19.531-28.004-25.364Z"/>
+          </svg>
+          <span class="icon-label">J</span>
+        </a>
+
+        <div class="header-social-divider"></div>
+
+        <a class="header-social-link header-social-icon" href="https://www.threads.net/@the_delusioneers" target="_blank" rel="noopener" aria-label="Threads — The Delusioneers">
+          <svg width="11" height="12" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path fill="currentColor" d="M141.537 88.988a66.667 66.667 0 0 0-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.036l13.779 9.452c5.73-8.695 14.724-10.548 21.348-10.548h.229c8.249.053 14.474 2.452 18.503 7.129 2.932 3.405 4.893 8.111 5.864 14.05-7.314-1.243-15.224-1.626-23.68-1.14-23.82 1.371-39.134 15.264-38.105 34.568.522 9.792 5.4 18.216 13.735 23.719 7.047 4.652 16.124 6.927 25.557 6.412 12.458-.683 22.231-5.436 29.049-14.127 5.178-6.6 8.452-15.153 9.898-25.93 5.937 3.583 10.337 8.298 12.767 13.966 4.132 9.635 4.373 25.468-8.546 38.376-11.319 11.308-24.925 16.2-45.488 16.351-22.809-.169-40.06-7.484-51.275-21.742C35.236 139.966 29.808 120.682 29.605 96c.203-24.682 5.63-43.966 16.133-57.317C56.954 24.425 74.204 17.11 97.013 16.941c22.975.17 40.526 7.52 52.171 21.847 5.71 7.026 10.015 15.86 12.853 26.162l16.147-4.308c-3.44-12.68-8.853-23.606-16.219-32.668C147.036 10.646 125.205 1.205 97.07 1 68.754 1.205 47.189 10.685 32.986 28.23 20.096 43.982 13.491 66.487 13.25 96v.027c.241 29.513 6.846 52.017 19.736 67.769C47.19 181.315 68.754 190.795 97.07 191c25.861-.182 44.084-6.953 59.271-22.123 20.537-20.515 19.984-46.6 13.2-62.525-4.643-10.82-13.585-19.531-28.004-25.364Z"/>
+          </svg>
+          <span class="icon-label">D</span>
+        </a>
+
+        <div class="header-social-divider"></div>
+
+        <a class="header-social-link header-social-icon" href="https://www.instagram.com/the_delusioneers" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg width="12" height="12" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <circle cx="12" cy="12" r="4"/>
+            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+          </svg>
+        </a>
+
+        <div class="header-social-divider"></div>
+
+        <a class="header-social-link header-social-icon" href="https://thedelusioneers.substack.com" target="_blank" rel="noopener" aria-label="Substack">
+          <svg width="12" height="12" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path fill="currentColor" d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/>
+          </svg>
+        </a>
+
+        <div class="header-social-divider"></div>
+
+        <a class="header-social-link header-social-icon" href="https://bsky.app/profile/thedelusioneers.bsky.social" target="_blank" rel="noopener" aria-label="Bluesky">
+          <svg width="12" height="11" viewBox="0 0 600 530" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path fill="currentColor" d="m135.72 44.03c66.496 49.921 138.02 151.14 164.28 205.46 26.262-54.316 97.782-155.54 164.28-205.46 47.98-36.021 125.72-63.892 125.72 24.795 0 17.712-10.155 148.79-16.111 170.07-20.703 73.984-96.144 92.854-163.25 81.433 117.3 19.964 147.14 86.092 82.697 152.22-122.39 125.59-175.91-31.511-189.63-71.766-2.514-7.3797-3.6904-10.832-3.7077-7.8964-0.0174-2.9357-1.1937 0.51669-3.7077 7.8964-13.714 40.255-67.233 197.36-189.63 71.766-64.444-66.128-34.605-132.26 82.697-152.22-67.108 11.421-142.55-7.4491-163.25-81.433-5.9562-21.282-16.111-152.36-16.111-170.07 0-88.687 77.742-60.816 125.72-24.795z"/>
+          </svg>
+        </a>
+
+      </nav>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <span id="toggleIcon">○</span>
+        <span id="toggleLabel">Light</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       SOURCES DOCUMENT
+       ============================================================ -->
+  <div class="page">
+
+    <div class="page-meta">
+      <div class="page-label">The Delusioneers &mdash; Source Page</div>
+      <h1 class="page-title">Sources — The Receipt, Bell Edition</h1>
+      <a class="back-link" href="index.html">&larr; Back to main document</a>
+    </div>
+
+    <!-- JURISDICTION: CANADA (Federal) -->
+    <div class="jurisdiction-group">
+      <div class="jurisdiction-heading">Jurisdiction: Canada (Federal)</div>
+
+      <!-- CAN-01 -->
+      <div class="source-entry">
+        <div class="source-id">CAN-01</div>
+        <div class="source-title">BCE Inc. &mdash; Q4 2025 Quarterly Results</div>
+        <div class="source-meta">
+          <dl>
+            <dt>Title</dt>
+            <dd>BCE Inc. Q4 2025 Results — Canadian Retail High-Speed Internet Subscribers</dd>
+            <dt>Jurisdiction / Date</dt>
+            <dd>Canada / Q4 2025 (reported early 2026)</dd>
+            <dt>Sections cited</dt>
+            <dd>Total retail high-speed internet subscriber count (4,455,460 at end of Q4 2025)</dd>
+            <dt>Official URL</dt>
+            <dd><a href="https://www.bce.ca/investors/financial-performance/quarterly" target="_blank" rel="noopener">https://www.bce.ca/investors/financial-performance/quarterly</a></dd>
+            <dt>Used in</dt>
+            <dd>Line Item 2 (The Math), Closure Stamp</dd>
+          </dl>
+        </div>
+        <div class="status-note">Status: Primary source was not fetched on 2026-06-13 (403 Forbidden across all BCE investor relations and SEC/SEDAR+ URLs attempted in two sessions). Figure carried forward from April 2026 verification as PARTIAL. See source package GAP-03 for the full list of URLs attempted.</div>
+      </div>
+
+      <!-- CAN-02 -->
+      <div class="source-entry">
+        <div class="source-id">CAN-02</div>
+        <div class="source-title">CRTC Telecom Regulatory Policy 2019-269 (Internet Code)</div>
+        <div class="source-meta">
+          <dl>
+            <dt>Title</dt>
+            <dd>Establishment of the Internet Code</dd>
+            <dt>Jurisdiction / Date</dt>
+            <dd>Canada / adopted 2019-06-27, in force</dd>
+            <dt>Sections cited</dt>
+            <dd>Advance written notice provisions for price changes; absence of bill-placement specification</dd>
+            <dt>Official URL</dt>
+            <dd><a href="https://crtc.gc.ca/eng/archive/2019/2019-269.htm" target="_blank" rel="noopener">https://crtc.gc.ca/eng/archive/2019/2019-269.htm</a></dd>
+            <dt>Used in</dt>
+            <dd>Line Item 3 (The Rule), Closure Stamp, Stub (primary source citation)</dd>
+          </dl>
+        </div>
+        <div class="status-note">Status: Primary source was not fetched on 2026-06-13 (403 Forbidden across all CRTC, canlii.org, and laws-lois.justice.gc.ca URLs attempted in two sessions). Notice requirement and the absence of a bill-placement rule carried forward from April 2026 verification as PARTIAL. The absence of a placement specification is a gap confirmed in the rule's text, not a retrieval failure. See source package GAP-04 for the full list of URLs attempted.</div>
+      </div>
+
+      <!-- CAN-03 -->
+      <div class="source-entry">
+        <div class="source-id">CAN-03</div>
+        <div class="source-title">Commission for Complaints for Telecom-television Services (CCTS) &mdash; Complaint Process</div>
+        <div class="source-meta">
+          <dl>
+            <dt>Title</dt>
+            <dd>Making a Complaint — CCTS Consumer Information</dd>
+            <dt>Jurisdiction / Date</dt>
+            <dd>Canada / current</dd>
+            <dt>Sections cited</dt>
+            <dd>Cost to consumer (free); provider response window (fixed); maximum compensation available; per-complaint administrative cost to provider (not published — GAP-CONFIRMED)</dd>
+            <dt>Official URL</dt>
+            <dd><a href="https://www.ccts-cprst.ca/consumers/making-a-complaint/" target="_blank" rel="noopener">https://www.ccts-cprst.ca/consumers/making-a-complaint/</a></dd>
+            <dt>Used in</dt>
+            <dd>Line Item 5 (The Remedy), Closure Stamp</dd>
+          </dl>
+        </div>
+        <div class="status-note">Status: Primary source was not fetched on 2026-06-13 (403 Forbidden across all CCTS URLs attempted in two sessions). Complaint process details carried forward from April 2026 verification as PARTIAL. The per-complaint administrative cost to Bell is a GAP-CONFIRMED absence — not published at a per-complaint dollar amount in any accessible source. See source package GAP-02 and GAP-05.</div>
+      </div>
+
+    </div><!-- /.jurisdiction-group -->
+
+    <div class="page-footer">
+      <div><a href="index.html">&larr; The Receipt — Bell Edition</a></div>
+      <div>thedelusioneers.ca</div>
+    </div>
+
+  </div><!-- /.page -->
+
+  <script id="header-component-script">
+    const html = document.documentElement;
+    const toggle = document.getElementById('themeToggle');
+    const icon = document.getElementById('toggleIcon');
+    const label = document.getElementById('toggleLabel');
+
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const saved = localStorage.getItem('delusioneers-theme');
+    const initialDark = saved ? saved === 'dark' : prefersDark.matches;
+
+    function setTheme(dark) {
+      html.setAttribute('data-theme', dark ? 'dark' : 'light');
+      icon.textContent = dark ? '●' : '○';
+      label.textContent = dark ? 'Dark' : 'Light';
+    }
+
+    setTheme(initialDark);
+
+    toggle.addEventListener('click', () => {
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      setTheme(!isDark);
+      localStorage.setItem('delusioneers-theme', !isDark ? 'dark' : 'light');
+    });
+
+    prefersDark.addEventListener('change', (e) => {
+      if (!localStorage.getItem('delusioneers-theme')) setTheme(e.matches);
+    });
+  </script>
+
+</body>
+</html>

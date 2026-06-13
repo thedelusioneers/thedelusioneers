@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=JetBrains+Mono:wght@300;400;500;700&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 1080px; height: 1080px; overflow: hidden; }
+
+    body {
+      background: #0d0d0d;
+      display: flex;
+      flex-direction: column;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .brand-bar {
+      background: #0d0d0d;
+      padding: 28px 48px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .brand-name { font-family: 'Special Elite', monospace; font-size: 18px; letter-spacing: 3px; text-transform: uppercase; color: #f5f0e8; }
+    .series-name { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(245,240,232,0.45); }
+
+    .accent-line { height: 4px; background: #c41e1e; flex-shrink: 0; }
+
+    .content {
+      flex: 1;
+      background: #f5f0e8;
+      padding: 52px 60px 48px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #c41e1e;
+      margin-bottom: 18px;
+    }
+
+    .card-title {
+      font-family: 'Special Elite', monospace;
+      font-size: 42px;
+      line-height: 1.1;
+      color: #0d0d0d;
+      margin-bottom: 40px;
+    }
+
+    .math-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .math-table td {
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      vertical-align: top;
+      font-size: 14.5px;
+      line-height: 1.4;
+    }
+
+    .math-table td:first-child {
+      color: #4a4540;
+      width: 60%;
+      padding-right: 20px;
+    }
+
+    .math-table td:last-child {
+      text-align: right;
+      font-weight: 500;
+      color: #0d0d0d;
+      font-size: 15px;
+    }
+
+    .math-table tr:last-child td { border-bottom: none; }
+
+    .math-table .highlight td {
+      padding-top: 24px;
+      padding-bottom: 8px;
+    }
+
+    .math-table .highlight td:first-child {
+      color: #0d0d0d;
+      font-weight: 500;
+      font-size: 15px;
+    }
+
+    .math-table .highlight td:last-child {
+      font-family: 'Special Elite', monospace;
+      font-size: 32px;
+      color: #0d0d0d;
+      letter-spacing: -0.5px;
+    }
+
+    .source-note {
+      margin-top: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: #8a8278;
+    }
+
+    .attribution-bar {
+      background: #0d0d0d;
+      padding: 18px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .attribution-sources { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(245,240,232,0.35); }
+    .attribution-handle { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(245,240,232,0.45); }
+  </style>
+</head>
+<body>
+  <div class="brand-bar">
+    <span class="brand-name">The Delusioneers</span>
+    <span class="series-name">Bell Edition</span>
+  </div>
+  <div class="accent-line"></div>
+  <div class="content">
+    <div class="card-label">Line Item 2 &mdash; The Math</div>
+    <div class="card-title">The Math</div>
+    <table class="math-table">
+      <tbody>
+        <tr>
+          <td>Monthly increase per subscriber</td>
+          <td>$6.00</td>
+        </tr>
+        <tr>
+          <td>Bell retail internet subscribers (Canada, Q4 2025)</td>
+          <td>4,455,460</td>
+        </tr>
+        <tr>
+          <td>Projected additional monthly revenue</td>
+          <td>~$26,732,760</td>
+        </tr>
+        <tr class="highlight">
+          <td>Projected additional annual revenue</td>
+          <td>~$320,793,120</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="source-note">Source: BCE Inc. Q4 2025 Quarterly Results</div>
+  </div>
+  <div class="attribution-bar">
+    <span class="attribution-sources">BCE Q4 2025 &bull; CRTC 2019-269</span>
+    <span class="attribution-handle">@the_delusioneers</span>
+  </div>
+</body>
+</html>

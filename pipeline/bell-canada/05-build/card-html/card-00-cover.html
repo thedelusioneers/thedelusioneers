@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=JetBrains+Mono:wght@300;400;500;700&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 1080px;
+      height: 1080px;
+      overflow: hidden;
+    }
+
+    body {
+      background: #0d0d0d;
+      display: flex;
+      flex-direction: column;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Brand bar */
+    .brand-bar {
+      background: #0d0d0d;
+      padding: 28px 48px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .brand-name {
+      font-family: 'Special Elite', monospace;
+      font-size: 18px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #f5f0e8;
+    }
+
+    .series-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.45);
+    }
+
+    /* Red accent line */
+    .accent-line {
+      height: 4px;
+      background: #c41e1e;
+      flex-shrink: 0;
+    }
+
+    /* Content area */
+    .content {
+      flex: 1;
+      background: #f5f0e8;
+      padding: 56px 60px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #8a8278;
+      margin-bottom: 20px;
+    }
+
+    .card-title {
+      font-family: 'Special Elite', monospace;
+      font-size: 56px;
+      line-height: 1.1;
+      color: #0d0d0d;
+      margin-bottom: 32px;
+    }
+
+    .card-body {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 18px;
+      line-height: 1.7;
+      color: #2a2825;
+    }
+
+    .card-body .highlight {
+      color: #c41e1e;
+      font-weight: 500;
+    }
+
+    .covers {
+      margin-top: auto;
+      padding-top: 32px;
+      border-top: 1px solid rgba(0,0,0,0.12);
+    }
+
+    .covers-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #8a8278;
+      margin-bottom: 10px;
+    }
+
+    .covers-list {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.8;
+      color: #4a4540;
+    }
+
+    /* Attribution bar */
+    .attribution-bar {
+      background: #0d0d0d;
+      padding: 18px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .attribution-sources {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.35);
+    }
+
+    .attribution-handle {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.45);
+    }
+  </style>
+</head>
+<body>
+  <div class="brand-bar">
+    <span class="brand-name">The Delusioneers</span>
+    <span class="series-name">Bell Edition</span>
+  </div>
+  <div class="accent-line"></div>
+  <div class="content">
+    <div>
+      <div class="card-label">Card 00 &mdash; Cover</div>
+      <div class="card-title">The Receipt</div>
+      <div class="card-body">
+        One charge. One rule. One call. One remedy.<br>
+        All figures from BCE filings and CRTC instruments.
+      </div>
+    </div>
+    <div class="covers">
+      <div class="covers-label">This receipt covers</div>
+      <div class="covers-list">
+        The $6/month increase &mdash; Ontario<br>
+        The subscriber-base math &mdash; ~$320M/year<br>
+        The Internet Code notice gap<br>
+        The retention call &amp; the CCTS remedy
+      </div>
+    </div>
+  </div>
+  <div class="attribution-bar">
+    <span class="attribution-sources">BCE Q4 2025 &bull; CRTC 2019-269 &bull; CCTS</span>
+    <span class="attribution-handle">@the_delusioneers</span>
+  </div>
+</body>
+</html>

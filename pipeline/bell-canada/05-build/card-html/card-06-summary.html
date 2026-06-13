@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=JetBrains+Mono:wght@300;400;500;700&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 1080px; height: 1080px; overflow: hidden; }
+
+    body {
+      background: #0d0d0d;
+      display: flex;
+      flex-direction: column;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .brand-bar {
+      background: #0d0d0d;
+      padding: 28px 48px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .brand-name { font-family: 'Special Elite', monospace; font-size: 18px; letter-spacing: 3px; text-transform: uppercase; color: #f5f0e8; }
+    .series-name { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(245,240,232,0.45); }
+
+    .accent-line { height: 4px; background: #c41e1e; flex-shrink: 0; }
+
+    .content {
+      flex: 1;
+      background: #f5f0e8;
+      padding: 52px 60px 48px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #c41e1e; margin-bottom: 18px; }
+    .card-title { font-family: 'Special Elite', monospace; font-size: 36px; line-height: 1.1; color: #0d0d0d; margin-bottom: 36px; }
+
+    .stamp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 28px;
+    }
+
+    .stamp-table td {
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      vertical-align: top;
+      font-size: 13.5px;
+      line-height: 1.4;
+    }
+
+    .stamp-table td:first-child {
+      color: #4a4540;
+      width: 58%;
+      padding-right: 20px;
+      font-size: 12.5px;
+    }
+
+    .stamp-table td:last-child {
+      font-weight: 500;
+      color: #0d0d0d;
+      text-align: right;
+    }
+
+    .stamp-table tr:last-child td { border-bottom: none; }
+
+    .stamp-table .absent td:last-child {
+      color: #8a8278;
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .closing-line {
+      margin-top: auto;
+      padding-top: 24px;
+      border-top: 2px solid #0d0d0d;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #2a2825;
+    }
+
+    .attribution-bar {
+      background: #0d0d0d;
+      padding: 18px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .attribution-sources { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(245,240,232,0.35); }
+    .attribution-handle { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(245,240,232,0.45); }
+  </style>
+</head>
+<body>
+  <div class="brand-bar">
+    <span class="brand-name">The Delusioneers</span>
+    <span class="series-name">Bell Edition</span>
+  </div>
+  <div class="accent-line"></div>
+  <div class="content">
+    <div class="card-label">Closure Stamp &mdash; Summary</div>
+    <div class="card-title">The Closure Stamp</div>
+    <table class="stamp-table">
+      <tbody>
+        <tr>
+          <td>Increase per account per month</td>
+          <td>$6.00</td>
+        </tr>
+        <tr>
+          <td>Bell retail internet subscribers (Canada, Q4 2025)</td>
+          <td>4,455,460</td>
+        </tr>
+        <tr>
+          <td>Projected additional annual revenue</td>
+          <td>~$320,793,120</td>
+        </tr>
+        <tr>
+          <td>Code requiring advance written notice</td>
+          <td>CRTC 2019-269</td>
+        </tr>
+        <tr class="absent">
+          <td>Code provision specifying bill placement</td>
+          <td>None</td>
+        </tr>
+        <tr class="absent">
+          <td>Written confirmation of retention rate</td>
+          <td>Absent from record</td>
+        </tr>
+        <tr class="absent">
+          <td>Per-complaint administrative cost to Bell</td>
+          <td>Not published</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="closing-line">
+      $6/month. Page 3. ~$320M/year.<br>
+      No placement rule. No written confirmation. No published per-complaint cost.
+    </div>
+  </div>
+  <div class="attribution-bar">
+    <span class="attribution-sources">BCE Q4 2025 &bull; CRTC 2019-269 &bull; CCTS</span>
+    <span class="attribution-handle">@the_delusioneers</span>
+  </div>
+</body>
+</html>
