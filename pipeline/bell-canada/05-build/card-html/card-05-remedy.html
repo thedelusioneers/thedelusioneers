@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=JetBrains+Mono:wght@300;400;500;700&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 1080px; height: 1080px; overflow: hidden; }
+
+    body {
+      background: #0d0d0d;
+      display: flex;
+      flex-direction: column;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .brand-bar {
+      background: #0d0d0d;
+      padding: 28px 48px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .brand-name { font-family: 'Special Elite', monospace; font-size: 18px; letter-spacing: 3px; text-transform: uppercase; color: #f5f0e8; }
+    .series-name { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(245,240,232,0.45); }
+
+    .accent-line { height: 4px; background: #c41e1e; flex-shrink: 0; }
+
+    .content {
+      flex: 1;
+      background: #f5f0e8;
+      padding: 52px 60px 48px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #c41e1e; margin-bottom: 18px; }
+    .card-title { font-family: 'Special Elite', monospace; font-size: 42px; line-height: 1.1; color: #0d0d0d; margin-bottom: 36px; }
+
+    .card-body {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 17px;
+      line-height: 1.75;
+      color: #2a2825;
+      margin-bottom: 28px;
+    }
+
+    .ccts-facts {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-bottom: 28px;
+      border: 1px solid rgba(0,0,0,0.12);
+    }
+
+    .ccts-fact {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .ccts-fact:last-child { border-bottom: none; }
+
+    .ccts-fact-label {
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #8a8278;
+      white-space: nowrap;
+      min-width: 120px;
+    }
+
+    .ccts-fact-value {
+      font-size: 14px;
+      color: #0d0d0d;
+      font-weight: 500;
+    }
+
+    .gap-callout {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 16px 20px;
+      border-left: 3px solid rgba(0,0,0,0.2);
+    }
+    .gap-label { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 2px; text-transform: uppercase; color: #8a8278; white-space: nowrap; padding-top: 3px; }
+    .gap-text { font-family: 'JetBrains Mono', monospace; font-size: 14px; line-height: 1.65; color: #4a4540; }
+
+    .attribution-bar {
+      background: #0d0d0d;
+      padding: 18px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .attribution-sources { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(245,240,232,0.35); }
+    .attribution-handle { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(245,240,232,0.45); }
+  </style>
+</head>
+<body>
+  <div class="brand-bar">
+    <span class="brand-name">The Delusioneers</span>
+    <span class="series-name">Bell Edition</span>
+  </div>
+  <div class="accent-line"></div>
+  <div class="content">
+    <div class="card-label">Line Item 5 &mdash; The Remedy</div>
+    <div class="card-title">The Remedy</div>
+    <div class="ccts-facts">
+      <div class="ccts-fact">
+        <span class="ccts-fact-label">Cost to file</span>
+        <span class="ccts-fact-value">Free (to the consumer)</span>
+      </div>
+      <div class="ccts-fact">
+        <span class="ccts-fact-label">Provider must respond</span>
+        <span class="ccts-fact-value">Within a fixed window</span>
+      </div>
+      <div class="ccts-fact">
+        <span class="ccts-fact-label">Compensation</span>
+        <span class="ccts-fact-value">Up to a stated maximum</span>
+      </div>
+      <div class="ccts-fact">
+        <span class="ccts-fact-label">Cost to Bell</span>
+        <span class="ccts-fact-value">Not published at per-complaint dollar amount</span>
+      </div>
+    </div>
+    <div class="gap-callout">
+      <span class="gap-label">Gap&#8209;02</span>
+      <div class="gap-text">The administrative cost to Bell of processing a CCTS complaint may exceed the $6 monthly increase. The record does not confirm this to a dollar amount.</div>
+    </div>
+  </div>
+  <div class="attribution-bar">
+    <span class="attribution-sources">CCTS &mdash; ccts-cprst.ca</span>
+    <span class="attribution-handle">@the_delusioneers</span>
+  </div>
+</body>
+</html>
